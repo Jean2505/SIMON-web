@@ -1,0 +1,27 @@
+div {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    align-content: center;
+
+}
+
+form {
+    width: 20%;
+    height: 20%;
+    background-color: orange;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    margin: auto;
+}
+
+input {
+    width: 50%;
+    margin: auto;
+}
