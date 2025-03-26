@@ -1,8 +1,8 @@
 <div>
     <form action="">
         <h2>Entre na conta</h2>
-        <input type="text">
-        <input type="text">
-        <button>Entrar</button>
+        <input type="text" [(ngModel)]="enteredEmail">
+        <input type="text" [(ngModel)]="enteredPassword">
+        <button (click)="onSubmit()">Entrar</button>
     </form>
 </div>
