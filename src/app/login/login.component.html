@@ -1,8 +1,32 @@
-<div>
+<div class="body">
+    <div class="container">
+        <div class="text">
+            Entre na conta
+    </div>
     <form action="">
-        <h2>Entre na conta</h2>
-        <input type="text" [(ngModel)]="enteredEmail">
-        <input type="text" [(ngModel)]="enteredPassword">
-        <button (click)="onSubmit()">Entrar</button>
+        <div class="form-row">
+          <div class="input-data">
+              <input type="text" required>
+             <div class="underline"></div>
+             <label for="">Email</label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-data">
+              <input type="password" required>
+             <div class="underline"></div>
+             <label for="">Senha</label>
+          </div>
+        </div>
+        <div class="form-row submit-btn">
+            <div class="input-data">
+               <div class="inner"></div>
+               <input type="submit" value="entrar">
+            </div>
+         </div>
     </form>
+</div>
+<div class="background">
+    <img src="/simons.png" alt="Logo"/>
+</div>
 </div>
