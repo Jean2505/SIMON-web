@@ -1,0 +1,12 @@
+specVersion: "v1"
+serviceId: "SIMON-web"
+location: "southamerica-east1"
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: "simon-db"
+      cloudSql:
+        instanceId: "simon-web-cSQL"
+      # schemaValidation: "COMPATIBLE"
+connectorDirs: ["./connector"]
