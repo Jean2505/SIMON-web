@@ -1,22 +1,15 @@
-<div class="main">
+<div class="container">
     <h2>Selecione a escola e o curso</h2>
-    <div>
-        <mat-form-field appearance="outline">
+    <div class="dropdown-container">
+        <mat-form-field class="dropdown" appearance="outline">
             <mat-label>Escola</mat-label>
             <mat-select (selectionChange)="onSelectEscola($event.value)">
-                <!-- <mat-form-field appearance="outline">
-                    <mat-label>
-                        <mat-icon>label_important</mat-icon> Procurar
-                    </mat-label>
-                    <input (keyup)="onKey()" type="text" matInput>
-                </mat-form-field>
-                <mat-option value="0">Todas</mat-option> -->
                 @for (escola of escolas; track escola){
                     <mat-option [value]="escola.escolaId">{{escola.name}}</mat-option>
                 } 
             </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="outline">
+        <mat-form-field class="dropdown" appearance="outline">
             <mat-label>Curso</mat-label>
             <mat-select>    
                 @for (curso of cursosAparentes; track curso.cursoId){
@@ -24,5 +17,14 @@
                 } 
             </mat-select>
         </mat-form-field>
+    </div>
+    <div class="manage-container">
+        <ul class="disciplines">
+            @for (discipline of disciplines; track discipline.id) {
+                <li>
+                    <app-discipline [discipline]="discipline" />
+                </li>
+            }
+        </ul>
     </div>
 </div>

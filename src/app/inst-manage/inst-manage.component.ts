@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-
+import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatIconModule} from '@angular/material/icon';
+
+import { DisciplineComponent } from "./discipline/discipline.component";
+import { DUMMY_DISCIPLINES } from './dummy-disciplines';
 
  interface Escola {
   escolaId: string;
@@ -13,12 +16,11 @@ interface Curso {
   cursoId: string;
   escolaId: string;
   name: string;
-  disciplines: string[];
 }
 
 @Component({
   selector: 'app-inst-manage',
-  imports: [MatFormFieldModule, MatSelectModule, MatIconModule],
+  imports: [MatFormFieldModule, MatSelectModule, MatIconModule, FormsModule, DisciplineComponent],
   templateUrl: './inst-manage.component.html',
   styleUrl: './inst-manage.component.scss'
 })
@@ -26,6 +28,7 @@ export class InstManageComponent {
   @Input({required:true}) escola!: Escola;
   @Input({required:true}) curso!: Curso;
 
+  disciplines = DUMMY_DISCIPLINES;
   selectedEscolaId?: string;
 
   escolas: Escola[] = [
@@ -35,27 +38,19 @@ export class InstManageComponent {
   ];
 
   cursos: Curso[] =[
-    {cursoId: 'c01', escolaId: '01', name: 'Engenharia de Software', disciplines: []},
-    {cursoId: 'c02', escolaId: '02', name: 'Administração', disciplines: []},
-    {cursoId: 'c03', escolaId: '03', name: 'Jornalismo', disciplines: []},
-    {cursoId: 'c04', escolaId: '01', name: 'Engenharia Civil', disciplines: []},
-    {cursoId: 'c05', escolaId: '02', name: 'Ciências Contábeis', disciplines: []},
-    {cursoId: 'c06', escolaId: '01', name: 'Cibersegurança', disciplines: []},
-    {cursoId: 'c07', escolaId: '03', name: 'Letras', disciplines: []},
-    {cursoId: 'c08', escolaId: '01', name: 'Engenharia de Computação', disciplines: []}
+    {cursoId: 'c01', escolaId: '01', name: 'Engenharia de Software'},
+    {cursoId: 'c02', escolaId: '02', name: 'Administração'},
+    {cursoId: 'c03', escolaId: '03', name: 'Jornalismo'},
+    {cursoId: 'c04', escolaId: '01', name: 'Engenharia Civil'},
+    {cursoId: 'c05', escolaId: '02', name: 'Ciências Contábeis'},
+    {cursoId: 'c06', escolaId: '01', name: 'Cibersegurança'},
+    {cursoId: 'c07', escolaId: '03', name: 'Letras'},
+    {cursoId: 'c08', escolaId: '01', name: 'Engenharia de Computação'}
   ]
 
   cursosAparentes: Curso [] = [];
 
   onSelectEscola(escolaId: string) {
-    console.log('Entrou')
-    console.log(escolaId)
     this.cursosAparentes = this.cursos.filter(curso => curso.escolaId === escolaId)
-    console.log(this.cursosAparentes);
   }
-
-  onKey() {
-
-  }
-
 }
