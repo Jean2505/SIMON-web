@@ -1,0 +1,28 @@
+<div class="main">
+    <h2>Selecione a escola e o curso</h2>
+    <div>
+        <mat-form-field appearance="outline">
+            <mat-label>Escola</mat-label>
+            <mat-select>
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>
+                        <mat-icon>label_important</mat-icon> Procurar
+                    </mat-label>
+                    <input (keyup)="onKey()" type="text" matInput>
+                </mat-form-field>
+                <mat-option value="0">Todas</mat-option> -->
+                @for (escola of escolas; track escola){
+                    <mat-option [value]="escola.escolaId" (onSelectionChange)="onSelectEscola()">{{escola.name}}</mat-option>
+                } 
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Curso</mat-label>
+            <mat-select>    
+                @for (curso of cursos; track curso.escolaId){
+                    <mat-option [value]="curso.escolaId === selectedEscolaId">{{curso.name}}</mat-option>
+                } 
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
