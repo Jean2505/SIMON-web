@@ -28,8 +28,6 @@ export class InstManageComponent {
 
   selectedEscolaId?: string;
 
-  @Output() onSelectionChange = new EventEmitter();
-
   escolas: Escola[] = [
     {escolaId: '01', name: 'Escola Politécnica'},
     {escolaId: '02', name: 'Escola de Economia e Negócios'},
@@ -47,12 +45,13 @@ export class InstManageComponent {
     {cursoId: 'c08', escolaId: '01', name: 'Engenharia de Computação', disciplines: []}
   ]
 
-  get selectedEscola() {
-    return this.escolas.filter((escola)=> this.selectedEscolaId === this.curso.escolaId);
-  }
+  cursosAparentes: Curso [] = [];
 
-  onSelectEscola() {
-    this.onSelectionChange.emit(this.escola.escolaId); 
+  onSelectEscola(escolaId: string) {
+    console.log('Entrou')
+    console.log(escolaId)
+    this.cursosAparentes = this.cursos.filter(curso => curso.escolaId === escolaId)
+    console.log(this.cursosAparentes);
   }
 
   onKey() {
