@@ -1,36 +1,35 @@
 <div class="container">
-    <!-- <h2>Selecione a escola e o curso</h2> -->
-    <div class="wrapper"><div class="dropdown-container">
-        <mat-form-field class="dropdown" appearance="outline">
-            <mat-label>Escola</mat-label>
-            <mat-select (selectionChange)="onSelectEscola($event.value)">
-                @for (escola of escolas; track escola){
-                    <mat-option [value]="escola.escolaId">{{escola.name}}</mat-option>
-                } 
-            </mat-select>
-        </mat-form-field>
-        <mat-form-field class="dropdown" appearance="outline">
-            <mat-label>Curso</mat-label>
-            <mat-select (selectionChange)="onSelectCurso(curso.cursoId)">    
-                @for (curso of cursosAparentes; track curso.cursoId){
-                    <mat-option [value]="curso.escolaId === selectedEscolaId">{{curso.name}}</mat-option>
-                } 
-            </mat-select>
-        </mat-form-field>
+  <div class="wrapper">
+    <div class="dropdown-container">
+      <!-- Dropdown de Escolas -->
+      <mat-form-field class="dropdown" appearance="outline">
+        <mat-label>Escola</mat-label>
+        <mat-select (selectionChange)="onSelectEscola($event.value)" [disabled]="loadingSchools">
+          <mat-option *ngFor="let escola of escolas; trackBy: trackByEscola" [value]="escola.escolaId">
+            {{ escola.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <!-- Dropdown de Cursos (dependente da escola selecionada) -->
+      <mat-form-field class="dropdown" appearance="outline" *ngIf="cursos.length > 0">
+        <mat-label>Curso</mat-label>
+        <mat-select (selectionChange)="onSelectCurso($event.value)" [disabled]="loadingCourses">
+          <mat-option *ngFor="let curso of cursos; trackBy: trackByCurso" [value]="curso.cursoId">
+            {{ curso.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
+  </div>
 
-    <button class="load-courses" (click)="onLoadCourses()">Carregar matérias</button>
-    
-    <div class="manage-container">
-        <!-- @if (selectedCurso) {
-            @for (disciplina of disciplinasAparentes; track disciplina.id) {
-                <ul class="disciplines">
-                    <li>
-                        <app-discipline [cursoId]="selectedCursoId" [discipline]="disciplinasAparentes"/>
-                    </li>
-                </ul>
-            }
-        } -->
-         
-    </div>
+  <!-- Exibição das disciplinas, se houver um curso selecionado -->
+  <div class="manage-container" *ngIf="selectedCurso">
+    <h3>Disciplinas</h3>
+    <ul class="disciplines">
+      <li *ngFor="let disciplina of disciplinasAparentes; trackBy: trackByDisciplina">
+        <app-discipline [cursoId]="selectedCursoId" [discipline]="disciplina"></app-discipline>
+      </li>
+    </ul>
+  </div>
 </div>

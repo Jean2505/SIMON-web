@@ -1,14 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
-import {MatIconModule} from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { HttpClient } from '@angular/common/http';
 
-import { DisciplineComponent } from "./discipline/discipline.component";
-import { DUMMY_DISCIPLINES } from './dummy-disciplines';
+// Imports do Angular Firestore (API modular)
+import { Firestore, collection, query, where, getDocs } from '@angular/fire/firestore';
+
+import { DisciplineComponent } from './discipline/discipline.component';
 import { Discipline } from './discipline/discipline.model';
 
- interface Escola {
+interface Escola {
   escolaId: string;
   name: string;
 }
@@ -21,103 +26,175 @@ interface Curso {
 
 @Component({
   selector: 'app-inst-manage',
-  imports: [MatFormFieldModule, MatSelectModule, MatIconModule, FormsModule, DisciplineComponent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatIconModule,
+    MatCardModule,
+    DisciplineComponent
+  ],
   templateUrl: './inst-manage.component.html',
-  styleUrl: './inst-manage.component.scss'
+  styleUrls: ['./inst-manage.component.scss']
 })
-export class InstManageComponent {
-  @Input({required:true}) escola!: Escola;
-  @Input({required:true}) curso!: Curso;
-  // @Input({required:true}) disciplina!: Discipline;
+export class InstManageComponent implements OnInit {
 
-  // disciplines = DUMMY_DISCIPLINES;
+  // Seleção dos dropdowns
   selectedEscolaId?: string;
   selectedCursoId!: string;
-  cursosAparentes: Curso [] = [];
-  disciplinasAparentes: Discipline [] = [];
 
-  escolas: Escola[] = [
-    {escolaId: '01', name: 'Escola Politécnica'},
-    {escolaId: '02', name: 'Escola de Economia e Negócios'},
-    {escolaId: '03', name: 'Escola de Linguagem e Comunicação'}
-  ];
+  // Dados carregados dinamicamente do backend (SQLite)
+  escolas: Escola[] = [];
+  cursos: Curso[] = [];
 
-  cursos: Curso[] =[
-    {cursoId: 'c01', escolaId: '01', name: 'Engenharia de Software'},
-    {cursoId: 'c02', escolaId: '02', name: 'Administração'},
-    {cursoId: 'c03', escolaId: '03', name: 'Jornalismo'},
-    {cursoId: 'c04', escolaId: '01', name: 'Engenharia Civil'},
-    {cursoId: 'c05', escolaId: '02', name: 'Ciências Contábeis'},
-    {cursoId: 'c06', escolaId: '01', name: 'Cibersegurança'},
-    {cursoId: 'c07', escolaId: '03', name: 'Letras'},
-    {cursoId: 'c08', escolaId: '01', name: 'Engenharia de Computação'}
-  ]
+  // Disciplinas carregadas do Firebase (após sincronização)
+  disciplinasAparentes: Discipline[] = [];
 
-  disciplinas: Discipline [] = [
-    {
-      id: 'd01',
-      cursoId: 'c01',
-      name: 'Algoritmos e Estruturas de Dados',
-      lecturer: 'Prof. Ana Costa',
-      term: '2',
-      monitorAmnt: '0'
-    },
-    {
-      id: 'd02',
-      cursoId: 'c03',
-      name: 'Mídias, Narrativas e Imagética',
-      lecturer: 'Prof. Carlos Lima',
-      term: '3',
-      monitorAmnt: '0'
-    },
-    {
-      id: 'd03',
-      cursoId: 'c02',
-      name: 'Microeconomia Aplicada',
-      lecturer: 'Prof. João Silva',
-      term: '2',
-      monitorAmnt: '0'
-    },
-    {
-      id: 'd04',
-      cursoId: 'c04',
-      name: 'Projeto de Estradas',
-      lecturer: 'Prof. João Silva',
-      term: '6',
-      monitorAmnt: '0'
-    },
-    {
-      id: 'd05',
-      cursoId: 'c05',
-      name: 'Contabilidade Setorial',
-      lecturer: 'Prof. João Silva',
-      term: '8',
-      monitorAmnt: '0'
-    },
-    {
-      id: 'd06',
-      cursoId: 'c06',
-      name: 'Contabilidade Setorial',
-      lecturer: 'Prof. João Silva',
-      term: '8',
-      monitorAmnt: '0'
-    },
-  ];
+  // Flags de carregamento
+  loadingSchools: boolean = false;
+  loadingCourses: boolean = false;
+  loadingDisciplinas: boolean = false;
+  loadingSync: boolean = false;
 
+  constructor(private http: HttpClient, private firestore: Firestore) { }
+
+  ngOnInit() {
+    this.loadSchools();
+  }
+
+  // Carrega as escolas do backend (SQLite)
+  loadSchools() {
+    this.loadingSchools = true;
+    this.http.get<Escola[]>('http://localhost:3000/schools')
+      .subscribe({
+        next: (data) => {
+          this.escolas = data;
+          this.loadingSchools = false;
+        },
+        error: (err) => {
+          console.error("Erro ao carregar escolas:", err);
+          this.loadingSchools = false;
+        }
+      });
+  }
+
+  // Ao selecionar uma escola, carrega os cursos associados a ela do backend
   onSelectEscola(escolaId: string) {
-    this.cursosAparentes = this.cursos.filter(curso => curso.escolaId === escolaId)
+    this.selectedEscolaId = escolaId;
+    // Limpa a seleção de cursos e disciplinas anteriores
+    this.cursos = [];
+    this.selectedCursoId = '';
+    this.disciplinasAparentes = [];
+    // Carrega os cursos para a escola selecionada
+    this.loadCourses(escolaId);
   }
 
+  // Carrega os cursos para a escola selecionada
+  loadCourses(escolaId: string) {
+    this.loadingCourses = true;
+    // Supondo que o endpoint aceite o parâmetro "school" com o ID da escola
+    this.http.get<Curso[]>('http://localhost:3000/courses', { params: { school: escolaId } })
+      .subscribe({
+        next: (data) => {
+          this.cursos = data;
+          this.loadingCourses = false;
+        },
+        error: (err) => {
+          console.error("Erro ao carregar cursos:", err);
+          this.loadingCourses = false;
+        }
+      });
+  }
+
+  // Ao selecionar um curso, consulta as disciplinas do Firebase (que foram sincronizadas via backend)
+  // Método atualizado do inst-manage.component.ts para buscar disciplinas usando a Firebase Function
   onSelectCurso(cursoId: string) {
-    this.disciplinasAparentes = this.disciplinas.filter(disciplina => disciplina.cursoId === cursoId);
     this.selectedCursoId = cursoId;
+    this.loadingDisciplinas = true;
+
+    // Supondo que você tenha a lista de cursos carregada em `this.cursos`,
+    // busque o objeto do curso selecionado (para obter o nome).
+    const selectedCourse = this.cursos.find(c => c.cursoId === cursoId);
+    if (!selectedCourse) {
+      console.error('Curso não encontrado');
+      this.loadingDisciplinas = false;
+      return;
+    }
+
+    const payload = { course: selectedCourse.name };
+    console.log(payload);
+
+    // Agora chama a rota do SEU backend (server.js), não a da Cloud Function
+    this.http.post('http://localhost:3000/getExternalCourses', payload)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Matérias recebidas:', JSON.stringify(response.payload));
+          // Se 'payload' for string, faça o parse
+          if (response.payload && typeof response.payload === 'string') {
+            this.disciplinasAparentes = JSON.parse(response.payload);
+          } else {
+            this.disciplinasAparentes = response.payload;
+          }
+        },
+        error: (err) => {
+          console.error('Erro ao obter matérias da rota local:', err);
+        }
+      });
+
   }
 
+  // Sincroniza os dados de disciplinas do SQLite para o Firebase via backend
+  onLoadCourses() {
+    if (!this.selectedEscolaId || !this.selectedCursoId) {
+      alert("Selecione uma escola e um curso antes de carregar as matérias.");
+      return;
+    }
+    // Busca os objetos da escola e do curso selecionados (para enviar os nomes, se necessário)
+    const selectedEscola = this.escolas.find(e => e.escolaId === this.selectedEscolaId);
+    const selectedCurso = this.cursos.find(c => c.cursoId === this.selectedCursoId);
+    if (!selectedEscola || !selectedCurso) {
+      alert("Seleção inválida!");
+      return;
+    }
+    // Os parâmetros aqui podem ser ajustados conforme o que seu backend espera (por exemplo, o nome da escola e do curso)
+    const params = {
+      school: selectedEscola.name,
+      major: selectedCurso.name
+    };
+
+    this.loadingSync = true;
+    this.http.get('http://localhost:3000/loadCourses', { params })
+      .subscribe({
+        next: (resp) => {
+          console.log("Sincronização concluída, matérias carregadas para o Firebase:", resp);
+          this.loadingSync = false;
+          // Atualiza as disciplinas após a sincronização
+          this.onSelectCurso(this.selectedCursoId);
+        },
+        error: (err) => {
+          console.error("Erro na sincronização:", err);
+          this.loadingSync = false;
+        }
+      });
+  }
+
+  // Getter para facilitar a verificação do curso selecionado
   get selectedCurso() {
-    return this.cursos.find((curso) => curso.cursoId === this.selectedCursoId);
+    return this.cursos.find(curso => curso.cursoId === this.selectedCursoId);
   }
 
-  onLoadCourses(){
-    
+  // Funções trackBy para otimizar os *ngFor
+  trackByEscola(index: number, escola: Escola): string {
+    return escola.escolaId;
+  }
+
+  trackByCurso(index: number, curso: Curso): string {
+    return curso.cursoId;
+  }
+
+  trackByDisciplina(index: number, disciplina: Discipline): string {
+    return disciplina.id;
   }
 }
