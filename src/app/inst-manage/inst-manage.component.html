@@ -1,6 +1,6 @@
 <div class="container">
-    <h2>Selecione a escola e o curso</h2>
-    <div class="dropdown-container">
+    <!-- <h2>Selecione a escola e o curso</h2> -->
+    <div class="wrapper"><div class="dropdown-container">
         <mat-form-field class="dropdown" appearance="outline">
             <mat-label>Escola</mat-label>
             <mat-select (selectionChange)="onSelectEscola($event.value)">
@@ -17,7 +17,7 @@
                 } 
             </mat-select>
         </mat-form-field>
-    </div>
+    </div></div>
     <div class="manage-container">
         <ul class="disciplines">
             @for (discipline of disciplines; track discipline.id) {
