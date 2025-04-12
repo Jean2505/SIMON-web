@@ -1,24 +1,51 @@
 export const DUMMY_DISCIPLINES = [
     {
       id: 'd01',
+      cursoId: 'c01',
       name: 'Algoritmos e Estruturas de Dados',
       lecturer: 'Prof. Ana Costa',
-      shift: 'Matutino',
-      monitorAmnt: '2'
+      term: '2',
+      monitorAmnt: '0'
     },
     {
       id: 'd02',
-      name: 'Fundamentos de Redes',
+      cursoId: 'c03',
+      name: 'Mídias, Narrativas e Imagética',
       lecturer: 'Prof. Carlos Lima',
-      shift: 'Noturno',
-      monitorAmnt: '1'
+      term: '3',
+      monitorAmnt: '0'
     },
     {
       id: 'd03',
+      cursoId: 'c02',
       name: 'Microeconomia Aplicada',
       lecturer: 'Prof. João Silva',
-      shift: 'afternoon',
-      monitorAmnt: '3'
+      term: '2',
+      monitorAmnt: '0'
+    },
+    {
+      id: 'd04',
+      cursoId: 'c04',
+      name: 'Projeto de Estradas',
+      lecturer: 'Prof. João Silva',
+      term: '6',
+      monitorAmnt: '0'
+    },
+    {
+      id: 'd05',
+      cursoId: 'c05',
+      name: 'Contabilidade Setorial',
+      lecturer: 'Prof. João Silva',
+      term: '8',
+      monitorAmnt: '0'
+    },
+    {
+      id: 'd06',
+      cursoId: 'c06',
+      name: 'Contabilidade Setorial',
+      lecturer: 'Prof. João Silva',
+      term: '8',
+      monitorAmnt: '0'
     },
   ];
   

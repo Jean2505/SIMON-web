@@ -11,6 +11,7 @@ import { type Discipline } from './discipline.model';
 })
 export class DisciplineComponent {
   @Input({required:true}) discipline!: Discipline;
+  @Input({required:true}) cursoId!: string;
   enteredQuantity = '';
 
   onAddDiscipline(){
