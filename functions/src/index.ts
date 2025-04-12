@@ -38,6 +38,34 @@ interface Course {
 //   response.send("Hello from Firebase!");
 // });
 
+export const getCourses = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    let courses: Course[] = [];
+    try {
+        (await db.collection("Courses").get()).forEach((doc) => {
+            if(doc.data().course == req.body.course){
+                courses.push(doc.data() as Course);
+            }
+        });
+        result = {
+            status: "OK",
+            message: "Courses retrieved successfully",
+            payload: JSON.stringify(courses)
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error retrieving courses",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+});
+
 export const createCourses = onRequest({region: "southamerica-east1"}, (req, res) => {
     let result: CallableResponse;
     
