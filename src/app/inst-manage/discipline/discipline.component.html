@@ -1,13 +1,11 @@
-<div>
+<div class="discipline-row">
     <span>{{ discipline.id }}</span>
     <span>{{ discipline.name }}</span>
-    <span>{{ discipline.lecturer }}</span>
+    <span>{{ discipline.professor }}</span>
     <span>{{ discipline.term }}</span>
-
-    <label for="title">Qtd monitores</label>
-    <input type="text" id="quantity" name="quantity" [(ngModel)]="enteredQuantity"/>
-
-    <p class="actions">
-        <button (click)="onAddDiscipline()">Adicionar Matéria</button>
-    </p>
-</div>
+  
+    <input type="number" [(ngModel)]="enteredQuantity" min="0" />
+  
+    <button (click)="onAddDiscipline()">Atualizar</button>
+  </div>
+  

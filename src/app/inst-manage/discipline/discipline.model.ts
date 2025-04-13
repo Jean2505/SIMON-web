@@ -2,7 +2,7 @@ export interface Discipline {
     id: string;
     cursoId: string;
     name: string;
-    lecturer: string;
+    professor: string;
     term: string;
     monitorAmnt: string;
 }

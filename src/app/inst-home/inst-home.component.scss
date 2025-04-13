@@ -15,10 +15,10 @@
     height: 100vh;
     position: absolute;
     top: 0;
-    background-image: url("/simons.png");
-    background-size: 20%;
-    filter: brightness(0) opacity(0.06);
-    transform: rotate(30deg);
+    background-image: url("/bgsimonwhite.png");
+    background-size: cover;
+    z-index: -2;
+    filter: brightness(0) opacity(0.03);
 }
 
 ul {

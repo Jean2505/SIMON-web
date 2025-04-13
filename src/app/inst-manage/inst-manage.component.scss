@@ -47,18 +47,30 @@ mat-select{
     height: 100%;
 }
 
+mat-option{
+    background-color: #5bb6e0 !important;
+    z-index: 3;
+    padding: 0 !important;
+    border-radius: 25px !important;
+    margin-top: 5px !important;
+    padding-left: 20px !important; 
+    padding-right: 20px !important;
+    color: rgb(1, 0, 54);
+    border: 1px #016eea solid;
+}
+
 mat-option:hover{
-    background-color: wheat!important;
+    background-color: #d0b4fc !important;
 }
 
 .dropdown{
     flex: 1;
     height: 8.9vh;
-    background: -webkit-linear-gradient(right, rgba(86, 216, 228, 0.3), rgb(83, 1, 234, 0.3));
+    background: -webkit-linear-gradient(left, #5bb6e0 50%, #418de4 100%);
     box-sizing: border-box;
-    max-width: 300px; /* controla o tamanho dos selects */
+    max-width: 300px;
     border-radius: 28px;
-    color: black;
+    color: rgb(245, 252, 255);
     font-weight: 500;
     font-size: 1.3rem;
 }
@@ -66,3 +78,60 @@ mat-option:hover{
 mat-label{
     opacity: 1;
 }
+
+h3{
+    font-size: 2rem;
+}
+
+hr{
+    background-color: rgb(83, 1, 234, 1);
+}
+
+.manage-container {
+    margin-top: 24px;
+
+    h3 {
+      font-size: 2rem;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    .disciplines {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li + li {
+        margin-top: 16px;
+      }
+    }
+  }
+
+  .manage-container {
+    padding: 0px 6vw;
+
+    .discipline-header {
+      display: grid;
+      grid-template-columns: 80px 1.5fr 1.5fr 1fr 1.5fr 1fr;
+      padding: 12px 20px;
+      background: -webkit-linear-gradient(right, rgba(86, 216, 228, 0.3), rgb(83, 1, 234, 0.3));
+      border-radius: 8px;
+      font-weight: bold;
+      color: #475569;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+  
+    .disciplines {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
+  
