@@ -111,9 +111,11 @@ export const updateCourse = onRequest({region: "southamerica-east1"}, async (req
         return;
     }
 
-    await db.collection("Courses").doc(snapshot.docs[0].id).update({
-        monitors: req.body.qtdMonitors
-      });
+    await db.collection("Courses").doc(snapshot.docs[0].id).set({monitors: req.body.qtdMonitors}, {merge: true});
+
+    // await db.collection("Courses").doc(snapshot.docs[0].id).update({
+    //     ["monitors"]: req.body.qtdMonitors
+    //   });
 
     res.status(200).send('Documento atualizado com sucesso!');
 });
