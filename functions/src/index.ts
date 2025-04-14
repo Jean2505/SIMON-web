@@ -101,3 +101,19 @@ export const createCourses = onRequest({region: "southamerica-east1"}, (req, res
         res.status(500).send(result);
     }
 });
+
+export const updateCourse = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    const snapshot = await db.collection("Courses").where("id", "==", req.body.id).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        res.status(404).send("No matching documents.");
+        return;
+    }
+
+    await db.collection("Courses").doc(snapshot.docs[0].id).update({
+        monitors: req.body.qtdMonitors
+      });
+
+    res.status(200).send('Documento atualizado com sucesso!');
+});
