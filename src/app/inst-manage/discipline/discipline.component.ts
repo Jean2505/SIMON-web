@@ -14,7 +14,7 @@ export class DisciplineComponent {
   @Input({required:true}) cursoId!: string;
   enteredQuantity = '';
 
-  onAddDiscipline(){
-    
+  onAddDiscipline(discipline: String){
+    console.log('Discipline ID:', discipline);
   }
 }
