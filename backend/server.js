@@ -68,16 +68,41 @@ app.get('/loadCourses', (req, res) => {
       if (err) return res.status(500).json({ error: err.message });
 
       const payload = { courses: rows };
-      /*
+      
       try {
-        const response = await axios.post('https://createcourses-bz6uecg2pq-rj.a.run.app', payload);
-        console.log('Resposta da função externa:', response.payload);
-        res.json({ enviado: true, retorno: response.data });
-      } catch (postError) {
-        console.error('Erro ao enviar para a função externa:', postError.message);
-        res.status(500).json({ error: 'Erro ao enviar para função externa', detalhe: postError.message });
+        // Obtém o nome do curso do body enviado pelo Angular
+        const { major } = req.body;
+    
+        // Monta o payload esperado pela função externa
+        const payload = { major };
+    
+        // Chama a Cloud Function usando axios
+        const response = await axios.post('https://getcourses-bz6uecg2pq-rj.a.run.app', payload);
+    
+        // Retorna a resposta da função externa ao front-end
+        console.log(response.data);
+
+        if (response.data && typeof response.data === 'string') {
+          this.disciplinasAparentes = JSON.parse(response.payload);
+        } else {
+          this.disciplinasAparentes = response.payload;
+        }
+
+        if(length(this.disciplinasAparentes != length(rows))) {
+          try {
+            const response = await axios.post('https://createcourses-bz6uecg2pq-rj.a.run.app', payload);
+            console.log('Resposta da função externa:', response.payload);
+            res.json({ enviado: true, retorno: response.data });
+          } catch (postError) {
+            console.error('Erro ao enviar para a função externa:', postError.message);
+            res.status(500).json({ error: 'Erro ao enviar para função externa', detalhe: postError.message });
+          }
+        }
+
+      } catch (error) {
+        console.error('Erro ao chamar função externa:', error.message);
+        res.status(500).json({ error: 'Erro ao obter as disciplinas externamente' });
       }
-        */
     }
   );
 });
@@ -98,6 +123,27 @@ app.post('/getExternalCourses', async (req, res) => {
   } catch (error) {
     console.error('Erro ao chamar função externa:', error.message);
     res.status(500).json({ error: 'Erro ao obter as disciplinas externamente' });
+  }
+});
+
+app.post('/updateCourse', async (req, res) => {
+  try {
+    // Obtém o nome do curso do body enviado pelo Angular
+    const { course } = req.body;
+
+    // Monta o payload esperado pela função externa
+    const payload = { course };
+
+    const update = { id: req.body.params.id, qtdMonitors: req.body.params.qtdMonitors };
+
+    // Chama a Cloud Function usando axios
+    const response = await axios.post('https://updatecourse-bz6uecg2pq-rj.a.run.app', update);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data);
+  } catch (error) {
+    console.error('Erro ao chamar função externa:', error.message);
+    res.status(500).json({ error: 'Erro ao atualizar as disciplinas externamente' });
   }
 });
 
