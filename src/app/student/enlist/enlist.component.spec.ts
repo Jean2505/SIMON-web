@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StudEnlistComponent } from './stud-enlist.component';
+import { StudentEnlistComponent } from './enlist.component';
 
-describe('StudEnlistComponent', () => {
-  let component: StudEnlistComponent;
-  let fixture: ComponentFixture<StudEnlistComponent>;
+describe('StudentEnlistComponent', () => {
+  let component: StudentEnlistComponent;
+  let fixture: ComponentFixture<StudentEnlistComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StudEnlistComponent]
+      imports: [StudentEnlistComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StudEnlistComponent);
+    fixture = TestBed.createComponent(StudentEnlistComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-inst-header',
@@ -8,5 +8,12 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.component.scss'
 })
 export class InstitutionHeaderComponent {
+  constructor(private router: Router) {}
+
+  goHome(): void {
+    this.router.navigate(['/institution/home'])
+      .then(success => console.log('Navegação realizada:', success))
+      .catch(error => console.error('Erro na navegação:', error));
+  }
 
 }

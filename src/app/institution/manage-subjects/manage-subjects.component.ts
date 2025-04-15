@@ -25,7 +25,7 @@ interface Curso {
 }
 
 @Component({
-  selector: 'app-inst-manage-subjects',
+  selector: 'app-institution-manage-subjects',
   standalone: true,
   imports: [
     CommonModule,

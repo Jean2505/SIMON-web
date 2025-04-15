@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudentService } from '../../core/services/student.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inst-home',
@@ -9,7 +10,15 @@ import { StudentService } from '../../core/services/student.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class InstitutionHomeComponent implements OnInit {
+export class InstitutionHomeComponent /* implements OnInit */ {
+  constructor(private router: Router) { }
+
+  goManageSubjects(): void {
+    this.router.navigate(['/institution/manage-subjects'])
+      .then(success => console.log('Navegação realizada:', success))
+      .catch(error => console.error('Erro na navegação:', error));
+  }
+  /*
   alunoService = inject(StudentService);
   alunos: { id: number; nome: string }[] = [];
 
@@ -25,4 +34,5 @@ export class InstitutionHomeComponent implements OnInit {
       this.ngOnInit();
     });
   }
+  */
 }
