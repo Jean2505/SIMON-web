@@ -2,10 +2,9 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './shared/login/login.component';
 import { RoleGuard } from './core/guards/role.guard';
+import { ErrorComponent } from './shared/error/error.component';
 
 export const routes: Routes = [
-  // Rota de Login: qualquer pessoa pode acessar
-  { path: 'login', component: LoginComponent },
 
   // Rota para usuários Aluno
   {
@@ -30,7 +29,11 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { expectedRole: 'INSTITUICAO' }
   },
+  // Rota de Login: qualquer pessoa pode acessar
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
 
   // Redireciona para o login caso a rota digitada não exista
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: '404' }
+  { path: '404', component: ErrorComponent }, // Componente de erro 404
 ];
