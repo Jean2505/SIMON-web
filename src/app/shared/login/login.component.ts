@@ -23,12 +23,28 @@ export class LoginComponent {
         this.enteredEmail,
         this.enteredPassword
       );
-
       console.log('Login efetuado com sucesso!', userCredential.user);
-
-      // Exemplo: redirecionar usuário para home após login
-      this.router.navigate(['/home']);
-
+  
+      // Atualiza o token para garantir que os custom claims estejam disponíveis
+      const idTokenResult = await userCredential.user.getIdTokenResult(true);
+      const role = idTokenResult.claims['role'] || '';
+      console.log('Role do usuário:', role);
+  
+      // Redireciona de acordo com o role
+      switch (role) {
+        case 'ALUNO':
+          this.router.navigate(['/student']);
+          break;
+        case 'PROFESSOR':
+          this.router.navigate(['/professor']);
+          break;
+        case 'INSTITUICAO':
+          this.router.navigate(['/institution']);
+          break;
+        default:
+          this.router.navigate(['/login']);
+          break;
+      }
     } catch (error) {
       console.error('Erro no login:', error);
       alert('Erro ao fazer login. Verifique suas credenciais!');

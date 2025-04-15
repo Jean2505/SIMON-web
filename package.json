@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run setup && concurrently \"npm run backend\" \"npm run frontend\"",
-    "setup": "if not exist node_modules npm install && if not exist backend/node_modules cd backend && npm install",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "setup": "npm install && cd backend && npm install",
     "backend": "cd backend && npx nodemon server.js",
     "frontend": "ng serve",
     "build": "ng build",

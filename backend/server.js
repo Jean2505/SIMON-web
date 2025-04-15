@@ -1,13 +1,36 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
 const db = require('./database');
 const axios = require('axios');
+const path = require('path');
+
+// Importa a configuração do Firebase Admin
+const admin = require('./functions/firebase-admin-config');
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Exemplo de endpoint que utiliza o Firebase Admin para algo, como definir custom claims
+app.get('/updateUser', async (req, res) => {
+  res.sendFile(path.join(__dirname, '/screens/updateUser.html'));
+});
+app.post('/setUserRole', async (req, res) => {
+  const { uid, role } = req.body;
+  
+  try {
+    await admin.auth().setCustomUserClaims(uid, { role });
+    //res.json({ message: `Custom claim para role '${role}' foi setada no usuário ${uid}` });
+    res.send(`Custom claim para role '${role}' foi setada no usuário ${uid}`);
+  } catch (error) {
+    res.send('Erro ao setar custom claim:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 /**
  * GET /schools

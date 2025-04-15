@@ -9,7 +9,7 @@ import { StudentService } from '../../core/services/student.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class InstHomeComponent implements OnInit {
+export class InstitutionHomeComponent implements OnInit {
   alunoService = inject(StudentService);
   alunos: { id: number; nome: string }[] = [];
 

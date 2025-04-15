@@ -39,7 +39,7 @@ interface Curso {
   templateUrl: './manage-subjects.component.html',
   styleUrls: ['./manage-subjects.component.scss']
 })
-export class InstManageComponent implements OnInit {
+export class InstitutionManageSubjectsComponent implements OnInit {
 
   // Seleção dos dropdowns
   selectedEscolaId?: string;
