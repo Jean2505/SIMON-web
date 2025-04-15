@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from "./login/login.component";
-import { InstHomeComponent } from "./inst-home/inst-home.component";
-import { InstHeaderComponent } from "./inst-header/inst-header.component";
-import { InstManageComponent } from "./inst-manage/inst-manage.component";
+import { LoginComponent } from "./shared/login/login.component";
+import { InstHomeComponent } from "./institution/home/home.component";
+import { InstHeaderComponent } from "./institution/header/header.component";
+import { InstManageComponent } from "./institution/manage-subjects/manage-subjects.component";
 
 @Component({
   selector: 'app-root',

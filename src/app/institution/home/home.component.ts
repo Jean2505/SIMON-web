@@ -1,13 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StudentService } from '../services/student.service';
+import { StudentService } from '../../core/services/student.service';
 
 @Component({
   selector: 'app-inst-home',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './inst-home.component.html',
-  styleUrls: ['./inst-home.component.scss']
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
 })
 export class InstHomeComponent implements OnInit {
   alunoService = inject(StudentService);

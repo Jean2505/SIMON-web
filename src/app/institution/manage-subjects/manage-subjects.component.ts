@@ -25,7 +25,7 @@ interface Curso {
 }
 
 @Component({
-  selector: 'app-inst-manage',
+  selector: 'app-inst-manage-subjects',
   standalone: true,
   imports: [
     CommonModule,
@@ -36,8 +36,8 @@ interface Curso {
     MatCardModule,
     DisciplineComponent
   ],
-  templateUrl: './inst-manage.component.html',
-  styleUrls: ['./inst-manage.component.scss']
+  templateUrl: './manage-subjects.component.html',
+  styleUrls: ['./manage-subjects.component.scss']
 })
 export class InstManageComponent implements OnInit {
 

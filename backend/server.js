@@ -50,13 +50,12 @@ app.get('/courses', (req, res) => {
 
 /**
  * GET /loadCourses
- * Sincroniza os dados de disciplinas (selecionadas por escola e curso) do SQLite para o Firebase
- * via uma função externa.
+ * Sincroniza os dados de disciplinas (selecionadas por escola e curso) do SQLite para o Firebase via uma função externa.
  * Espera os query parameters "school" e "major" (neste caso, os nomes da escola e do curso, respectivamente).
  */
 app.get('/loadCourses', (req, res) => {
   const { school, major } = req.query;
-  
+
   db.all(
     `
     SELECT * FROM DISCIPLINA
@@ -66,41 +65,33 @@ app.get('/loadCourses', (req, res) => {
     [school, major],
     async (err, rows) => {
       if (err) return res.status(500).json({ error: err.message });
-
-      const payload = { courses: rows };
       
+      const course = { course: major };
+      coursesToAdd = [];
+
       try {
-        // Obtém o nome do curso do body enviado pelo Angular
-        const { major } = req.body;
-    
-        // Monta o payload esperado pela função externa
-        const payload = { major };
-    
-        // Chama a Cloud Function usando axios
-        const response = await axios.post('https://getcourses-bz6uecg2pq-rj.a.run.app', payload);
-    
-        // Retorna a resposta da função externa ao front-end
-        console.log(response.data);
+        const response = await axios.post('https://getcourses-bz6uecg2pq-rj.a.run.app', course);
 
-        if (response.data && typeof response.data === 'string') {
-          this.disciplinasAparentes = JSON.parse(response.payload);
-        } else {
-          this.disciplinasAparentes = response.payload;
-        }
-
-        if(length(this.disciplinasAparentes != length(rows))) {
+        subjects = JSON.parse(response.data.payload);
+        rows.forEach(row => {
+          subject = subjects.some(d => d.id == row.id_Disciplina);
+          if (!subject) {
+            console.error(`Disciplina não encontrada: ${row.id_Disciplina}`);
+            coursesToAdd.push(row);
+          }
+        });
+        const courses = { courses: coursesToAdd };
+        if (coursesToAdd.length > 0) {
           try {
-            const response = await axios.post('https://createcourses-bz6uecg2pq-rj.a.run.app', payload);
-            console.log('Resposta da função externa:', response.payload);
+            const response = await axios.post('https://createcourses-bz6uecg2pq-rj.a.run.app', courses);
             res.json({ enviado: true, retorno: response.data });
           } catch (postError) {
             console.error('Erro ao enviar para a função externa:', postError.message);
             res.status(500).json({ error: 'Erro ao enviar para função externa', detalhe: postError.message });
           }
         }
-
-      } catch (error) {
-        console.error('Erro ao chamar função externa:', error.message);
+      } catch (err) {
+        console.error('Erro ao chamar função externa:', err.message);
         res.status(500).json({ error: 'Erro ao obter as disciplinas externamente' });
       }
     }
