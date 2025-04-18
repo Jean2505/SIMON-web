@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 
-import { type Discipline } from './discipline.model';
+import { type Discipline } from '../../../models/discipline.model';
 
 
 @Component({

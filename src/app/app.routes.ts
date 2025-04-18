@@ -1,7 +1,7 @@
 // src/app/app.routes.ts
 import { Routes } from '@angular/router';
-import { LoginComponent } from './shared/login/login.component';
 import { RoleGuard } from './core/guards/role.guard';
+import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
 
 export const routes: Routes = [

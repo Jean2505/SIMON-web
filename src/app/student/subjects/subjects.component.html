@@ -1,0 +1,27 @@
+<div class="container">
+  
+    <!-- Exibição das disciplinas, se houver um curso selecionado -->
+    <div class="manage-container">
+      <h3>Disciplinas</h3>
+      <hr />
+    
+      <!-- Cabeçalho da tabela -->
+      <div class="discipline-header">
+        <span>ID</span>
+        <span>Nome</span>
+        <span>Professor</span>
+        <span>Período</span>
+        <span>Qtd Monitores</span>
+        <span>Ações</span>
+      </div>
+    
+      <!-- Lista de cards estilizados -->
+      <ul class="disciplines">
+        <li *ngFor="let disciplina of subjects; trackBy: trackBySubject">
+          <app-discipline [cursoId]="courseId" [discipline]="disciplina"></app-discipline>
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+  

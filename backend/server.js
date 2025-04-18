@@ -121,6 +121,17 @@ app.get('/loadCourses', (req, res) => {
   );
 });
 
+app.post('/getStudent', async (req, res) => {
+  try {
+    const studentId = { uid: req.query };
+    const response = await axios.post("https://getstudentdata-bz6uecg2pq-rj.a.run.app?studentId", studentId);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Erro ao chamar função externa:', error.message);
+    res.status(500).json({ error: 'Erro ao obter dados do aluno externamente' });
+  }
+});
+
 app.post('/getExternalCourses', async (req, res) => {
   try {
     // Obtém o nome do curso do body enviado pelo Angular
@@ -142,12 +153,6 @@ app.post('/getExternalCourses', async (req, res) => {
 
 app.post('/updateCourse', async (req, res) => {
   try {
-    // Obtém o nome do curso do body enviado pelo Angular
-    const { course } = req.body;
-
-    // Monta o payload esperado pela função externa
-    const payload = { course };
-
     const update = { id: req.body.params.id, qtdMonitors: req.body.params.qtdMonitors };
 
     // Chama a Cloud Function usando axios

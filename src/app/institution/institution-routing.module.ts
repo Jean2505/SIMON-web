@@ -14,7 +14,6 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: InstitutionHomeComponent },
       { path: 'manage-subjects', component: InstitutionManageSubjectsComponent },
-      // Outras rotas filhas caso existam
     ]
   }
 ];

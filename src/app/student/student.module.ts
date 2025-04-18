@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule }   from '@angular/forms';  
 
 import { StudentRoutingModule } from './student-routing.module';
 
@@ -8,6 +9,7 @@ import { StudentRoutingModule } from './student-routing.module';
   declarations: [],
   imports: [
     CommonModule,
+    FormsModule,
     StudentRoutingModule
   ]
 })

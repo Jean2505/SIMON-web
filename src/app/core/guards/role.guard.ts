@@ -1,57 +1,80 @@
+// src/app/core/guards/role.guard.ts
 import { Injectable } from '@angular/core';
 import {
   CanActivate,
   ActivatedRouteSnapshot,
-  RouterStateSnapshot,
-  Router
+  Router,
+  UrlTree
 } from '@angular/router';
-import { getAuth } from '@angular/fire/auth';
-import { Observable, of } from 'rxjs';
+import { Auth } from '@angular/fire/auth';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private auth: Auth,
+    private firestore: Firestore,
+    private http: HttpClient
+  ) { }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean> {
-    const auth = getAuth();
-
-    return new Observable<boolean>(observer => {
-      const unsubscribe = auth.onAuthStateChanged(user => {
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
+    return new Observable<boolean | UrlTree>(observer => {
+      // Monitora estado de autenticação
+      const unsubscribe = this.auth.onAuthStateChanged(async user => {
         if (!user) {
-          // Usuário não autenticado: redireciona para login
-          this.router.navigate(['/login']);
-          observer.next(false);
+          // 1) não autenticado
+          observer.next(this.router.parseUrl('/login'));
           observer.complete();
-        } else {
-          // Força a atualização do token para pegar custom claims
-          user.getIdTokenResult(true)
-            .then(idTokenResult => {
-              const role = idTokenResult.claims['role'] || '';
-              const expectedRole = route.data['expectedRole'];
-              if (role === expectedRole) {
-                observer.next(true);
-              } else {
-                // Role não confere: redireciona para login
-                this.router.navigate(['/login']);
-                observer.next(false);
-              }
-              observer.complete();
-            })
-            .catch(err => {
-              console.error('Erro ao ler custom claims:', err);
-              this.router.navigate(['/login']);
-              observer.next(false);
-              observer.complete();
-            });
+          return;
         }
+
+        try {
+          // 2) força refresh do token para pegar claims atualizados
+          let tokenResult = await user.getIdTokenResult(true);
+          let role = tokenResult.claims['role'] as string | undefined;
+
+          // 3) se não tiver role no token, busca no Firestore e seta no backend
+          if (!role) {
+            role = 'ALUNO'; // valor padrão
+            // const userRef = doc(this.firestore, `users/${user.uid}`);
+            // const snap = await getDoc(userRef);
+            // const fetchedRole = snap.exists() ? (snap.data() as any).role : null;
+
+            // if (fetchedRole) {
+            // chama seu endpoint para definir custom claim
+            await this.http
+              .post("localhost:3000/setUserRole", {
+                uid: user.uid,
+                role: role
+              })
+              .toPromise();
+
+            // 4) atualiza o token para obter o claim recém-setado
+            tokenResult = await user.getIdTokenResult(true);
+            role = tokenResult.claims['role'] as string | undefined;
+            // }
+          }
+
+          const expectedRole = route.data['expectedRole'] as string;
+
+          // 5) valida role
+          if (role === expectedRole) {
+            observer.next(true);
+          } else {
+            observer.next(this.router.parseUrl('/login'));
+          }
+        } catch (err) {
+          console.error('Erro no RoleGuard:', err);
+          observer.next(this.router.parseUrl('/login'));
+        }
+
+        observer.complete();
       });
 
-      // Retorna a função de cleanup
+      // retorna função de cleanup
       return unsubscribe;
     });
   }

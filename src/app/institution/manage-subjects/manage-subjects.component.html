@@ -4,19 +4,19 @@
       <!-- Dropdown de Escolas -->
       <mat-form-field class="dropdown" appearance="outline">
         <mat-label>Escola</mat-label>
-        <mat-select (selectionChange)="onSelectEscola($event.value)" [disabled]="loadingSchools">
-          <mat-option *ngFor="let escola of escolas; trackBy: trackByEscola" [value]="escola.escolaId">
-            {{ escola.name }}
+        <mat-select (selectionChange)="onSelectSchool($event.value)" [disabled]="loadingSchools">
+          <mat-option *ngFor="let school of schools; trackBy: trackBySchool" [value]="school.escolaId">
+            {{ school.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
       
       <!-- Dropdown de Cursos (dependente da escola selecionada) -->
-      <mat-form-field class="dropdown" appearance="outline" *ngIf="cursos.length > 0">
+      <mat-form-field class="dropdown" appearance="outline" *ngIf="courses.length > 0">
         <mat-label>Curso</mat-label>
-        <mat-select (selectionChange)="onSelectCurso($event.value)" [disabled]="loadingCourses">
-          <mat-option *ngFor="let curso of cursos; trackBy: trackByCurso" [value]="curso.cursoId">
-            {{ curso.name }}
+        <mat-select (selectionChange)="onSelectCourse($event.value)" [disabled]="loadingCourses">
+          <mat-option *ngFor="let course of courses; trackBy: trackByCourse" [value]="course.cursoId">
+            {{ course.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -24,7 +24,7 @@
   </div>
 
   <!-- Exibição das disciplinas, se houver um curso selecionado -->
-  <div class="manage-container" *ngIf="selectedCurso">
+  <div class="manage-container" *ngIf="selectedCourse">
     <h3>Disciplinas</h3>
     <hr />
   
@@ -40,8 +40,8 @@
   
     <!-- Lista de cards estilizados -->
     <ul class="disciplines">
-      <li *ngFor="let disciplina of disciplinasAparentes; trackBy: trackByDisciplina">
-        <app-discipline [cursoId]="selectedCursoId" [discipline]="disciplina"></app-discipline>
+      <li *ngFor="let subject of subjects; trackBy: trackBySubject">
+        <app-discipline [cursoId]="selectedCourseId" [discipline]="subject"></app-discipline>
       </li>
     </ul>
   </div>

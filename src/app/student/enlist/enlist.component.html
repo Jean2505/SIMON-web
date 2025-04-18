@@ -1,1 +1,46 @@
-<p>stud-enlist works!</p>
+<div id="container">
+  <section class="candidatura-monitoria">
+    <h1>Candidatura à Monitoria</h1>
+
+    <form (ngSubmit)="enlist()">
+      <!-- Nome do aluno -->
+      <div class="form-group">
+        <label>Nome do Aluno:</label>
+        <p class="value">{{ student.name }}</p>
+      </div>
+
+      <!-- RA do aluno -->
+      <div class="form-group">
+        <label>RA:</label>
+        <p class="value">{{ student.ra }}</p>
+      </div>
+
+      <!-- Remuneração do aluno -->
+      <div class="form-group">
+        <label>Remuneração:</label>
+        <mat-slide-toggle [(ngModel)]="isSwitchOn" name="payroll">
+        </mat-slide-toggle>
+        <p class="value">{{ isSwitchOn ? "Sim" : "Não" }}</p>
+      </div>
+
+      <!-- Campo para o aluno escrever a justificativa -->
+      <div class="form-group">
+        <label for="mensagem">Justificativa / Motivação:</label>
+        <textarea
+          id="mensagem"
+          name="mensagem"
+          [(ngModel)]="message"
+          rows="5"
+          placeholder="Descreva aqui por que você deseja ser monitor…"
+          required
+        >
+        </textarea>
+      </div>
+
+      <!-- Botão de envio -->
+      <button type="submit" [disabled]="!message || !isSwitchOn">
+        Enviar Candidatura
+      </button>
+    </form>
+  </section>
+</div>
