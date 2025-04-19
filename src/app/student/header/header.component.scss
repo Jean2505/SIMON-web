@@ -46,12 +46,23 @@
   .container .logout {
     position: relative;
     width: 20vw;
-    height: 100vh;
     z-index: 2;
     text-align: center;
     align-items: center;
     justify-content: center;
     margin-left: 10px;
+    padding: 2.8vh;
+  }
+
+  .text{
+    position: relative;
+    width: auto;
+    cursor: pointer;
+  }
+
+  svg{
+    margin-left: 3px;
+    vertical-align: middle;
   }
   
   .logout img {
@@ -67,4 +78,3 @@
     margin-top: 5px;
     cursor: pointer;
   }
-  

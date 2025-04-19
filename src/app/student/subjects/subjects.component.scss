@@ -88,7 +88,7 @@ hr{
 }
 
 .manage-container {
-    margin-top: 24px;
+    margin-top: 15vh;
 
     h3 {
       font-size: 2rem;
@@ -118,7 +118,7 @@ hr{
 
     .discipline-header {
       display: grid;
-      grid-template-columns: 80px 1.5fr 1.5fr 1fr 1.5fr 1fr;
+      grid-template-columns: 80px 1.5fr 1.5fr 1fr 1fr;
       padding: 12px 20px;
       background: -webkit-linear-gradient(right, rgba(86, 216, 228, 0.3), rgb(83, 1, 234, 0.3));
       border-radius: 8px;

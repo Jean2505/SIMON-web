@@ -168,6 +168,17 @@ form .form-row .textarea{
   z-index: 2;
 }
 
+.Logo{
+  width: 70%;
+  margin-top: -20%;
+  margin-bottom: 10%;
+  position: relative;
+  filter: brightness(0) saturate(100%) invert(16%) sepia(99%) saturate(2732%) hue-rotate(205deg) brightness(97%) contrast(101%);
+  display: block;
+  margin: -20% auto 10% auto;
+  padding-right: 10px;
+}
+
 @media (max-width: 700px) {
   .container .text{
     font-size: 30px;
