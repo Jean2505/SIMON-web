@@ -17,7 +17,7 @@ const routes: Routes = [
       { path: 'subjects', component: StudentSubjectsComponent },
       { path: ':id/enlist', component: StudentEnlistComponent },
     ]
-  }
+  } 
 ];
 
 @NgModule({

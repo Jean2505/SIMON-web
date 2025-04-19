@@ -109,12 +109,12 @@ app.get('/loadCourses', (req, res) => {
             const response = await axios.post('https://createcourses-bz6uecg2pq-rj.a.run.app', courses);
             res.json({ enviado: true, retorno: response.data });
           } catch (postError) {
-            console.error('Erro ao enviar para a função externa:', postError.message);
+            console.error('Erro ao enviar para a função createcourses:', postError.message);
             res.status(500).json({ error: 'Erro ao enviar para função externa', detalhe: postError.message });
           }
         }
       } catch (err) {
-        console.error('Erro ao chamar função externa:', err.message);
+        console.error('Erro ao chamar função getcourses:', err.message);
         res.status(500).json({ error: 'Erro ao obter as disciplinas externamente' });
       }
     }
@@ -127,17 +127,14 @@ app.post('/getStudent', async (req, res) => {
     const response = await axios.post("https://getstudentdata-bz6uecg2pq-rj.a.run.app?studentId", studentId);
     res.json(response.data);
   } catch (error) {
-    console.error('Erro ao chamar função externa:', error.message);
+    console.error('Erro ao chamar função getStudent:', error.message);
     res.status(500).json({ error: 'Erro ao obter dados do aluno externamente' });
   }
 });
 
 app.post('/getExternalCourses', async (req, res) => {
   try {
-    // Obtém o nome do curso do body enviado pelo Angular
     const { course } = req.body;
-
-    // Monta o payload esperado pela função externa
     const payload = { course };
 
     // Chama a Cloud Function usando axios
@@ -161,10 +158,25 @@ app.post('/updateCourse', async (req, res) => {
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);
   } catch (error) {
-    console.error('Erro ao chamar função externa:', error.message);
+    console.error('Erro ao chamar função updatecourse:', error.message);
     res.status(500).json({ error: 'Erro ao atualizar as disciplinas externamente' });
   }
 });
+
+app.post('/enlist', async (req, res) => {
+  try {
+    const enlist = { id: req.body.params.id, studentId: req.body.params.studentId };
+
+    // Chama a Cloud Function usando axios
+    const response = await axios.post('https://enlist-bz6uecg2pq-rj.a.run.app', enlist);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data);
+  } catch (error) {
+    console.error('Erro ao chamar função enlist:', error.message);
+    res.status(500).json({ error: 'Erro ao inscrever o aluno externamente' });
+  }
+})
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule }  from '@angular/common';
-import { FormsModule }   from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from '@angular/fire/auth';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -24,14 +24,14 @@ export class StudentEnlistComponent implements OnInit {
   isSwitchOn = false;
 
   constructor(private http: HttpClient, private auth: Auth) { }
-  
+
   ngOnInit() {
     this.getStudent();
   }
 
   getStudent() {
     const uid = this.auth.currentUser?.uid;
-    this.http.post('http://localhost:3000/getStudent', { studentID: uid } )
+    this.http.post('http://localhost:3000/getStudent', { studentID: uid })
       .subscribe({
         next: (response: any) => {
           console.log('Dados do aluno:', response.payload);
@@ -48,15 +48,31 @@ export class StudentEnlistComponent implements OnInit {
   }
 
   enlist() {
+    if (!this.student) {
+      console.error('Aluno não encontrado');
+      return;
+    }
+    if (!this.message) {
+      console.error('Mensagem não pode ser vazia');
+      return;
+    }
+    const enlist = {
+      uid: this.student.uid,
+      nome: this.student.name,
+      ra: this.student.ra,
+      mensagem: this.message
+    }
     try {
-      if (!this.student) {
-        console.error('Aluno não encontrado');
-        return;
-      }
-      if (!this.message) {
-        console.error('Mensagem não pode ser vazia');
-        return;
-      }
+      this.http.post('http://localhost:3000/enlist', enlist).subscribe({
+        next: (response) => {
+          console.log('Candidatura enviada com sucesso:', response);
+          alert('Candidatura enviada com sucesso!');
+        },
+        error: (error) => {
+          console.error('Erro ao enviar candidatura:', error);
+          alert('Erro ao enviar candidatura. Tente novamente mais tarde.');
+        }
+      });
       console.log('Candidatura enviada:', {
         nome: this.student.name,
         ra: this.student.ra,
