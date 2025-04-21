@@ -66,6 +66,30 @@ export const getCourses = onRequest({region: "southamerica-east1"}, async (req, 
     }
 });
 
+export const createMonitor = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+
+    try {
+        await db.collection("Monitores").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Monitor created successfully",
+            payload: "Monitor created successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating monitor",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+
+});
+
 export const createCourses = onRequest({region: "southamerica-east1"}, (req, res) => {
     let result: CallableResponse;
     
@@ -102,7 +126,7 @@ export const createCourses = onRequest({region: "southamerica-east1"}, (req, res
     }
 });
 
-export const updateCourse = onRequest({region: "southamerica-east1"}, async (req, res) => {
+export const updateCourse = onRequest({region: "southamerica-east1" }, async (req, res) => {
     const snapshot = await db.collection("Courses").where("id", "==", req.body.id).get();
 
     if (snapshot.empty) {
@@ -118,4 +142,52 @@ export const updateCourse = onRequest({region: "southamerica-east1"}, async (req
     //   });
 
     res.status(200).send('Documento atualizado com sucesso!');
+});
+
+export const findUser = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+
+    const snapshot = await db.collection("Alunos").where("uid", "==", req.body.uid).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "User found",
+        payload: JSON.stringify(snapshot.docs[0].data())
+    };
+    res.status(200).send(result);
+});
+
+export const findMonitor = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.body.uid).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "Monitor found",
+        payload: JSON.stringify(snapshot.docs[0].data())
+    };
+    res.status(200).send(result);
 });
