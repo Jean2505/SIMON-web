@@ -23,5 +23,4 @@ export class StudentHomeComponent {
       .then(success => console.log('Navegação realizada:', success))
       .catch(error => console.error('Erro na navegação:', error));
   }
-
 }

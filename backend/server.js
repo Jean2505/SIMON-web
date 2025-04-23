@@ -49,6 +49,25 @@ app.get('/schools', (req, res) => {
 });
 
 /**
+ * GET /course
+ * Retorna a lista de disciplinas (distintas) para um curso específico.
+ */
+app.get('/discipline', (req, res) => {
+  const { disciplineId } = req.query;
+  if (!disciplineId) {
+    return res.status(400).json({ error: "Parâmetro 'course' é obrigatório." });
+  }
+  db.all(
+    "SELECT * FROM DISCIPLINA WHERE id_Disciplina = ?",
+    [disciplineId],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
+})
+
+/**
  * GET /courses
  * Retorna a lista de cursos (distintos) para uma escola específica.
  * Aceita o parâmetro "school" (o identificador/nome da escola) e retorna:
@@ -123,11 +142,12 @@ app.get('/loadCourses', (req, res) => {
 
 app.post('/getStudent', async (req, res) => {
   try {
-    const studentId = { uid: req.query };
-    const response = await axios.post("https://getstudentdata-bz6uecg2pq-rj.a.run.app?studentId", studentId);
+    const studentId = req.body;
+    console.log('Requisição: ', studentId);
+    const response = await axios.post("https://finduser-bz6uecg2pq-rj.a.run.app", studentId);
     res.json(response.data);
   } catch (error) {
-    console.error('Erro ao chamar função getStudent:', error.message);
+    console.error('Erro ao chamar função findUser:', error.message);
     res.status(500).json({ error: 'Erro ao obter dados do aluno externamente' });
   }
 });
@@ -165,15 +185,14 @@ app.post('/updateCourse', async (req, res) => {
 
 app.post('/enlist', async (req, res) => {
   try {
-    const enlist = { id: req.body.params.id, studentId: req.body.params.studentId };
-
     // Chama a Cloud Function usando axios
-    const response = await axios.post('https://enlist-bz6uecg2pq-rj.a.run.app', enlist);
+    console.log('Requisição: ', req.body);
+    const response = await axios.post('https://createmonitor-bz6uecg2pq-rj.a.run.app', req.body);
 
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);
   } catch (error) {
-    console.error('Erro ao chamar função enlist:', error.message);
+    console.error('Erro ao chamar função createMemonitor:', error.message);
     res.status(500).json({ error: 'Erro ao inscrever o aluno externamente' });
   }
 })

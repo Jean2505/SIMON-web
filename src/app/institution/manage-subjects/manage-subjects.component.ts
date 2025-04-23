@@ -139,7 +139,6 @@ export class InstitutionManageSubjectsComponent implements OnInit {
           console.error('Erro ao obter matérias da rota local:', err);
         }
       });
-
   }
 
   // Sincroniza os dados de disciplinas do SQLite para o Firebase via backend

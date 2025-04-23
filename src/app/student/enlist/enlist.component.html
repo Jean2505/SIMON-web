@@ -1,12 +1,12 @@
 <div id="container">
   <section class="candidatura-monitoria">
-    <h1>Candidatura à Monitoria</h1>
+    <h1>Candidatura à Monitoria: {{ discipline }}</h1>
 
     <form (ngSubmit)="enlist()">
       <!-- Nome do aluno -->
       <div class="form-group">
         <label>Nome do Aluno:</label>
-        <p class="value">{{ student.name }}</p>
+        <p class="value">{{ student.nome }}</p>
       </div>
 
       <!-- RA do aluno -->
@@ -37,10 +37,19 @@
         </textarea>
       </div>
 
+      <div class="form-group">
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Carga‑Horária (h)</mat-label>
+          <mat-select [(ngModel)]="selectedHours" name="hours" required>
+            <mat-option *ngFor="let h of hoursOptions" [value]="h">
+              {{ h }} h
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <!-- Botão de envio -->
-      <button type="submit" [disabled]="!message || !isSwitchOn">
-        Enviar Candidatura
-      </button>
+      <button type="submit" [disabled]="!message">Enviar Candidatura</button>
     </form>
   </section>
 </div>
