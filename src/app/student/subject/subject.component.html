@@ -17,9 +17,11 @@
     
       <!-- Lista de cards estilizados -->
       <ul class="monitors">
-        <li *ngFor="let subject of subjects; trackBy: trackBySubject">
-          <app-monitor [cursoId]="courseId" [discipline]="subject"></app-monitor>
-        </li>
+        @for (monitor of monitors; track monitor.ra) {
+          <li>
+            <app-monitors></app-monitors>
+          </li>
+        }
       </ul>
     </div>
     
