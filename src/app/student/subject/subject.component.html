@@ -1,0 +1,27 @@
+<div class="container">
+  
+    <!-- Exibição das disciplinas, se houver um curso selecionado -->
+    <div class="list-monitor">
+      <h3>Monitores</h3>
+      <hr />
+    
+      <!-- Cabeçalho da tabela -->
+      <div class="monitors-header">
+        <span>Foto</span>
+        <span>Nome</span>
+        <span>Horario</span>
+        <span>Prédio</span>
+        <span>Sala</span>
+        <span>Status</span>
+      </div>
+    
+      <!-- Lista de cards estilizados -->
+      <ul class="monitors">
+        <li *ngFor="let subject of subjects; trackBy: trackBySubject">
+          <app-monitor [cursoId]="courseId" [discipline]="subject"></app-monitor>
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+  

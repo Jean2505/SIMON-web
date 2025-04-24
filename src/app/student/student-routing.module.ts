@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { StudentHeaderComponent } from './header/header.component';
 import { StudentHomeComponent } from './home/home.component';
 import { StudentSubjectsComponent } from './subjects/subjects.component';
+import { StudentSubjectComponent } from './subject/subject.component';
 import { StudentEnlistComponent } from './enlist/enlist.component';
 
 const routes: Routes = [
