@@ -20,8 +20,8 @@ export class DisciplineComponent {
 
   constructor(private router: Router) { }
 
-  enlistSubject(discipline: Discipline): void {
-    this.router.navigate([`/student/${discipline.id}/enlist`])
+  viewSubject(discipline: Discipline): void {
+    this.router.navigate([`/student/subject/${discipline.id}`]) 
       .then(success => console.log('Navegação realizada:', success))
       .catch(error => console.error('Erro na navegação:', error));
   }

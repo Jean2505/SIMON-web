@@ -16,7 +16,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: StudentHomeComponent },
       { path: 'subjects', component: StudentSubjectsComponent },
-      { path: ':id/enlist', component: StudentEnlistComponent },
+      { path: 'subject/:id', component: StudentSubjectComponent },
+      { path: 'enlist', component: StudentEnlistComponent },
     ]
   } 
 ];
