@@ -1,8 +1,13 @@
 <div class="monitor-row">
-    <span>{{ monitor?.photo }}</span>
+    <span class="photo-container">
+      <img class="monitor-photo" [src]="monitor?.photo" alt="Foto do monitor">
+    </span>
     <span>{{ monitor?.name }}</span>
     <span>{{ monitor?.availability }}</span>
     <span>{{ monitor?.local }}</span>
     <span>{{ monitor?.room }}</span>
-    <span>{{ monitor?.status }}</span>
-</div>
+    <span>{{ monitor?.status ? "Disponível" : "Indisponível" }}</span>
+    <span>
+      <button class="btn-acessar">Acessar</button>
+    </span>
+  </div>

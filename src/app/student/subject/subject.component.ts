@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { type Monitor } from "../../models/monitor.model"
 import { MonitorsComponent } from "./monitors/monitors.component";
+import { DUMMY_MONITORS } from './monitors/dummy-monitors';
 
 @Component({
   selector: 'app-subject',
@@ -21,5 +22,6 @@ import { MonitorsComponent } from "./monitors/monitors.component";
   styleUrl: './subject.component.scss'
 })
 export class StudentSubjectComponent {
-  monitors: Monitor[] = [];
+  monitors = DUMMY_MONITORS;
+
 }

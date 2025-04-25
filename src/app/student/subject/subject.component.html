@@ -13,13 +13,14 @@
         <span>Prédio</span>
         <span>Sala</span>
         <span>Status</span>
+        <span>Ação</span>
       </div>
     
       <!-- Lista de cards estilizados -->
       <ul class="monitors">
         @for (monitor of monitors; track monitor.ra) {
           <li>
-            <app-monitors></app-monitors>
+            <app-monitors [monitor]="monitor"></app-monitors>
           </li>
         }
       </ul>
