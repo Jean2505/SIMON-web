@@ -1,51 +1,51 @@
 .monitor-row {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    background: #fff;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    text-align: center;
-    align-items: center; // Centraliza verticalmente
-    justify-content: space-between; // Ou "center" pra tudo no meio
-  }
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  align-items: center; // Centraliza verticalmente
+  justify-content: space-between; // Ou "center" pra tudo no meio
+}
 
-  .monitor-row span {
-    flex: 1;
-    padding: 0 10px;
-    font-size: 14px;
-    color: #333;
-  }
+.monitor-row span {
+  flex: 1;
+  padding: 0 10px;
+  font-size: 14px;
+  color: #333;
+}
 
-  .monitor-photo {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+.monitor-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 
-  .monitor-row .photo-container {
-    flex: 0 0 auto;
-    padding-left: 10px;
-  }
+.monitor-row .photo-container {
+  flex: 0 0 auto;
+  padding-left: 10px;
+}
 
-  .btn-acessar {
-    background-color: #0095f6;
-    color: white;
-    padding: 6px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 14px;
-  }
+.btn-acessar {
+  background-color: #0095f6;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
 
-  .btn-acessar:hover {
-    background-color: #007bd1;
-  }
+.btn-acessar:hover {
+  background-color: #007bd1;
+}
 
-  .monitor-header,
+.monitor-header,
 .monitor-row {
   display: flex;
   align-items: center;

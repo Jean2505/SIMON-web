@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     width: 100vw;
     height: 100vh;
@@ -9,23 +9,23 @@
     align-items: center;
 }
 
-.parent{
+.parent {
     width: 50%;
 }
 
-img{
+img {
     width: 40%;
     float: left;
     margin-left: 10px;
 }
 
-h1{
+h1 {
     font-size: 3rem;
     background: -webkit-linear-gradient(right, #56d8e4, #5301ea, #56d8e4, #5301ea);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent; 
+    -webkit-text-fill-color: transparent;
 }
 
-h3{
+h3 {
     margin-top: 3px;
 }
