@@ -215,3 +215,8 @@ export const getCourseMonitors = onRequest({region: "southamerica-east1"}, async
     };
     res.status(200).send(result);
 });
+
+export const helloWorld = onRequest({region: "southamerica-east1"}, (req, res) => {
+    logger.info("Hello logs!", {structuredData: true});
+    res.send("Hello from Firebase!");
+});
