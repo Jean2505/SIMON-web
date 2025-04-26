@@ -145,6 +145,7 @@ app.post('/getStudent', async (req, res) => {
     const studentId = req.body;
     console.log('Requisição: ', studentId);
     const response = await axios.post("https://finduser-bz6uecg2pq-rj.a.run.app", studentId);
+    console.log('Resposta: ', response.data);
     res.json(response.data);
   } catch (error) {
     console.error('Erro ao chamar função findUser:', error.message);
@@ -159,6 +160,8 @@ app.post('/getExternalCourses', async (req, res) => {
 
     // Chama a Cloud Function usando axios
     const response = await axios.post('https://getcourses-bz6uecg2pq-rj.a.run.app', payload);
+
+    console.log('Requisição: ', payload);
 
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);

@@ -9,6 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Student } from '../../models/student.model';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { Discipline } from '../../models/discipline.model';
 
 @Component({
   selector: 'app-student-enlist',
@@ -32,32 +33,22 @@ export class StudentEnlistComponent implements OnInit {
   student: Student = {
     nome: 'carregando...',
     uid: 'carregando...',
-    ra: 'carregando...'
+    ra: 'carregando...',
+    curso: 'carregando...',
   };
   time!: string;
   message = '';
   isSwitchOn = false;
+  subjectsOptions: Discipline[] = [];
+  selectedSubject!: Discipline;
   hoursOptions: number[] = [6, 12, 18];
   selectedHours!: number;
 
   ngOnInit() {
-    this.disciplineId = this.route.snapshot.paramMap.get('id')!;
-    this.http.get('http://localhost:3000/discipline', { params: { disciplineId: this.disciplineId } })
-      .subscribe({
-        next: (response: any) => {
-          console.log('Resposta do servidor:', response[0]);
-          this.discipline = response[0].nome_Disciplina;
-          console.log('Nome da disciplina:', this.discipline);
-        },
-        error: (error) => {
-          console.error('Error em subscribe do discipline:', error);
-        }
-      });
     this.getStudent();
   }
 
   getStudent() {
-    console.log('ID da disciplina:', this.disciplineId);
     const uid = this.auth.currentUser?.uid;
     var result: any = null;
     console.log('UID do aluno:', uid);
@@ -65,12 +56,31 @@ export class StudentEnlistComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           result = JSON.parse(response.payload);
+          console.log('Aluno recebido:', result);
           this.student.nome = result.nome;
           this.student.uid = result.uid;
           this.student.ra = result.ra;
+          this.student.curso = result.curso;
+          this.loadSubjects();
         },
         error: (error) => {
           console.error('Error em subscribe do getStudent:', error);
+        }
+      });
+  }
+
+  loadSubjects() {
+    console.log('curso:', this.student.curso);
+    var result: any = null;
+    this.http.post('http://localhost:3000/getExternalCourses', { course: this.student.curso })
+      .subscribe({
+        next: (response: any) => {
+          result = JSON.parse(response.payload);
+          console.log('Matérias recebidas:', result);
+          this.subjectsOptions = result;
+        },
+        error: (error) => {
+          console.error('Error em subscribe do getExternalCourses:', error);
         }
       });
   }
@@ -88,8 +98,8 @@ export class StudentEnlistComponent implements OnInit {
       uid: this.student.uid,
       nome: this.student.nome,
       ra: this.student.ra,
-      disciplinaId: this.disciplineId,
-      disciplina: this.discipline,
+      disciplinaId: this.selectedSubject.id,
+      disciplina: this.selectedSubject.name,
       mensagem: this.message,
       status: 'Analise',
       cargaHoraria: this.selectedHours,
