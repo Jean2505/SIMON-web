@@ -49,14 +49,12 @@
         </div>
 
         <div class="form-group">
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Carga‑Horária (h)</mat-label>
-            <mat-select panelClass="custom-select-panel" [(ngModel)]="selectedHours" name="hours" class="dropdown" required>
-              <mat-option *ngFor="let h of hoursOptions" [value]="h">
-                {{ h }} h
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <label>Carga‑Horária (h)</label>
+          <mat-select panelClass="custom-select-panel value" [(ngModel)]="selectedHours" name="hours" class="dropdown" required>
+            <mat-option *ngFor="let h of hoursOptions" [value]="h">
+              {{ h }} h
+            </mat-option>
+          </mat-select>
         </div>
 
         <div class="form-row submit-btn">

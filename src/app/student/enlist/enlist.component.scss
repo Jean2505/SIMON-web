@@ -40,11 +40,12 @@
       font-weight: 500;
     }
 
-    .value {
+    .value,
+    mat-select {
       background-color: #4da0ff42;
       background: linear-gradient(90deg, rgba(77, 160, 255, 0.3) 62%, rgba(1, 52, 110, 0.5) 100%);
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 8px !important;
       color: black;
       border: 1px solid #4da0ff52;
     }
