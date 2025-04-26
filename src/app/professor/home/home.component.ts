@@ -35,8 +35,8 @@ export class ProfessorHomeComponent {
   /**
    * Navega para a tela de monitores do professor.
    */
-  goMonitors(): void {
-    this.router.navigate(['/professor/monitors'])
+  goTutors(): void {
+    this.router.navigate(['/professor/tutors'])
       .then(success => {
         console.log('Navegação realizada:', success);
         console.clear(); // Limpa o console após navegação bem-sucedida

@@ -18,10 +18,12 @@
 
     <!-- Lista de cards estilizados -->
     <ul class="monitors">
-      @if (monitors.length > 0) {
-        @for (monitor of monitors; track monitor.ra) {
+      @if (loadingTutors) {
+      <li class="loading">Carregando monitores...</li>
+      } @else if (tutors.length > 0) {
+        @for (tutor of tutors; track tutor.ra) {
         <li>
-          <app-monitors [monitor]="monitor"></app-monitors>
+          <app-tutors [tutor]="tutor"></app-tutors>
         </li>
         }
       } @else {

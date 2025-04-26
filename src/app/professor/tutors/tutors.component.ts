@@ -4,17 +4,17 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 
-interface MonitorAssignment {
+interface TutorAssignment {
   school: string;
   course: string;
   subject: string;
-  monitors: string[];
+  tutors: string[];
   candidates: string[];
 }
 
 interface Subject {
   name: string;
-  monitors: string[];
+  tutors: string[];
   candidates: string[];
 }
 
@@ -36,12 +36,12 @@ interface School {
     MatIconModule,
     MatCardModule
   ],
-  templateUrl: './monitors.component.html',
-  styleUrls: ['./monitors.component.scss']
+  templateUrl: './tutors.component.html',
+  styleUrls: ['./tutors.component.scss']
 })
-export class ProfessorMonitorsComponent implements OnInit {
+export class ProfessorTutorsComponent implements OnInit {
   /** Dados originais — substitua pela chamada ao seu serviço */
-  private assignments: MonitorAssignment[] = [];
+  private assignments: TutorAssignment[] = [];
 
   /** Estrutura agrupada para template */
   public groupedData: School[] = [];
@@ -53,14 +53,14 @@ export class ProfessorMonitorsComponent implements OnInit {
         school: 'Escola Politécnica',
         course: 'Engenharia Mecânica',
         subject: 'Cálculo I',
-        monitors: ['João', 'Ana'],
+        tutors: ['João', 'Ana'],
         candidates: ['Carlos', 'Mariana']
       },
       {
         school: 'Escola de Economia e Negócios',
         course: 'Economia e Administração',
         subject: 'Introdução à Matemática Básica',
-        monitors: ['Pedro'],
+        tutors: ['Pedro'],
         candidates: ['Luís', 'Maria']
       }
       // ... demais registros
@@ -72,7 +72,7 @@ export class ProfessorMonitorsComponent implements OnInit {
   /**
    * Agrupa um array plano de atribuições em escolas → cursos → disciplinas.
    */
-  private transformData(data: MonitorAssignment[]): School[] {
+  private transformData(data: TutorAssignment[]): School[] {
     const schoolMap = new Map<string, Map<string, Subject[]>>();
 
     data.forEach(item => {
@@ -86,7 +86,7 @@ export class ProfessorMonitorsComponent implements OnInit {
       }
       courseMap.get(item.course)!.push({
         name: item.subject,
-        monitors: item.monitors,
+        tutors: item.tutors,
         candidates: item.candidates
       });
     });

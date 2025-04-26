@@ -8,9 +8,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { type Monitor } from '../../models/monitor.model';
-import { MonitorsComponent } from './monitors/monitors.component';
-import { DUMMY_MONITORS } from './monitors/dummy-monitors';
+import { type Tutor } from '../../models/tutor.model';
+import { TutorsComponent } from './tutors/tutors.component';
+import { DUMMY_MONITORS } from './tutors/dummy-monitors';
 
 /**
  * Componente de exibição de monitores de uma disciplina para o estudante.
@@ -25,20 +25,23 @@ import { DUMMY_MONITORS } from './monitors/dummy-monitors';
     MatSelectModule,
     MatIconModule,
     MatCardModule,
-    MonitorsComponent
+    TutorsComponent
   ],
   templateUrl: './subject.component.html',
   styleUrls: ['./subject.component.scss']
 })
 export class StudentSubjectComponent implements OnInit {
   /** Lista de monitores disponíveis para a disciplina. */
-  monitors: Monitor[] = [];
+  tutors: Tutor[] = [];
 
   /** ID da disciplina extraído da rota. */
   disciplineId!: string;
 
   /** Nome da disciplina exibido no topo. */
   discipline: string = 'carregando...';
+
+  /** Indica se as disciplinas estão sendo carregadas. */
+  loadingTutors = true;
 
   /**
    * Construtor do componente.
@@ -89,7 +92,7 @@ export class StudentSubjectComponent implements OnInit {
         next: (response: any) => {
           result = JSON.parse(response.payload);
           console.log('Resposta do servidor:', result);
-          this.monitors = result.map((monitor: any) => ({
+          this.tutors = result.map((monitor: any) => ({
             approved: monitor.aprovacao,
             discipline: monitor.disciplina,
             disciplineId: monitor.disciplinaId,
@@ -103,8 +106,9 @@ export class StudentSubjectComponent implements OnInit {
           }));
         },
         error: error => {
-          console.error('Erro ao buscar monitores:', error);
-        }
+          console.error('Erro ao buscar monitores:', error);  
+        },
       });
+      this.loadingTutors = false; // Atualiza o estado de carregamento após a resposta
   }
 }

@@ -5,7 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProfessorHeaderComponent } from './header/header.component';
 import { ProfessorHomeComponent } from './home/home.component';
 import { ProfessorSubjectsComponent } from './subjects/subjects.component';
-import { ProfessorMonitorsComponent } from './monitors/monitors.component';
+import { ProfessorTutorsComponent } from './tutors/tutors.component';
 
 const routes: Routes = [
   {
@@ -15,7 +15,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: ProfessorHomeComponent },
       { path: 'subjects', component: ProfessorSubjectsComponent },
-      { path: 'monitors', component: ProfessorMonitorsComponent },
+      { path: 'tutors', component: ProfessorTutorsComponent },
     ]
   }
 ];

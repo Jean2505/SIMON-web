@@ -63,13 +63,11 @@ export class StudentSubjectsComponent implements OnInit {
         },
         error: (error) => {
           console.error('Erro ao carregar matérias:', error);
-        },
-        complete: () => {
-          console.log('Carregamento de matérias concluído.');
-          this.loadingDisciplinas = false;
-          this.loadingSync = false;
         }
       });
+      console.log('Carregamento de matérias concluído.');
+      this.loadingDisciplinas = false;
+      this.loadingSync = false;
   }
 
   /**

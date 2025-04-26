@@ -1,0 +1,13 @@
+<div class="monitor-row">
+    <span class="photo-container">
+      <img class="monitor-photo" [src]="tutor.photo" alt="Foto do monitor">
+    </span>
+    <span>{{ tutor.name }}</span>
+    <span>{{ tutor.availability }}</span>
+    <span>{{ tutor.local }}</span>
+    <span>{{ tutor.room }}</span>
+    <span>{{ tutor.status ? "Disponível" : "Indisponível" }}</span>
+    <span>
+      <button class="btn-acessar">Acessar</button>
+    </span>
+  </div>

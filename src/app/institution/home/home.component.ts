@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';  
-import { CommonModule } from '@angular/common';  
-import { Router } from '@angular/router';  
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inst-home',               // Seletor HTML para usar este componente
@@ -24,6 +24,16 @@ export class InstitutionHomeComponent {
    */
   goManageSubjects(): void {
     this.router.navigate(['/institution/manage-subjects'])
+      .then(success => console.log('Navegação realizada:', success))
+      .catch(error => console.error('Erro na navegação:', error));
+  }
+
+  /**
+   * Método para navegar até a página de gerenciamento de monitores da instituição.
+   * Utiliza Router.navigate e registra no console se a navegação foi bem-sucedida ou não.
+   */
+  goManageTutors(): void {
+    this.router.navigate(['/institution/manage-tutors'])
       .then(success => console.log('Navegação realizada:', success))
       .catch(error => console.error('Erro na navegação:', error));
   }

@@ -1,4 +1,4 @@
-export interface Monitor {  // Interface para o monitor
+export interface Tutor {  // Interface para o monitor
     approved: string;       // Status de aprovação
     availability: string;   // Horário de atendimento
     discipline: string;     // Nome da disciplina
