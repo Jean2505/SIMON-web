@@ -21,8 +21,11 @@ export class DisciplineComponent {
   constructor(private router: Router) { }
 
   viewSubject(discipline: Discipline): void {
-    this.router.navigate([`/student/subject/${discipline.id}`]) 
-      .then(success => console.log('Navegação realizada:', success))
+    this.router.navigate([`/student/subject/${discipline.id}`])
+    .then(success => {
+      console.log('Navegação realizada:', success);
+      console.clear();
+    })
       .catch(error => console.error('Erro na navegação:', error));
   }
 }

@@ -14,19 +14,28 @@ export class ProfessorHomeComponent {
 
   goSubjects(): void {
     this.router.navigate(['/professor/subjects'])
-      .then(success => console.log('Navegação realizada:', success))
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();
+      })
       .catch(error => console.error('Erro na navegação:', error));
   }
 
   goMonitors(): void {
     this.router.navigate(['/professor/monitors'])
-      .then(success => console.log('Navegação realizada:', success))
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();
+      })
       .catch(error => console.error('Erro na navegação:', error));
   }
 
   goEnlist(): void {
     this.router.navigate(['/professor/enlist'])
-      .then(success => console.log('Navegação realizada:', success))
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();
+      })
       .catch(error => console.error('Erro na navegação:', error));
   }
 }

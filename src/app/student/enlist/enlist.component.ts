@@ -35,6 +35,7 @@ export class StudentEnlistComponent implements OnInit {
     uid: 'carregando...',
     ra: 'carregando...',
     curso: 'carregando...',
+    foto: '',
   };
   time!: string;
   message = '';
@@ -61,6 +62,7 @@ export class StudentEnlistComponent implements OnInit {
           this.student.uid = result.uid;
           this.student.ra = result.ra;
           this.student.curso = result.curso;
+          this.student.foto = result.photo;
           this.loadSubjects();
         },
         error: (error) => {
@@ -95,14 +97,18 @@ export class StudentEnlistComponent implements OnInit {
       return;
     }
     const enlist = {
-      uid: this.student.uid,
-      nome: this.student.nome,
-      ra: this.student.ra,
-      disciplinaId: this.selectedSubject.id,
-      disciplina: this.selectedSubject.name,
-      mensagem: this.message,
-      status: 'Analise',
+      aprovacao: 'Analise',
       cargaHoraria: this.selectedHours,
+      disciplina: this.selectedSubject.name,
+      disciplinaId: this.selectedSubject.id,
+      local: '',
+      mensagem: this.message,
+      nome: this.student.nome,
+      foto: this.student.foto,
+      ra: this.student.ra,
+      sala: '',
+      status: false,
+      uid: this.student.uid,
     }
     try {
       this.http.post('http://localhost:3000/enlist', enlist).subscribe({

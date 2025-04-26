@@ -23,7 +23,7 @@ import { DUMMY_MONITORS } from './monitors/dummy-monitors';
     MatIconModule,
     MatCardModule,
     MonitorsComponent
-],
+  ],
   templateUrl: './subject.component.html',
   styleUrl: './subject.component.scss'
 })
@@ -31,11 +31,16 @@ export class StudentSubjectComponent implements OnInit {
 
   constructor(private http: HttpClient, private auth: Auth, private route: ActivatedRoute) { }
 
-  monitors = DUMMY_MONITORS;
+  monitors: Monitor[] = [];
   disciplineId!: string;
   discipline: string = 'carregando...';
-  
+
   ngOnInit() {
+    this.getMonitors();
+  }
+
+  getMonitors() {
+    let result: any = null;
     this.disciplineId = this.route.snapshot.paramMap.get('id')!;
     this.http.get('http://localhost:3000/discipline', { params: { disciplineId: this.disciplineId } })
       .subscribe({
@@ -48,20 +53,28 @@ export class StudentSubjectComponent implements OnInit {
           console.error('Error em subscribe do discipline:', error);
         }
       });
-    this.getMonitors();
-  }
-
-  getMonitors() {
     console.log('ID da disciplina:', this.disciplineId);
-    this.http.get('http://localhost:3000/monitor', { params: { disciplineId: this.disciplineId } })
+    this.http.post('http://localhost:3000/getTutor', { courseId: this.disciplineId })
       .subscribe({
         next: (response: any) => {
-          console.log('Resposta do servidor:', response);
-          this.monitors = response;
+          result = JSON.parse(response.payload);
+          console.log('Resposta do servidor:', result);
+          this.monitors = result.map((monitor: any) => ({
+            approved: monitor.aprovacao,
+            discipline: monitor.disciplina,
+            disciplineId: monitor.disciplinaId,
+            photo: monitor.foto,
+            availability: monitor.horarioDisponivel,
+            local: monitor.local,
+            name: monitor.nome,
+            ra: monitor.ra,
+            room: monitor.sala,
+            status: monitor.status,
+          }));
         },
         error: (error) => {
           console.error('Error em subscribe do discipline:', error);
         }
       });
-    }
+  }
 }

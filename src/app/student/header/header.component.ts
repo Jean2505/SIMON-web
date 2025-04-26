@@ -10,11 +10,12 @@ import { Auth, signOut } from '@angular/fire/auth';
   styleUrls: ['./header.component.scss']
 })
 export class StudentHeaderComponent {
-  constructor(private router: Router, private auth: Auth) {}
+  constructor(private router: Router, private auth: Auth) { }
 
   logout(): void {
     signOut(this.auth)
       .then(() => {
+        console.clear();
         console.log('Logout realizado com sucesso!');
         // Redirecione para a tela de login ou outra rota de sua preferência
         this.router.navigate(['/login']);
@@ -26,7 +27,10 @@ export class StudentHeaderComponent {
 
   goHome(): void {
     this.router.navigate(['/student/home'])
-      .then(success => console.log('Navegação realizada:', success))
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();
+      })
       .catch(error => console.error('Erro na navegação:', error));
   }
 }

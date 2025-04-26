@@ -14,13 +14,19 @@ export class StudentHomeComponent {
 
   goSubjects(): void {
     this.router.navigate(['/student/subjects'])
-      .then(success => console.log('Navegação realizada:', success))
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();
+      })
       .catch(error => console.error('Erro na navegação:', error));
   }
 
   goEnlist(): void {
     this.router.navigate(['/student/enlist'])
-      .then(success => console.log('Navegação realizada:', success))
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();
+      })
       .catch(error => console.error('Erro na navegação:', error));
   }
 }

@@ -153,6 +153,19 @@ app.post('/getStudent', async (req, res) => {
   }
 });
 
+app.post('/getTutor', async (req, res) => {
+  try {
+    const tutorId = req.body;
+    console.log('Requisição: ', tutorId);
+    const response = await axios.post("https://getcoursemonitors-bz6uecg2pq-rj.a.run.app", tutorId);
+    console.log('Resposta: ', response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error('Erro ao chamar função findTutor:', error.message);
+    res.status(500).json({ error: 'Erro ao obter dados do monitor externamente' });
+  }
+});
+
 app.post('/getExternalCourses', async (req, res) => {
   try {
     const { course } = req.body;
