@@ -1,47 +1,74 @@
 import { ActivatedRoute } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { type Monitor } from "../../models/monitor.model"
-import { MonitorsComponent } from "./monitors/monitors.component";
+import { type Monitor } from '../../models/monitor.model';
+import { MonitorsComponent } from './monitors/monitors.component';
 import { DUMMY_MONITORS } from './monitors/dummy-monitors';
 
+/**
+ * Componente de exibição de monitores de uma disciplina para o estudante.
+ * Busca e apresenta lista de monitores disponíveis.
+ */
 @Component({
   selector: 'app-subject',
+  standalone: true,
   imports: [
     CommonModule,
     MatSlideToggleModule,
-    MatSelectModule,
-    CommonModule,
     MatSelectModule,
     MatIconModule,
     MatCardModule,
     MonitorsComponent
   ],
   templateUrl: './subject.component.html',
-  styleUrl: './subject.component.scss'
+  styleUrls: ['./subject.component.scss']
 })
 export class StudentSubjectComponent implements OnInit {
-
-  constructor(private http: HttpClient, private auth: Auth, private route: ActivatedRoute) { }
-
+  /** Lista de monitores disponíveis para a disciplina. */
   monitors: Monitor[] = [];
+
+  /** ID da disciplina extraído da rota. */
   disciplineId!: string;
+
+  /** Nome da disciplina exibido no topo. */
   discipline: string = 'carregando...';
 
-  ngOnInit() {
+  /**
+   * Construtor do componente.
+   * @param http  - HttpClient para requisições HTTP.
+   * @param auth  - Auth do Firebase para obter usuário atual.
+   * @param route - ActivatedRoute para parâmetros de rota.
+   */
+  constructor(
+    private http: HttpClient,
+    private auth: Auth,
+    private route: ActivatedRoute
+  ) { }
+
+  /**
+   * Hook de ciclo de vida Angular.
+   * Executa a busca inicial de monitores.
+   */
+  ngOnInit(): void {
     this.getMonitors();
   }
 
-  getMonitors() {
+  /**
+   * Obtém informações da disciplina e de seus monitores via backend.
+   * Atualiza `discipline` e popula `monitors`.
+   */
+  getMonitors(): void {
     let result: any = null;
     this.disciplineId = this.route.snapshot.paramMap.get('id')!;
+
+    // Solicita detalhes da disciplina
     this.http.get('http://localhost:3000/discipline', { params: { disciplineId: this.disciplineId } })
       .subscribe({
         next: (response: any) => {
@@ -49,11 +76,14 @@ export class StudentSubjectComponent implements OnInit {
           this.discipline = response[0].nome_Disciplina;
           console.log('Nome da disciplina:', this.discipline);
         },
-        error: (error) => {
-          console.error('Error em subscribe do discipline:', error);
+        error: error => {
+          console.error('Erro ao buscar disciplina:', error);
         }
       });
+
     console.log('ID da disciplina:', this.disciplineId);
+
+    // Solicita lista de monitores disponíveis
     this.http.post('http://localhost:3000/getTutor', { courseId: this.disciplineId })
       .subscribe({
         next: (response: any) => {
@@ -72,8 +102,8 @@ export class StudentSubjectComponent implements OnInit {
             status: monitor.status,
           }));
         },
-        error: (error) => {
-          console.error('Error em subscribe do discipline:', error);
+        error: error => {
+          console.error('Erro ao buscar monitores:', error);
         }
       });
   }

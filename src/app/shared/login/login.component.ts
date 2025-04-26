@@ -1,22 +1,40 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';  
+import { FormsModule } from '@angular/forms';  
+import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';  
+import { Router } from '@angular/router';  
 
+/**
+ * Componente de login responsável por autenticar usuários e redirecioná-los conforme seu role.
+ */
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [FormsModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  selector: 'app-login',                // Seletor HTML para usar este componente
+  standalone: true,                     // Componente standalone sem necessidade de NgModule externo
+  imports: [FormsModule],               // Módulo para formulários necessários no template
+  templateUrl: './login.component.html',// Caminho para o template HTML
+  styleUrls: ['./login.component.scss'],// Caminho para os estilos SCSS
 })
 export class LoginComponent {
-  enteredEmail = '';
-  enteredPassword = '';
+  /** Email digitado pelo usuário. */
+  enteredEmail: string = '';
 
-  constructor(private auth: Auth, private router: Router) {}
+  /** Senha digitada pelo usuário. */
+  enteredPassword: string = '';
 
-  async onSubmit() {
+  /**
+   * Construtor do componente.
+   * @param auth   - Serviço de autenticação do Firebase para login.
+   * @param router - Serviço Router para navegação programática após login.
+   */
+  constructor(
+    private auth: Auth,
+    private router: Router
+  ) {}
+
+  /**
+   * Método acionado ao submeter o formulário de login.
+   * Autentica via Firebase Auth, obtém custom claims e redireciona conforme role.
+   */
+  async onSubmit(): Promise<void> {
     try {
       const userCredential = await signInWithEmailAndPassword(
         this.auth,
@@ -24,12 +42,12 @@ export class LoginComponent {
         this.enteredPassword
       );
       console.log('Login efetuado com sucesso!', userCredential.user);
-  
-      // Atualiza o token para garantir que os custom claims estejam disponíveis
+
+      // Atualiza token para garantir disponibilidade de custom claims
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
       const role = idTokenResult.claims['role'] || '';
       console.log('Role do usuário:', role);
-  
+
       // Redireciona de acordo com o role
       switch (role) {
         case 'ALUNO':

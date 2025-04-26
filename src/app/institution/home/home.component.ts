@@ -1,37 +1,30 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';  
+import { CommonModule } from '@angular/common';  
+import { Router } from '@angular/router';  
 
 @Component({
-  selector: 'app-inst-home',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-inst-home',               // Seletor HTML para usar este componente
+  standalone: true,                        // Marca o componente como standalone (não requer NgModule)
+  imports: [CommonModule],                 // Módulos necessários (aqui, CommonModule para diretivas básicas)
+  templateUrl: './home.component.html',    // Caminho para o template HTML deste componente
+  styleUrls: ['./home.component.scss']     // Caminho para o(s) stylesheet(s) deste componente
 })
-export class InstitutionHomeComponent /* implements OnInit */ {
-  constructor(private router: Router) { }
+export class InstitutionHomeComponent {
+  /**
+   * Construtor do componente.
+   * @param router - Instância do Router do Angular para navegação programática dentro da aplicação.
+   */
+  constructor(
+    private router: Router
+  ) { }
 
+  /**
+   * Método para navegar até a página de gerenciamento de disciplinas da instituição.
+   * Utiliza Router.navigate e registra no console se a navegação foi bem-sucedida ou não.
+   */
   goManageSubjects(): void {
     this.router.navigate(['/institution/manage-subjects'])
       .then(success => console.log('Navegação realizada:', success))
       .catch(error => console.error('Erro na navegação:', error));
   }
-  /*
-  alunoService = inject(StudentService);
-  alunos: { id: number; nome: string }[] = [];
-
-  ngOnInit(): void {
-    this.alunoService.getAlunos().subscribe(data => {
-      this.alunos = data;
-      console.log('Alunos encontrados no banco:', data);
-    });
-  }
-
-  adicionar(nome: string): void {
-    this.alunoService.addAluno(nome).subscribe(() => {
-      this.ngOnInit();
-    });
-  }
-  */
 }
