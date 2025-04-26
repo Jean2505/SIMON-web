@@ -34,10 +34,12 @@
         <!-- Remuneração do aluno -->
         <div class="form-group">
           <label>Remuneração:</label>
-          <p class="value">
+          <p class="value switch">
+            <label class="custom-switch">
+              <input type="checkbox" [(ngModel)]="isSwitchOn" name="payroll">
+              <span class="slider"></span>
+            </label>
             {{ isSwitchOn ? "Sim" : "Não" }}
-            <mat-slide-toggle [(ngModel)]="isSwitchOn" name="payroll">
-            </mat-slide-toggle>
           </p>
         </div>
 

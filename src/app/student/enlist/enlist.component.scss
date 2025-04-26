@@ -48,6 +48,11 @@
       border-radius: 8px !important;
       color: black;
       border: 1px solid #4da0ff52;
+
+      &.switch {
+        display: flex;
+        align-items: center;
+      }
     }
 
     textarea {
@@ -204,6 +209,55 @@ mat-option {
 
 mat-option:hover {
   background-color: #819bb8 !important;
+}
+
+.custom-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin-right: 12px; /* pequena distância entre o texto e o botão */
+  margin-bottom: 0px !important; /* remove o espaço extra abaixo do botão */
+  vertical-align: middle;
+}
+
+.custom-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc; /* cor desligada */
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.custom-switch input:checked + .slider {
+  background-color: #00c389; /* verde ativado */
+}
+
+.custom-switch input:checked + .slider:before {
+  transform: translateX(26px);
 }
 
 .submit-btn .input-data {
