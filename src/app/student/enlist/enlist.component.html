@@ -1,0 +1,71 @@
+<div id="container" class="enlist">
+  <section class="candidatura-monitoria">
+    <div class="form-scroll-area">
+      <h1><span>Candidatura à Monitoria</span></h1>
+
+      <form (ngSubmit)="enlist()">
+
+        <!-- Nome da matéria -->
+        <div class="form-group">
+          <label>Matéria:</label>
+          <mat-select panelClass="custom-select-panel value" [(ngModel)]="selectedSubject" name="subjects" class="dropdown" required>
+            <mat-option *ngFor="let subject of subjectsOptions" [value]="subject">
+              {{ subject.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+
+        <!-- Nome do aluno -->
+        <div class="form-group">
+          <label>Nome do Aluno:</label>
+          <p class="value">
+            {{ student.nome }}
+          </p>
+        </div>
+
+        <!-- RA do aluno -->
+        <div class="form-group">
+          <label>RA:</label>
+          <p class="value">
+            {{ student.ra }}
+          </p>
+        </div>
+
+        <!-- Remuneração do aluno -->
+        <div class="form-group">
+          <label>Remuneração:</label>
+          <p class="value">
+            {{ isSwitchOn ? "Sim" : "Não" }}
+            <mat-slide-toggle [(ngModel)]="isSwitchOn" name="payroll">
+            </mat-slide-toggle>
+          </p>
+        </div>
+
+        <!-- Campo para o aluno escrever a justificativa -->
+        <div class="form-group">
+          <label for="mensagem">Justificativa / Motivação:</label>
+          <textarea id="mensagem" name="mensagem" [(ngModel)]="message" rows="5" placeholder="Descreva aqui por que você deseja ser monitor…" required>
+        </textarea>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Carga‑Horária (h)</mat-label>
+            <mat-select panelClass="custom-select-panel" [(ngModel)]="selectedHours" name="hours" class="dropdown" required>
+              <mat-option *ngFor="let h of hoursOptions" [value]="h">
+                {{ h }} h
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row submit-btn">
+          <div class="input-data">
+            <div class="inner"></div>
+            <button type="submit" [disabled]="!message">Enviar Candidatura</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>

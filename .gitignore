@@ -7,6 +7,7 @@
 /bazel-out
 
 # Node
+*/node_modules
 /node_modules
 npm-debug.log
 yarn-error.log
@@ -42,4 +43,7 @@ testem.log
 Thumbs.db
 
 # Environment variables
-/environments
+*/environments
+
+# Firebase
+/backend/firebase/*.json

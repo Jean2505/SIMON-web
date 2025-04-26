@@ -65,3 +65,71 @@ html {
   .mdc-text-field--outlined {
     --mdc-shape-small: 3px !important;
   }
+
+
+  div.mat-mdc-select-panel {
+    width: 100%;
+    max-height: 275px;
+    outline: 0;
+    overflow: auto;
+    /* padding: 8px 0; */
+    border-radius: 25px;
+    box-sizing: border-box;
+    position: static;
+    background-color: var(--mat-select-panel-background-color, var(--mat-sys-surface-container));
+}
+
+.cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
+  border-top-left-radius: 25px !important;
+  border-top-right-radius: 25px !important; 
+  transform-origin: top center;
+  margin-top: -5px;
+  background: none !important;
+}
+
+.cdk-overlay-pane .mat-mdc-select-panel {
+  padding: 0 !important;
+  border-radius: 25px !important;
+  background: none !important;
+}
+
+.mat-mdc-select-panel {
+  background-color: transparent !important; // remove o fundo branco
+  box-shadow: none !important;              // remove sombra, se quiser
+  border-radius: 0 !important;              // remove o arredondado externo
+  padding: 0 !important;                    // remove espaço entre as opções
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+  --mat-mdc-form-field-label-transform: translateY(calc(calc(18.75px + var(--mat-form-field-container-height, 56px) / 2) * -1)) scale(var(--mat-mdc-form-field-floating-label-scale, 0.75)) !important;
+  transform: var(--mat-mdc-form-field-label-transform);
+}
+
+.mat-mdc-slide-toggle {
+  .mdc-switch {
+    --mdc-switch-selected-track-color: #558B2F; // verde quando ligado
+    --mdc-switch-selected-thumb-color: white;
+    --mdc-switch-selected-icon-color: white;
+    --mdc-switch-unselected-icon-color: transparent;
+    --mdc-switch-unselected-track-color: #ccc;
+    --mdc-switch-unselected-thumb-color: white;
+
+    // adiciona o ícone ✔️
+    .mdc-switch__thumb::before {
+      content: "✔";
+      font-size: 12px;
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      line-height: 1;
+      pointer-events: none;
+    }
+  }
+
+  // Remove o ícone quando desativado
+  &.mat-mdc-slide-toggle-unchecked .mdc-switch__thumb::before {
+    content: "";
+  }
+}

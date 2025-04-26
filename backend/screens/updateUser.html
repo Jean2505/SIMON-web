@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar Usuário</title>
+</head>
+<body>
+    <form action="/setUserRole" method="post">
+        <label for="uid">ID do Usuário:</label>
+        <input type="text" id="uid" name="uid" required><br><br>
+
+        <label for="role">Novo Papel:</label>
+        <select id="role" name="role" required>
+            <option value="ALUNO">Aluno</option>
+            <option value="PROFESSOR">Professor</option>
+            <option value="INSTITUICAO">Instituição</option>
+        </select>
+
+        <input type="submit" value="Atualizar Papel">
+    </form>
+</body>
+</html>

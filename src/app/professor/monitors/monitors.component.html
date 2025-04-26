@@ -1,0 +1,34 @@
+<div *ngIf="groupedData.length; else noData">
+    <div *ngFor="let school of groupedData" class="school-block">
+      <h2 class="school-name">{{ school.name }}</h2>
+  
+      <div *ngFor="let course of school.courses" class="course-block">
+        <h3 class="course-name">{{ course.name }}</h3>
+  
+        <ul class="subject-list">
+          <li *ngFor="let subject of course.subjects" class="subject-item">
+            <h4 class="subject-name">{{ subject.name }}</h4>
+            <p class="monitors">
+              <strong>Monitores:</strong>
+              <span *ngIf="subject.monitors.length; else noMonitors">
+                {{ subject.monitors.join(', ') }}
+              </span>
+              <ng-template #noMonitors>—</ng-template>
+            </p>
+            <p class="candidates">
+              <strong>Candidatos:</strong>
+              <span *ngIf="subject.candidates.length; else noCandidates">
+                {{ subject.candidates.join(', ') }}
+              </span>
+              <ng-template #noCandidates>—</ng-template>
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #noData>
+    <p>Não há disciplinas cadastradas para este professor.</p>
+  </ng-template>
+  

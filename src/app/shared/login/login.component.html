@@ -1,0 +1,45 @@
+<div class="body">
+  <div class="container">
+      <img src="/simonlogo.png" class="Logo">
+      <div class="text">Entre na conta</div>
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <div class="form-row">
+          <div class="input-data">
+            <input
+              type="email"
+              required
+              [(ngModel)]="enteredEmail"
+              name="email"
+            />
+            <div class="underline"></div>
+            <label>Email</label>
+          </div>
+        </div>
+  
+        <div class="form-row">
+          <div class="input-data">
+            <input
+              type="password"
+              required
+              [(ngModel)]="enteredPassword"
+              name="password"
+            />
+            <div class="underline"></div>
+            <label>Senha</label>
+          </div>
+        </div>
+  
+        <div class="form-row submit-btn">
+          <div class="input-data">
+            <div class="inner"></div>
+            <input type="submit" value="entrar" />
+          </div>
+        </div>
+      </form>
+    </div>
+  
+    <div class="background">
+      <img src="/simons.png" alt="Logo Simon" />
+    </div>
+  </div>
+  
