@@ -1,0 +1,43 @@
+<div class="backdrop" (click)="onCancel()"></div>
+<dialog open>
+    <form>
+        <p>
+            <label for="title">Título do post</label>
+            <input type="text" name="title" [(ngModel)]="enteredTitle">
+        </p>
+
+        <p>
+            <label for="content">Conteúdo do post</label>
+            <textarea name="content" [(ngModel)]="enteredContent"></textarea>
+        </p>
+
+        <button type="button" (click)="onSelectAttach()">Anexar</button>
+        @if(isAttaching){
+            <div>
+                <label for="url">Anexar vídeo do YouTube <button type="button" (click)="onselectAddUrl()">+</button></label>
+                @if (isAddingUrl) {
+                    <input type="text" name="url" [(ngModel)]="enteredUrl">
+                }
+
+                <label for="file">Anexar arquivos <button>+</button></label>
+                <ul>
+                    @for (file of files; track file) {
+                        <li></li>
+                    }
+                </ul>
+
+                <label for="image">Anexar imagens <button>+</button></label>
+                <ul>
+                    @for (image of images; track image) {
+                        <li></li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <p class="actions">
+            <button type="button" (click)="onCancel()">Cancelar</button>
+            <button type="submit">Postar</button>
+        </p>
+    </form>
+</dialog>

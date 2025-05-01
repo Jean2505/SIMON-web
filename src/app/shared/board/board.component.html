@@ -1,6 +1,9 @@
+@if (isCreatingPost) {
+    <app-new-post (close)="onCloseCreatePost()"/>
+}
 <div class="container">
     @for (post of posts; track post.postId) {
         <app-card [post]="post"/>
     }
-    <button type="button">Novo post</button>
+    <button type="button" (click)="onStartCreatePost()">Novo post</button>
 </div>
