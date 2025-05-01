@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { RoleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
+import { BoardComponent } from './shared/board/board.component';
 
 export const routes: Routes = [
 
@@ -32,6 +33,8 @@ export const routes: Routes = [
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+
+  { path: 'board', component: BoardComponent},
 
   // Redireciona para o login caso a rota digitada não exista
   { path: '**', redirectTo: '404' },

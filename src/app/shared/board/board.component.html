@@ -1,0 +1,6 @@
+<div class="container">
+    @for (post of posts; track post.postId) {
+        <app-card [post]="post"/>
+    }
+    <button type="button">Novo post</button>
+</div>
