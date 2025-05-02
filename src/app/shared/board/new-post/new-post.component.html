@@ -1,43 +1,81 @@
 <div class="backdrop" (click)="onCancel()"></div>
 <dialog open>
-    <form>
-        <p>
-            <label for="title">Título do post</label>
-            <input type="text" name="title" [(ngModel)]="enteredTitle">
-        </p>
+  <form (ngSubmit)="onPost()">
+    <p>
+      <label for="title">Título do post</label>
+      <input
+        id="title"
+        type="text"
+        name="title"
+        [(ngModel)]="enteredTitle"
+        required
+      />
+    </p>
 
-        <p>
-            <label for="content">Conteúdo do post</label>
-            <textarea name="content" [(ngModel)]="enteredContent"></textarea>
-        </p>
+    <p>
+      <label for="content">Conteúdo do post</label>
+      <textarea
+        id="content"
+        name="content"
+        [(ngModel)]="enteredContent"
+        rows="5"
+        required
+      ></textarea>
+    </p>
 
-        <button type="button" (click)="onSelectAttach()">Anexar</button>
-        @if(isAttaching){
-            <div>
-                <label for="url">Anexar vídeo do YouTube <button type="button" (click)="onselectAddUrl()">+</button></label>
-                @if (isAddingUrl) {
-                    <input type="text" name="url" [(ngModel)]="enteredUrl">
-                }
+    <button type="button" (click)="onSelectAttach()">Anexar</button>
 
-                <label for="file">Anexar arquivos <button>+</button></label>
-                <ul>
-                    @for (file of files; track file) {
-                        <li></li>
-                    }
-                </ul>
+    @if (isAttaching) {
+    <div class="attachments">
+      <!-- URL do YouTube -->
+      <label>
+        Anexar vídeo do YouTube
+        <button type="button" (click)="onSelectAddUrl()">+</button>
+      </label>
+      @if (isAddingUrl) {
+      <input
+        type="url"
+        name="url"
+        [(ngModel)]="enteredUrl"
+        placeholder="https://"
+      />
+      }
 
-                <label for="image">Anexar imagens <button>+</button></label>
-                <ul>
-                    @for (image of images; track image) {
-                        <li></li>
-                    }
-                </ul>
-            </div>
+      <!-- Arquivos gerais -->
+      <input #fileInput type="file" (change)="onFileSelected($event)" hidden />
+      <label>
+        Anexar arquivos
+        <button type="button" (click)="fileInput.click()">+</button>
+      </label>
+      <ul>
+        @for (file of files; track file) {
+        <li>{{ file.name }}</li>
         }
+      </ul>
 
-        <p class="actions">
-            <button type="button" (click)="onCancel()">Cancelar</button>
-            <button type="submit">Postar</button>
-        </p>
-    </form>
+      <!-- Imagens -->
+      <input
+        #imageInput
+        type="file"
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        hidden
+      />
+      <label>
+        Anexar imagens
+        <button type="button" (click)="imageInput.click()">+</button>
+      </label>
+      <ul>
+        @for (image of images; track image) {
+        <li>{{ image.name }}</li>
+        }
+      </ul>
+    </div>
+    }
+
+    <p class="actions">
+      <button type="button" (click)="onCancel()">Cancelar</button>
+      <button type="submit">Postar</button>
+    </p>
+  </form>
 </dialog>
