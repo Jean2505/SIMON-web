@@ -6,6 +6,10 @@ import { ProfessorHeaderComponent } from './header/header.component';
 import { ProfessorHomeComponent } from './home/home.component';
 import { ProfessorSubjectsComponent } from './subjects/subjects.component';
 import { ProfessorTutorsComponent } from './tutors/tutors.component';
+import { SubjectComponent } from '../shared/subject/subject.component';
+import { SubjectBoardComponent } from '../shared/board/board.component';
+import { SubjectTutorsComponent } from '../shared/tutors/tutors.component';
+import { SubjectForumComponent } from '../shared/forum/forum.component';
 
 const routes: Routes = [
   {
@@ -16,6 +20,16 @@ const routes: Routes = [
       { path: 'home', component: ProfessorHomeComponent },
       { path: 'subjects', component: ProfessorSubjectsComponent },
       { path: 'tutors', component: ProfessorTutorsComponent },
+      {
+        path: 'subject/:id',
+        component: SubjectComponent,
+        children: [
+          { path: '', redirectTo: 'board', pathMatch: 'full' },
+          { path: 'board', component: SubjectBoardComponent },
+          { path: 'tutors', component: SubjectTutorsComponent },
+          { path: 'forum', component: SubjectForumComponent },
+        ]
+      },
     ]
   }
 ];

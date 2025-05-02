@@ -5,6 +5,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { InstitutionHeaderComponent } from './header/header.component';
 import { InstitutionHomeComponent } from './home/home.component';
 import { InstitutionManageSubjectsComponent } from './manage-subjects/manage-subjects.component';
+import { SubjectComponent } from '../shared/subject/subject.component';
+import { SubjectBoardComponent } from '../shared/board/board.component';
+import { SubjectTutorsComponent } from '../shared/tutors/tutors.component';
+import { SubjectForumComponent } from '../shared/forum/forum.component';
 
 const routes: Routes = [
   {
@@ -14,6 +18,16 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: InstitutionHomeComponent },
       { path: 'manage-subjects', component: InstitutionManageSubjectsComponent },
+      {
+        path: 'subject/:id',
+        component: SubjectComponent,
+        children: [
+          { path: '', redirectTo: 'board', pathMatch: 'full' },
+          { path: 'board', component: SubjectBoardComponent },
+          { path: 'tutors', component: SubjectTutorsComponent },
+          { path: 'forum', component: SubjectForumComponent },
+        ]
+      },
     ]
   }
 ];

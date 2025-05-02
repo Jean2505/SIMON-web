@@ -24,7 +24,8 @@ const routes: Routes = [
         path: 'subject/:id',
         component: SubjectComponent,
         children: [
-          { path: '', component: SubjectBoardComponent },
+          { path: '', redirectTo: 'board', pathMatch: 'full' },
+          { path: 'board', component: SubjectBoardComponent },
           { path: 'tutors', component: SubjectTutorsComponent },
           { path: 'forum', component: SubjectForumComponent },
         ]
