@@ -220,3 +220,54 @@ export const helloWorld = onRequest({region: "southamerica-east1"}, (req, res) =
     logger.info("Hello logs!", {structuredData: true});
     res.send("Hello from Firebase!");
 });
+
+export const createMuralPost = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    try {
+        await db.collection("MuralPosts").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Post created successfully",
+            payload: "Post created successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating post",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+
+});
+
+export const getMuralPosts = onRequest({region: "southamerica-east1"}, async (req, res) => {
+
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("MuralPosts").where("disciplinaId", "==", req.body.disciplinaId).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "Posts found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
