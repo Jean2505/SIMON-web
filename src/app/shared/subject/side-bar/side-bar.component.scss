@@ -1,0 +1,73 @@
+/* side-bar.component.scss */
+
+/* 1. Host: transforma o <app-side-bar> num elemento fixed */
+:host {
+    position: fixed;        /* fixa na viewport */
+    top: 0;                 /* topo da tela */
+    left: 0;                /* à esquerda */
+    width: 240px;           /* largura fixa */
+    height: 100vh;          /* toda a altura da tela */
+    margin-top: 10vh;
+    background-color: #2a2a40;
+    color: #ffffff;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;          /* acima do conteúdo principal */
+    overflow-y: auto;       /* scroll interno se precisarem mais itens */
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* 2. Container interno: espaço vertical e full height */
+  .container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;           /* para ul ocupar todo o espaço disponível */
+    padding: 1rem 0;        /* espaçamento vertical */
+  }
+  
+  /* 3. Lista sem bullets e com espaçamento */
+  .container ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container ul li {
+    margin: 0.5rem 0;
+  }
+  
+  /* 4. Links como blocos clicáveis */
+  .container ul li a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: inherit;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  /* 5. Hover e ativo */
+  .container ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .container ul li a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  /* 6. (Opcional) Rodapé fixo na parte inferior */
+  .sidebar__footer {
+    margin-top: auto;       /* empurra para o fim da coluna */
+    padding: 1rem;
+    font-size: 0.85rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  
+    a {
+      color: inherit;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+  

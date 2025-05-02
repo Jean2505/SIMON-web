@@ -10,7 +10,7 @@ import { NewPostComponent } from "./new-post/new-post.component";
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss'
 })
-export class BoardComponent {
+export class SubjectBoardComponent {
   posts = DUMMY_POSTS;
 
   isCreatingPost = false;
