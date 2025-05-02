@@ -1,70 +1,77 @@
+import { Auth } from '@angular/fire/auth';
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Storage, ref, uploadBytesResumable, getDownloadURL } from '@angular/fire/storage';
+import { HttpClient } from '@angular/common/http';
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject
+} from '@angular/fire/storage';
 
 @Component({
   selector: 'app-new-post',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './new-post.component.html',
   styleUrls: ['./new-post.component.scss']
 })
 export class NewPostComponent {
-  /** Emite quando o usuário clica em “Cancelar” */
+
+  /** ID da matéria (recebido como parâmetro) */
+  subjectID!: string;
+
+  /** Emite quando o usuário fecha/cancela o diálogo */
   @Output() close = new EventEmitter<void>();
 
-  /** Emite os dados completos do post ao enviar */
-  @Output()
-  submitPost = new EventEmitter<{
-    title: string;
-    content: string;
-    url?: string;
-    fileUrls: string[];
-    imageUrls: string[];
-  }>();
+  /** URL base da sua API backend */
+  private apiUrl = 'http://localhost:3000/createMuralPost';
 
-  /** Título digitado pelo usuário */
-  enteredTitle: string = '';
+  /** Título do post */
+  enteredTitle = '';
+  /** Conteúdo do post */
+  enteredContent = '';
+  /** URL de vídeo (YouTube) */
+  enteredUrl = '';
 
-  /** Conteúdo digitado pelo usuário */
-  enteredContent: string = '';
-
-  /** URL de vídeo (YouTube) digitada pelo usuário */
-  enteredUrl: string = '';
-
-  /** Controla se a seção de anexos está aberta */
+  /** Controla visibilidade da seção de anexos */
   isAttaching = false;
-
-  /** Controla se o campo de URL está visível */
+  /** Controla visibilidade do campo de URL */
   isAddingUrl = false;
+  /** Controla o clique no botão de enviar */
+  isSending = false;
 
-  /** Arquivos genéricos selecionados */
+  /** Lista de arquivos selecionados para upload futuro */
   files: File[] = [];
-
-  /** Imagens selecionadas */
+  /** Lista de imagens selecionadas para upload futuro */
   images: File[] = [];
 
-  /** URLs de download dos arquivos após upload */
-  private fileDownloadURLs: string[] = [];
-
-  /** URLs de download das imagens após upload */
-  private imageDownloadURLs: string[] = [];
+  /** Percentual geral de upload (0–100) */
+  overallUploadProgress = 0;
 
   /**
-   * @param storage Cliente de Storage do Firebase para upload de blobs
+   * Construtor do componente.
+   * @param auth  - Auth do Firebase para obter usuário atual.
+   * @param http  - HttpClient para requisições HTTP.
+   * @param route - ActivatedRoute para parâmetros de rota.
    */
-  constructor(private storage: Storage) {}
+  constructor(
+    /** Referência ao serviço de autenticação do Firebase */
+    private auth: Auth,
+    /** Referência ao backend */
+    private http: HttpClient,
+    /** Referência ao serviço de armazenamento do Firebase */
+    private storage: Storage
+  ) { }
 
-  /**
-   * Fecha o diálogo e reseta o estado interno.
-   */
+  /** Fecha o diálogo e reseta o estado */
   onCancel(): void {
     this.resetState();
     this.close.emit();
   }
 
-  /**
-   * Alterna visibilidade da seção de anexos.
-   */
+  /** Alterna a visibilidade da seção de anexos */
   onSelectAttach(): void {
     this.isAttaching = !this.isAttaching;
     if (!this.isAttaching) {
@@ -73,98 +80,141 @@ export class NewPostComponent {
     }
   }
 
-  /**
-   * Alterna visibilidade do campo de URL de vídeo.
-   */
+  /** Alterna a visibilidade do campo de URL */
   onSelectAddUrl(): void {
     this.isAddingUrl = !this.isAddingUrl;
-    if (!this.isAddingUrl) {
-      this.enteredUrl = '';
+    if (!this.isAddingUrl) this.enteredUrl = '';
+  }
+
+  /** Adiciona arquivos à lista local (sem upload) */
+  onFileSelected(event: Event): void {
+    const input = (event.target as HTMLInputElement);
+    if (input.files) {
+      this.files.push(...Array.from(input.files));
     }
   }
 
-  /**
-   * Quando o usuário seleciona arquivos genéricos,
-   * faz upload de cada um e armazena a URL resultante.
-   * @param event Evento do <input type="file">
-   */
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
-
-    Array.from(input.files).forEach(file => {
-      this.files.push(file);
-      this.uploadSingleFile(file)
-        .then(url => this.fileDownloadURLs.push(url))
-        .catch(err => console.error('Erro upload arquivo:', err));
-    });
-  }
-
-  /**
-   * Quando o usuário seleciona imagens,
-   * faz upload de cada uma e armazena a URL resultante.
-   * @param event Evento do <input type="file" accept="image/*">
-   */
+  /** Adiciona imagens à lista local (sem upload) */
   onImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (!input.files) return;
+    const input = (event.target as HTMLInputElement);
+    if (input.files) {
+      this.images.push(...Array.from(input.files));
+    }
+  }
 
-    Array.from(input.files).forEach(img => {
-      this.images.push(img);
-      this.uploadSingleFile(img)
-        .then(url => this.imageDownloadURLs.push(url))
-        .catch(err => console.error('Erro upload imagem:', err));
-    });
+  /** Remove um arquivo da lista local */
+  removeFile(index: number): void {
+    this.files.splice(index, 1);
+  }
+
+  /** Remove uma imagem da lista local */
+  removeImage(index: number): void {
+    this.images.splice(index, 1);
   }
 
   /**
-   * Faz o upload de um único File e retorna uma Promise
-   * que resolve com a URL de download.
-   * @param file Blob ou File a ser enviado
-   * @returns Promise<string> URL pública após upload
+   * Agrupa as URLs por extensão de arquivo.
    */
-  private uploadSingleFile(file: File): Promise<string> {
-    const path = `uploads/${Date.now()}_${file.name}`;
-    const storageRef = ref(this.storage, path);
+  private groupByExtension(urls: string[]): Record<string, string[]> {
+    return urls.reduce((acc, url) => {
+      const match = url.match(/\.([a-zA-Z0-9]+)(?:\?|$)/);
+      const ext = match ? match[1].toLowerCase() : 'unknown';
+      if (!acc[ext]) {
+        acc[ext] = [];
+      }
+      acc[ext].push(url);
+      return acc;
+    }, {} as Record<string, string[]>);
+  }
 
-    return new Promise((resolve, reject) => {
-      const task = uploadBytesResumable(storageRef, file);
+  /**
+   * Faz upload resumível de cada arquivo e imagem, atualizando o progresso geral.
+   */
+  onPost(): void {
+    let isSending = true;
+    // Combina arquivos e imagens
+    const allFiles = [
+      ...this.files.map(f => ({ file: f, folder: 'uploads/files' })),
+      ...this.images.map(img => ({ file: img, folder: 'uploads/images' }))
+    ];
+
+    /** Total de bytes a serem enviados */
+    const totalBytes = allFiles.reduce((sum, item) => sum + item.file.size, 0);
+    /** Array para guardar bytes enviados por tarefa */
+    const bytesTransferredArr = new Array(allFiles.length).fill(0);
+    /** Array para URLs de download */
+    const downloadURLs: string[] = new Array(allFiles.length);
+
+    allFiles.forEach((item, idx) => {
+      const path = `${item.folder}/${Date.now()}_${item.file.name}`;
+      const storageRef = ref(this.storage, path);
+      const task = uploadBytesResumable(storageRef, item.file);
+
       task.on(
         'state_changed',
-        () => {
-          // progresso pode ser lido aqui, se necessário
+        snapshot => {
+          /** Atualiza bytes enviados para esta tarefa */
+          bytesTransferredArr[idx] = snapshot.bytesTransferred;
+          /** Calcula progresso geral */
+          const transferred = bytesTransferredArr.reduce((a, b) => a + b, 0);
+          this.overallUploadProgress = (transferred / totalBytes) * 100;
         },
-        error => reject(error),
+        error => {
+          console.error('Erro no upload:', error);
+        },
         async () => {
           try {
             const url = await getDownloadURL(storageRef);
-            resolve(url);
+            downloadURLs[idx] = url;
+            // Se todas as URLs estiverem definidas, envia ao backend
+            if (downloadURLs.every(u => !!u)) {
+              /** URLs separados */
+              const fileUrls = downloadURLs.slice(0, this.files.length);
+              console.log('fileUrls:', fileUrls);
+              /** URLs de imagem */
+              const imageUrls = downloadURLs.slice(this.files.length);
+              console.log('fileUrls:', fileUrls);
+              /** Agrupa arquivos por extensão */
+              const groupedFiles = this.groupByExtension(fileUrls);
+              console.log('groupedFiles:', groupedFiles);
+              
+              const payload = {
+                title: this.enteredTitle,
+                //disciplineId: subjectID,
+                content: this.enteredContent,
+                files: groupedFiles,
+                url: this.enteredUrl || undefined,
+                uid: this.auth.currentUser?.uid,
+                imageUrls
+              };
+              this.http.post(this.apiUrl, payload).subscribe({
+                next: res => {
+                  console.log('Post enviado:', res);
+                  this.resetState();
+                  this.close.emit();
+                },
+                error: err => {
+                  console.error('Erro ao enviar post:', err);
+                  // Tenta deletar arquivos se o envio falhar
+                  fileUrls.forEach(url => {
+                    const fileRef = ref(this.storage, url);
+                    deleteObject(fileRef)
+                      .then(() => console.log('Arquivo deletado:', url))
+                      .catch(err => console.error('Erro ao deletar arquivo:', err));
+                  });
+                }
+              })
+            }
           } catch (err) {
-            reject(err);
+            console.error('Erro ao obter downloadURL:', err);
           }
         }
       );
     });
+    isSending = false;
   }
 
-  /**
-   * Quando o usuário submete o form,
-   * emite todos os dados (título, conteúdo, URL, fileUrls, imageUrls).
-   */
-  onPost(): void {
-    this.submitPost.emit({
-      title: this.enteredTitle,
-      content: this.enteredContent,
-      url: this.enteredUrl || undefined,
-      fileUrls: this.fileDownloadURLs,
-      imageUrls: this.imageDownloadURLs
-    });
-    this.resetState();
-  }
-
-  /**
-   * Reseta todas as variáveis ao estado inicial.
-   */
+  /** Reseta todas as variáveis ao estado inicial */
   private resetState(): void {
     this.enteredTitle = '';
     this.enteredContent = '';
@@ -173,7 +223,6 @@ export class NewPostComponent {
     this.isAddingUrl = false;
     this.files = [];
     this.images = [];
-    this.fileDownloadURLs = [];
-    this.imageDownloadURLs = [];
+    this.overallUploadProgress = 0;
   }
 }

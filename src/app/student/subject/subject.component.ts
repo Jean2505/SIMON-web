@@ -10,7 +10,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { type Tutor } from '../../models/tutor.model';
 import { TutorsComponent } from './tutors/tutors.component';
-import { DUMMY_MONITORS } from './tutors/dummy-monitors';
 
 /**
  * Componente de exibição de monitores de uma disciplina para o estudante.

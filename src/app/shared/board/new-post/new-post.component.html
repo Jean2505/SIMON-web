@@ -48,8 +48,11 @@
         <button type="button" (click)="fileInput.click()">+</button>
       </label>
       <ul>
-        @for (file of files; track file) {
-        <li>{{ file.name }}</li>
+        @for (file of files; let i = $index; track file) {
+        <li>
+          {{ file.name }}
+          <button type="button" (click)="removeFile(i)">X</button>
+        </li>
         }
       </ul>
 
@@ -66,8 +69,11 @@
         <button type="button" (click)="imageInput.click()">+</button>
       </label>
       <ul>
-        @for (image of images; track image) {
-        <li>{{ image.name }}</li>
+        @for (image of images; let i = $index; track image) {
+        <li>
+          {{ image.name }}
+          <button type="button" (click)="removeImage(i)">X</button>
+        </li>
         }
       </ul>
     </div>
@@ -75,7 +81,7 @@
 
     <p class="actions">
       <button type="button" (click)="onCancel()">Cancelar</button>
-      <button type="submit">Postar</button>
+      <button type="submit" [disabled]="isSending">Postar</button>
     </p>
   </form>
 </dialog>

@@ -213,6 +213,34 @@ app.post('/enlist', async (req, res) => {
   }
 })
 
+app.post('/getMuralPosts', async (req, res) => {
+  try {
+    // Chama a Cloud Function usando axios
+    console.log('Requisição: ', req.body);
+    const response = await axios.post('https://getmuralposts-bz6uecg2pq-rj.a.run.app', req.body);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data);
+  } catch (error) {
+    console.error('Erro ao chamar função getMuralPosts:', error.message);
+    res.status(500).json({ error: 'Erro ao obter os posts externamente' });
+  }
+})
+
+app.post('/createMuralPost', async (req, res) => {
+  try {
+    // Chama a Cloud Function usando axios
+    console.log('Requisição: ', req.body);
+    const response = await axios.post('https://createmuralpost-bz6uecg2pq-rj.a.run.app', req.body);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data);
+  } catch (error) {
+    console.error('Erro ao chamar função createPost:', error.message);
+    res.status(500).json({ error: 'Erro ao criar o post externamente' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
