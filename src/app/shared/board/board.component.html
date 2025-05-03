@@ -1,7 +1,9 @@
 @if (isCreatingPost) {
 <app-new-post (close)="onCloseCreatePost()" />
 }
-@for (post of posts; track post.postId) {
-<app-card [post]="post" />
-}
-<button type="button" (click)="onStartCreatePost()">Novo post</button>
+<div class="card-grid">
+    @for (post of posts; track post.postId) {
+      <app-card [post]="post" />
+    }
+</div>
+<button type="button" (click)="onStartCreatePost()">+</button>

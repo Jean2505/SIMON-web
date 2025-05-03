@@ -8,13 +8,27 @@
     width: 240px;           /* largura fixa */
     height: 100vh;          /* toda a altura da tela */
     margin-top: 10vh;
-    background-color: #2a2a40;
+    background: linear-gradient(145deg, #56d8e4 10%, #5301ea 90%);
     color: #ffffff;
     border-right: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
     z-index: 10;          /* acima do conteúdo principal */
     overflow-y: auto;       /* scroll interno se precisarem mais itens */
     font-family: "Poppins", sans-serif;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, #56d8e4 10%, #5301ea 90%); // cor base
+      filter: brightness(0.50); // ou outro filtro desejado
+      z-index: 0; // atrás do conteúdo
+    }
+  
+    ::ng-deep * {
+      position: relative;
+      z-index: 1; // garante que o conteúdo fique acima do filtro
+    }
   }
   
   /* 2. Container interno: espaço vertical e full height */
@@ -44,12 +58,13 @@
     text-decoration: none;
     border-radius: 4px;
     font-weight: 500;
+    font-size: 1.25rem;
     transition: background-color 0.2s ease-in-out;
   }
   
   /* 5. Hover e ativo */
   .container ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.3);
   }
   
   .container ul li a.active {
@@ -69,5 +84,14 @@
       text-decoration: none;
       &:hover { text-decoration: underline; }
     }
+  }
+
+  .container ul li a {
+    display: flex;
+    align-items: center;
+  }
+  
+  .container ul li a svg {
+    margin-right: 8px; /* espaço entre o ícone e o texto */
   }
   

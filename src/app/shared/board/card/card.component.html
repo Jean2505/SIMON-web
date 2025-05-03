@@ -1,13 +1,18 @@
 @if (isViewingPost) {
     <app-post [post]="post!" (close)="onClosePost()" />
 }
-<a (click)="onOpenPost()">
-    <div class="card">
-        <h3>{{ post?.title }}</h3>
-        <p>{{ post?.content }}</p>
-        <div class="card_footer">
-            <p>{{ post?.posterName }}</p>
-            <time>{{ post?.date | date }}</time>
-        </div>
+<a class="post-card" (click)="onOpenPost()">
+    <div class="color-strip" [ngStyle]="{ 'background-color': color }">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+            <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+        </svg>
     </div>
-</a>
+    <div class="card-content">
+      <h3 class="post-title">{{ post?.title }}</h3>
+      <p class="post-body">{{ post?.content }}</p>
+    </div>
+    <div class="card-footer">
+      <span class="poster-name">{{ post?.posterName }}</span>
+      <time class="post-date">{{ post?.date | date:'dd/MM/yyyy' }}</time>
+    </div>
+  </a>
