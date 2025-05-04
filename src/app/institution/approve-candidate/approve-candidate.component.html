@@ -1,0 +1,36 @@
+@for (enlistment of enlistments; track enlistment.enlistmentId) {
+    <div class="container">
+        <mat-accordion>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title> {{ enlistment.discipline }} - {{ enlistment.course }} </mat-panel-title>
+                    <mat-panel-description> {{ enlistment.studentName }} </mat-panel-description>
+                </mat-expansion-panel-header>
+    
+                <h2>Aluno</h2>
+                <p>{{ enlistment.studentName }} - {{ enlistment.studentRa }}</p>
+    
+                <h2>Matéria</h2>
+                <p>{{ enlistment.discipline }} - {{ enlistment.course }}</p>
+                
+                <h2>Remuneração</h2>
+                @if (enlistment.remuneration) {
+                    <p>Sim</p>
+                } @else {
+                    <p>Não</p>
+                }
+    
+                <h2>Justificativa/Motivação</h2>
+                <p>{{ enlistment.justification }}</p>
+    
+                <h2>Carga-Horária (h)</h2>
+                <p>{{ enlistment.workload }}</p>  
+                
+                <mat-action-row>
+                    <button (click)="onRejection()">Reprovar</button>
+                    <button (click)="onApproval()">Aprovar</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+}

@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { RoleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
+import { ApproveCandidateComponent } from './institution/approve-candidate/approve-candidate.component';
 
 export const routes: Routes = [
 
@@ -29,6 +30,9 @@ export const routes: Routes = [
     canActivate: [RoleGuard],
     data: { expectedRole: 'INSTITUICAO' }
   },
+
+  { path: 'approve-candidate', component: ApproveCandidateComponent },
+
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
