@@ -1,9 +1,11 @@
 @if (isCreatingPost) {
-<app-new-post (close)="onCloseCreatePost()" />
+<app-new-post [subject]="subject!" (close)="onCloseCreatePost()" />
 }
 <div class="card-grid">
-    @for (post of posts; track post.postId) {
-      <app-card [post]="post" />
-    }
+  @for (post of posts; track post.postId) {
+  <app-card [subject]="subject" [post]="post" />
+  }
 </div>
+@if (role != 'ALUNO') {
 <button type="button" (click)="onStartCreatePost()">+</button>
+}

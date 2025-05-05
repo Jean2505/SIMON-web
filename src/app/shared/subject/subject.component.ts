@@ -1,7 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SideBarComponent } from './side-bar/side-bar.component';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
+import { User } from 'firebase/auth';
+import { HttpClient } from '@angular/common/http';
+
+import { type Discipline } from '../../models/discipline.model';
+
+import { SideBarComponent } from './side-bar/side-bar.component';
 
 @Component({
   selector: 'app-subject',
@@ -12,19 +18,80 @@ import { ActivatedRoute, RouterOutlet } from '@angular/router';
 })
 export class SubjectComponent implements OnInit {
 
+  /** Role do usuário
+   * 
+   * `ALUNO`, `MONITOR`, `PROFESSOR`, `INSTITUICAO`
+   */
+  role: string | null = null;
+
+  /** Usuário */
+  user: User | null = null;
+
   /** ID da matéria recuperada da rota */
-  subjectId!: string;
+  subjectId = '';
+
+  /**
+   * Interface da Disciplina
+   * @property id: ID da disciplina
+   * @property curso: Curso ao qual a disciplina pertence
+   * @property name: Nome da disciplina
+   * @property professor: Nome do professor responsável pela disciplina
+   * @property term: Período da disciplina
+   * @optional monitorAmnt: Quantidade de monitores para a disciplina
+   */
+  subject: Discipline = {
+    id: '',
+    curso: '',
+    name: '',
+    professor: '',
+    term: 0
+  };
+
   /**
    * Injetar o serviço de rota ativa para leitura dos parâmetros.
-   * @param route serviço do Angular para obter dados da rota atual
+   * @param auth  - serviço de autenticação do Firebase
+   * @param http  - serviço HTTP do Angular para fazer requisições
+   * @param route - serviço do Angular para obter dados da rota atual
    */
-  constructor(private route: ActivatedRoute) { } // Injeta o ActivatedRoute para acessar parâmetros de rota
+  constructor(
+    /** Referência ao serviço de autenticação do Firebase */
+    private auth: Auth,
+    /** Referência ao backend */
+    private http: HttpClient,
+    /** Referência ao serviço de rota atual do Angular */
+    private route: ActivatedRoute
+  ) { } // Injeta o ActivatedRoute para acessar parâmetros de rota
 
   /** Método chamado quando o componente é inicializado */
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    let user = this.auth.currentUser;
+    const idTokenResult = await user!.getIdTokenResult(true);
+    // pega o campo "role" dos claims
+    this.role = (idTokenResult.claims['role'] as string) ?? null;
+    console.log('Role do usuário:', this.role);
     // Recupera o ID da matéria a partir dos parâmetros da rota
-    this.route.params.subscribe(params => {
-      this.subjectId = params['id'];
+    this.route.paramMap.subscribe(params => {
+      this.subjectId = params.get('id') ?? '';
     });
+    this.http.get('http://localhost:3000/discipline', { params: { disciplineId: this.subjectId } }).subscribe({
+      next: (response: any) => {
+        this.subject.id = response[0].id_Disciplina;
+        this.subject.curso = response[0].curso_Disciplina;
+        this.subject.name = response[0].nome_Disciplina;
+        this.subject.professor = response[0].professor_Disciplina;
+        this.subject.term = response[0].periodo_Disciplina;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar disciplina:', error);
+      }
+    });
+  }
+
+  /**
+   * Recebe a instância do componente ativado no router-outlet e faz a injeção do subjectId.
+   */
+  onChildActivate(child: any): void {
+    // Método chamado quando um componente filho é ativado
+    child.subject = this.subject;
   }
 }

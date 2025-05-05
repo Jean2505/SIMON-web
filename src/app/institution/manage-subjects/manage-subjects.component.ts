@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';  
-import { CommonModule } from '@angular/common';  
-import { FormsModule } from '@angular/forms';  
-import { MatFormFieldModule } from '@angular/material/form-field';  
-import { MatSelectModule } from '@angular/material/select';  
-import { MatIconModule } from '@angular/material/icon';  
-import { MatCardModule } from '@angular/material/card';  
-import { HttpClient } from '@angular/common/http';  
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { HttpClient } from '@angular/common/http';
 
-import { DisciplineComponent } from './discipline/discipline.component';  
-import { Discipline } from '../../models/discipline.model';  
+import { DisciplineComponent } from './discipline/discipline.component';
+import { Discipline } from '../../models/discipline.model';
 
 /**
  * Representa uma escola no sistema.
@@ -150,6 +150,10 @@ export class InstitutionManageSubjectsComponent implements OnInit {
     this.selectedCourseId = courseId;
     this.loadingSubjects = true;
 
+    /**
+     * Verifica se o curso selecionado existe na lista de cursos.
+     * Se não existir, exibe mensagem de erro e retorna.
+     */
     const selectedCourse = this.courses.find(c => c.cursoId === courseId);
     if (!selectedCourse) {
       console.error('Curso não encontrado');

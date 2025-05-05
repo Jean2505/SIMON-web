@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 
 import { type Post } from '../../../models/post.model';
+import { type Discipline } from '../../../models/discipline.model';
+
 import { PostComponent } from "../post/post.component";
 
 @Component({
@@ -11,8 +13,20 @@ import { PostComponent } from "../post/post.component";
   styleUrl: './card.component.scss'
 })
 export class CardComponent {
-  @Input() post?: Post; 
 
+  /**
+   * Interface da Disciplina
+   * @property id: ID da disciplina
+   * @property cursoId: ID do curso ao qual a disciplina pertence
+   * @property name: Nome da disciplina
+   * @property professor: Nome do professor responsável pela disciplina
+   * @property term: Período da disciplina
+   * @optional monitorAmnt: Quantidade de monitores para a disciplina
+   */
+  @Input() subject?: Discipline;
+
+  @Input() post?: Post;
+  
   color: string = '';
 
   ngOnInit(): void {
