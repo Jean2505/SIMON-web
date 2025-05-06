@@ -1,9 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-
 import { Auth, User } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { Timestamp } from 'firebase/firestore/lite';
 
 import { type Discipline } from '../../models/discipline.model';
 
@@ -79,6 +77,11 @@ export class SubjectBoardComponent implements OnInit {
           console.error('Erro ao carregar disciplina:', error);
         }
       });
+      this.http.post('http://localhost:3000/getMuralPosts', { disciplinaId: subjectId }).subscribe({
+        next: (response: any) => {
+          console.log(response.payload)
+        }
+      })
     });
   }
 

@@ -258,11 +258,13 @@ app.post("/enlist", async (req, res) => {
 app.post("/getMuralPosts", async (req, res) => {
   try {
     // Chama a Cloud Function usando axios
-    console.log("Requisição: ", req.body);
+    console.log("getMuralPosts requisition: ", req.body);
     const response = await axios.post(
       "https://getmuralposts-bz6uecg2pq-rj.a.run.app",
       req.body
     );
+
+    console.log("getMuralPosts response:", response.data);
 
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);
@@ -283,11 +285,13 @@ app.post("/createMuralPost", async (req, res) => {
   };
   try {
     // Chama a Cloud Function usando axios
-    console.log("Requisição: ", req.body);
+    console.log("createMuralPost: ", req.body);
     const response = await axios.post(
       "https://createmuralpost-bz6uecg2pq-rj.a.run.app",
       payload
     );
+
+    console.log(response.data);
 
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);

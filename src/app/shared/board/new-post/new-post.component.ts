@@ -127,7 +127,6 @@ export class NewPostComponent implements OnInit {
     }, {} as Record<string, string[]>);
   }
 
-
   /**
    * Faz upload resumível de cada arquivo e imagem, atualizando o progresso geral.
    */
@@ -183,7 +182,7 @@ export class NewPostComponent implements OnInit {
       // 7) Monta o payload e envia ao backend
       const payload = {
         title: this.enteredTitle,
-        disciplineId: this.subject.id,
+        disciplinaId: this.subject.id,
         content: this.enteredContent,
         files: groupedFiles,
         url: this.enteredUrl || undefined,
