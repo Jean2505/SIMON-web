@@ -8,8 +8,57 @@
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  padding-top: 10vh;
+  padding: 10vh 6vw;
 }
 
 .tutors-container {
   margin-top: 30px;
+}
+
+.subject-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  thead tr {
+    background: linear-gradient(to right, #c6aefb, #b9e9f8);
+    color: #333;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  th, td {
+    text-align: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  tbody tr {
+    background: #fff;
+    transition: background-color 0.3s ease;
+  }
+
+  tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+.btn-access {
+  background-color: #00aaff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #007ecc;
+  }
 }

@@ -1,39 +1,44 @@
 <div class="container">
   <div class="tutors-container">
-    <h1 class="title">Monitores</h1>
-    <div *ngIf="groupedData.length; else noData">
-        <div *ngFor="let school of groupedData" class="school-block">
-          <h2 class="school-name">{{ school.name }}</h2>
-      
-          <div *ngFor="let course of school.courses" class="course-block">
-            <h3 class="course-name">{{ course.name }}</h3>
-      
-            <ul class="subject-list">
-              <li *ngFor="let subject of course.subjects" class="subject-item">
-                <h4 class="subject-name">{{ subject.name }}</h4>
-                <p class="monitors">
-                  <strong>Monitores:</strong>
-                  <span *ngIf="subject.tutors.length; else noMonitors">
-                    {{ subject.tutors.join(', ') }}
-                  </span>
-                  <ng-template #noMonitors>—</ng-template>
-                </p>
-                <p class="candidates">
-                  <strong>Candidatos:</strong>
-                  <span *ngIf="subject.candidates.length; else noCandidates">
-                    {{ subject.candidates.join(', ') }}
-                  </span>
-                  <ng-template #noCandidates>—</ng-template>
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <ng-template #noData>
-        <p>Não há disciplinas cadastradas para este professor.</p>
-      </ng-template>
+    <h1 class="title">Disciplinas</h1>
+
+    <table class="subject-table" *ngIf="groupedData.length; else noData">
+      <thead>
+        <tr>
+          <th>Disciplina</th>
+          <th>Curso</th>
+          <th>Escola</th>
+          <th>Monitores</th>
+          <th>Candidatos</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let school of groupedData">
+          <ng-container *ngFor="let course of school.courses">
+            <ng-container *ngFor="let subject of course.subjects">
+              <tr>
+                <td>{{ subject.name }}</td>
+                <td>{{ course.name }}</td>
+                <td>{{ school.name }}</td>
+                <td>{{ subject.tutors.join(', ') || '—' }}</td>
+                <td>{{ subject.candidates.join(', ') || '—' }}</td>
+                <td>
+                  <button class="btn-access">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                      <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <ng-template #noData>
+      <p>Não há disciplinas cadastradas para este professor.</p>
+    </ng-template>
   </div>
 </div>
-  

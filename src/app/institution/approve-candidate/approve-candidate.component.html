@@ -6,29 +6,35 @@
                     <mat-panel-title> {{ enlistment.discipline }} - {{ enlistment.course }} </mat-panel-title>
                     <mat-panel-description> {{ enlistment.studentName }} </mat-panel-description>
                 </mat-expansion-panel-header>
-    
-                <h2>Aluno</h2>
-                <p>{{ enlistment.studentName }} - {{ enlistment.studentRa }}</p>
-    
-                <h2>Matéria</h2>
-                <p>{{ enlistment.discipline }} - {{ enlistment.course }}</p>
-                
-                <h2>Remuneração</h2>
-                @if (enlistment.remuneration) {
-                    <p>Sim</p>
-                } @else {
-                    <p>Não</p>
-                }
-    
-                <h2>Justificativa/Motivação</h2>
-                <p>{{ enlistment.justification }}</p>
-    
-                <h2>Carga-Horária (h)</h2>
-                <p>{{ enlistment.workload }}</p>  
-                
-                <mat-action-row>
-                    <button (click)="onRejection()">Reprovar</button>
-                    <button (click)="onApproval()">Aprovar</button>
+                <div class="panel-content">
+                    <div class="info-section aluno-materia">
+                      <h2 class="field-label">Aluno</h2>
+                      <span class="field-value">João Augusto - 123456</span>
+                      <p>|</p>
+                      <h2 class="field-label">Matéria</h2>
+                      <span class="field-value">Orientação a Objetos - Engenharia de Software</span>
+                      <p>|</p>
+                      <h2 class="field-label">Remuneração</h2>
+                      @if(enlistment.remuneration){
+                          <span class="field-value">Sim</span>
+                        }@else {
+                            <span class="field-value">Não</span>
+                      }
+                    <p>|</p>
+                    <h2 class="field-label">Carga-Horária (h)</h2>
+                    <span class="field-value">12</span>
+                    </div>
+                    <div class="info-section">
+                      <h2 class="field-label">Justificativa/Motivação</h2>
+                      <p class="field-value">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                      </p>
+                    </div>
+                  </div>
+                  
+                <mat-action-row class="action-buttons">
+                    <button (click)="onRejection()" class="approve-btn">Reprovar</button>
+                    <button (click)="onApproval()" class="reject-btn">Aprovar</button>
                 </mat-action-row>
             </mat-expansion-panel>
         </mat-accordion>
