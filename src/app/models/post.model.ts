@@ -3,5 +3,6 @@ export interface Post {
     title: string,
     content: string,
     posterName: string,
-    date: string
+    date: string,
+    images: string[]
 }
