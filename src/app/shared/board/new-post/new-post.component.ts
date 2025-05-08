@@ -186,7 +186,7 @@ export class NewPostComponent implements OnInit {
         content: this.enteredContent,
         files: groupedFiles,
         url: this.enteredUrl || undefined,
-        uid: this.auth.currentUser?.uid,
+        userName: this.auth.currentUser?.displayName,
         images: imageUrls || undefined
       };
 

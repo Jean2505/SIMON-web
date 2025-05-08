@@ -2,7 +2,7 @@
 <app-new-post [subject]="subject!" (close)="onCloseCreatePost()" />
 }
 <div class="card-grid">
-  @for (post of posts; track post.postId) {
+  @for (post of posts; track post.createdAt) {
   <app-card [subject]="subject" [post]="post" />
   }
 </div>

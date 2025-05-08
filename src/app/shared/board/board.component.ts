@@ -8,6 +8,7 @@ import { type Discipline } from '../../models/discipline.model';
 import { CardComponent } from "./card/card.component";
 import { DUMMY_POSTS } from './dummy-posts';
 import { NewPostComponent } from "./new-post/new-post.component";
+import { Post } from '../../models/post.model';
 
 @Component({
   selector: 'app-board',
@@ -49,7 +50,7 @@ export class SubjectBoardComponent implements OnInit {
 
   role!: string;
 
-  posts = DUMMY_POSTS;
+  posts!: Post[];
 
   /** Controla a visibilidade do componente de criação de post */
   isCreatingPost = false;
@@ -79,10 +80,34 @@ export class SubjectBoardComponent implements OnInit {
       });
       this.http.post('http://localhost:3000/getMuralPosts', { disciplinaId: subjectId }).subscribe({
         next: (response: any) => {
-          console.log(response.payload)
+          const result = JSON.parse(response.payload);
+          this.posts = result.map((post: any) => {
+            return {
+              postId: post.postId,
+              title: post.title,
+              content: post.content,
+              userName: post.userName,
+              files: post.files,
+              images: post.images,
+              videos: post.videos,
+              createdAt: new Date(
+                post.createdAt._seconds * 1000 +
+                post.createdAt._nanoseconds / 1_000_000
+              ),
+              disciplinaId: post.disciplinaId
+            };
+          });
+          console.log(this.posts);
         }
       })
     });
+  }
+
+  trackPosts(posts: [] | null): number {
+    if (posts) {
+      return posts.length;
+    }
+    return 0;
   }
 
   /** Controla a visibilidade do componente de criação de post */
