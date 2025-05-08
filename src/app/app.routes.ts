@@ -12,7 +12,7 @@ export const routes: Routes = [
     path: 'student',
     loadChildren: () => import('./student/student.module').then(m => m.StudentModule),
     canActivate: [RoleGuard],
-    data: { expectedRole: 'ALUNO' }
+    data: { expectedRoles: ['ALUNO', 'MONITOR'] }
   },
 
   // Rota para usuários Professor
@@ -20,7 +20,7 @@ export const routes: Routes = [
     path: 'professor',
     loadChildren: () => import('./professor/professor.module').then(m => m.ProfessorModule),
     canActivate: [RoleGuard],
-    data: { expectedRole: 'PROFESSOR' }
+    data: { expectedRoles: ['PROFESSOR'] }
   },
 
   // Rota para usuários Instituição
@@ -28,7 +28,7 @@ export const routes: Routes = [
     path: 'institution',
     loadChildren: () => import('./institution/institution.module').then(m => m.InstitutionModule),
     canActivate: [RoleGuard],
-    data: { expectedRole: 'INSTITUICAO' }
+    data: { expectedRoles: ['INSTITUICAO'] }
   },
 
   { path: 'approve-candidate', component: ApproveCandidateComponent },

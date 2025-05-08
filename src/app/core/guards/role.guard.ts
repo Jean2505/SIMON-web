@@ -58,10 +58,16 @@ export class RoleGuard implements CanActivate {
             // }
           }
 
-          const expectedRole = route.data['expectedRole'] as string;
+          const expectedRoles = route.data['expectedRoles'] as string[];
 
+          let flag = false;
           // 5) valida role
-          if (role === expectedRole) {
+          for (let i = 0; i < expectedRoles.length; i++) {
+            if (expectedRoles[i] == role) {
+              flag = true;
+            }
+          }
+          if (flag) {
             observer.next(true);
           } else {
             observer.next(this.router.parseUrl('/login'));
