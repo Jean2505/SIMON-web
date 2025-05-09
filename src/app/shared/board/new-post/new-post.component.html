@@ -32,16 +32,18 @@
           Anexar vídeo do YouTube
           <button type="button" (click)="addYoutubeUrl()">+</button>
         </label>
-        <div *ngFor="let url of youtubeUrls; let i = index; trackBy: trackByIndex" class="youtube-input-row">
-          <button type="button" (click)="removeYoutubeUrl(i)">X</button>
-          <input
-            type="url"
-            [name]="'url' + i"
-            [(ngModel)]="youtubeUrls[i]"
-            placeholder="https://"
-            class="youtube"
-          />
-        </div>
+        @for (url of videos; let i = $index; track url) {
+          <div class="youtube-input-row">
+            <button type="button" (click)="removeYoutubeUrl(i)">X</button>
+            <input
+              type="url"
+              [name]="'url' + i"
+              [(ngModel)]="videos[i]"
+              placeholder="https://"
+              class="youtube"
+            />
+          </div>
+        }
 
         <!-- Arquivos gerais -->
         <input #fileInput type="file" (change)="onFileSelected($event)" hidden />

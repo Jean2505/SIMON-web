@@ -55,7 +55,6 @@ export class RoleGuard implements CanActivate {
             // 4) atualiza o token para obter o claim recém-setado
             tokenResult = await user.getIdTokenResult(true);
             role = tokenResult.claims['role'] as string | undefined;
-            // }
           }
 
           const expectedRoles = route.data['expectedRoles'] as string[];
@@ -63,20 +62,14 @@ export class RoleGuard implements CanActivate {
           let flag = false;
           // 5) valida role
           for (let i = 0; i < expectedRoles.length; i++) {
-            if (expectedRoles[i] == role) {
-              flag = true;
-            }
+            if (expectedRoles[i] == role) flag = true;
           }
-          if (flag) {
-            observer.next(true);
-          } else {
-            observer.next(this.router.parseUrl('/login'));
-          }
+          if (flag) observer.next(true);
+          else observer.next(this.router.parseUrl('/login'));
         } catch (err) {
           console.error('Erro no RoleGuard:', err);
           observer.next(this.router.parseUrl('/login'));
         }
-
         observer.complete();
       });
 

@@ -53,6 +53,9 @@ export class LoginComponent {
         case 'ALUNO':
           this.router.navigate(['/student']);
           break;
+        case 'MONITOR':
+          this.router.navigate(['/student']);
+          break;
         case 'PROFESSOR':
           this.router.navigate(['/professor']);
           break;

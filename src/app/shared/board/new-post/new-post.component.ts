@@ -1,6 +1,4 @@
-import { Auth } from '@angular/fire/auth';
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -8,17 +6,18 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  deleteObject
 } from '@angular/fire/storage';
 import { Discipline } from '../../../models/discipline.model';
 
 @Component({
   selector: 'app-new-post',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule],
   templateUrl: './new-post.component.html',
   styleUrls: ['./new-post.component.scss']
 })
-export class NewPostComponent implements OnInit {
-
+export class NewPostComponent {
+  /** MATÉRIA/Subject passado via Input para associar o post */
   @Input() subject!: Discipline;
 
   /** Emite quando o usuário fecha/cancela o diálogo */
@@ -38,8 +37,9 @@ export class NewPostComponent implements OnInit {
   isAttaching = false;
   /** Controla visibilidade do campo de URL */
   isAddingUrl = false;
-  /** Controla o clique no botão de enviar */
-  isSending = false;
+
+  /** Lista de URLs de vídeos YouTube */
+  videos: string[] = [''];
 
   /** Lista de arquivos selecionados para upload futuro */
   files: File[] = [];
@@ -48,30 +48,25 @@ export class NewPostComponent implements OnInit {
 
   /** Percentual geral de upload (0–100) */
   overallUploadProgress = 0;
+  /** Impede envios duplicados enquanto estiver em progresso */
+  isSending = false;
 
-  /**
-   * Construtor do componente.
-   * @param auth    - Auth do Firebase para obter usuário atual.
-   * @param http    - HttpClient para requisições HTTP.
-   * @param storage - Storage do Firebase para upload de arquivos.
-   */
   constructor(
-    /** Referência ao serviço de autenticação do Firebase */
-    private auth: Auth,
-    /** Referência ao backend */
-    private http: HttpClient,
-    /** Referência ao serviço de armazenamento do Firebase */
-    private storage: Storage
+    private storage: Storage,
+    private http: HttpClient
   ) { }
-
-  ngOnInit(): void {
-    console.log(this.subject);
-  }
 
   /** Fecha o diálogo e reseta o estado */
   onCancel(): void {
     this.resetState();
     this.close.emit();
+  }
+
+  /** Confirma cancelamento antes de fechar */
+  confirmCancel(): void {
+    if (confirm('Deseja realmente cancelar o post?')) {
+      this.onCancel();
+    }
   }
 
   /** Alterna a visibilidade da seção de anexos */
@@ -80,18 +75,28 @@ export class NewPostComponent implements OnInit {
     if (!this.isAttaching) {
       this.isAddingUrl = false;
       this.enteredUrl = '';
+      this.videos = [''];
     }
   }
 
-  /** Alterna a visibilidade do campo de URL */
-  onSelectAddUrl(): void {
-    this.isAddingUrl = !this.isAddingUrl;
-    if (!this.isAddingUrl) this.enteredUrl = '';
+  /** Adiciona um novo campo de URL de YouTube */
+  addYoutubeUrl(): void {
+    this.videos.push('');
+  }
+
+  /** Remove um campo de URL de YouTube pelo índice */
+  removeYoutubeUrl(index: number): void {
+    this.videos.splice(index, 1);
+  }
+
+  /** TrackBy para ngFor de URLs de YouTube */
+  trackByIndex(index: number, item: string): number {
+    return index;
   }
 
   /** Adiciona arquivos à lista local (sem upload) */
   onFileSelected(event: Event): void {
-    const input = (event.target as HTMLInputElement);
+    const input = event.target as HTMLInputElement;
     if (input.files) {
       this.files.push(...Array.from(input.files));
     }
@@ -99,7 +104,7 @@ export class NewPostComponent implements OnInit {
 
   /** Adiciona imagens à lista local (sem upload) */
   onImageSelected(event: Event): void {
-    const input = (event.target as HTMLInputElement);
+    const input = event.target as HTMLInputElement;
     if (input.files) {
       this.images.push(...Array.from(input.files));
     }
@@ -116,94 +121,74 @@ export class NewPostComponent implements OnInit {
   }
 
   /**
-   * Agrupa as URLs por extensão de arquivo.
+   * Faz upload resumível de cada arquivo e imagem,
+   * atualizando o progresso geral e envia um único payload
+   * com arrays de URLs de arquivos, imagens, vídeos e disciplina.
    */
-  private groupByExtension(urls: string[]): Record<string, string[]> {
-    return urls.reduce((acc, url) => {
-      const match = url.match(/\.([a-zA-Z0-9]+)(?:\?|$)/);
-      const ext = match ? match[1].toLowerCase() : 'unknown';
-      (acc[ext] ??= []).push(url);
-      return acc;
-    }, {} as Record<string, string[]>);
-  }
+  onPost(): void {
+    if (this.isSending) return;
+    this.isSending = true;
 
-  /**
-   * Faz upload resumível de cada arquivo e imagem, atualizando o progresso geral.
-   */
-  async onPost(): Promise<void> {
-    // 1) Combina arquivos e imagens em uma única lista
-    const allFiles = [
+    const allItems = [
       ...this.files.map(f => ({ file: f, folder: 'uploads/files' })),
       ...this.images.map(img => ({ file: img, folder: 'uploads/images' }))
     ];
 
-    // 2) Opcional: total de bytes para calcular progresso geral
-    const totalBytes = allFiles.reduce((sum, item) => sum + item.file.size, 0);
-    let bytesTransferred = 0;
+    const totalBytes = allItems.reduce((sum, item) => sum + item.file.size, 0);
+    const bytesArr = new Array<number>(allItems.length).fill(0);
+    const downloadURLs: string[] = new Array(allItems.length).fill('');
 
-    // 3) Cria um array de Promises, uma para cada upload
-    const uploadPromises = allFiles.map(item =>
-      new Promise<string>((resolve, reject) => {
-        const path = `${item.folder}/${Date.now()}_${item.file.name}`;
-        const storageRef = ref(this.storage, path);
-        const task = uploadBytesResumable(storageRef, item.file);
+    allItems.forEach((item, idx) => {
+      const path = `${item.folder}/${Date.now()}_${item.file.name}`;
+      const storageRef = ref(this.storage, path);
+      const task = uploadBytesResumable(storageRef, item.file);
 
-        task.on(
-          'state_changed',
-          snapshot => {
-            // atualiza progresso geral
-            bytesTransferred += snapshot.bytesTransferred - bytesTransferred;
-            this.overallUploadProgress = (bytesTransferred / totalBytes) * 100;
-          },
-          err => reject(err),
-          async () => {
-            try {
-              const url = await getDownloadURL(storageRef);
-              resolve(url);
-            } catch (e) {
-              reject(e);
-            }
-          }
-        );
-      })
-    );
-
-    try {
-      // 4) Aguarda todos os uploads terminarem
-      const downloadURLs = await Promise.all(uploadPromises);
-
-      // 5) Separa fileUrls e imageUrls
-      const fileUrls = downloadURLs.slice(0, this.files.length);
-      const imageUrls = downloadURLs.slice(this.files.length);
-
-      // 6) Agrupa arquivos por extensão
-      const groupedFiles = this.groupByExtension(fileUrls);
-
-      // 7) Monta o payload e envia ao backend
-      const payload = {
-        title: this.enteredTitle,
-        disciplinaId: this.subject.id,
-        content: this.enteredContent,
-        files: groupedFiles,
-        url: this.enteredUrl || undefined,
-        userName: this.auth.currentUser?.displayName,
-        images: imageUrls || undefined
-      };
-
-      this.http.post(this.apiUrl, payload).subscribe({
-        next: () => {
-          console.log('Post enviado com sucesso');
-          // this.resetState();
-          // this.close.emit();
+      task.on(
+        'state_changed',
+        snapshot => {
+          bytesArr[idx] = snapshot.bytesTransferred;
+          const transferred = bytesArr.reduce((a, b) => a + b, 0);
+          this.overallUploadProgress = (transferred / totalBytes) * 100;
         },
-        error: err => {
-          console.error('Erro ao enviar post:', err);
+        error => {
+          console.error('Erro no upload:', error);
+          this.isSending = false;
+        },
+        async () => {
+          try {
+            downloadURLs[idx] = await getDownloadURL(storageRef);
+            if (downloadURLs.every(u => !!u)) {
+              const files = downloadURLs.slice(0, this.files.length);
+              const images = downloadURLs.slice(this.files.length);
+              const payload = {
+                title: this.enteredTitle,
+                content: this.enteredContent,
+                url: this.enteredUrl || undefined,
+                videos: this.videos,
+                files,
+                images,
+                disciplinaId: this.subject.id
+              };
+              this.http.post(this.apiUrl, payload).subscribe(
+                res => {
+                  console.log('Post enviado:', res);
+                  this.resetState();
+                  this.close.emit();
+                },
+                err => {
+                  console.error('Erro ao enviar post:', err);
+                  downloadURLs.forEach(u => deleteObject(ref(this.storage, u)));
+                  this.isSending = false;
+                }
+              );
+            }
+          } catch (err) {
+            console.error('Erro ao obter downloadURL:', err);
+            this.isSending = false;
+          }
         }
-      });
-
-    } catch (err) {
-      console.error('Erro no upload:', err);
-    }
+      );
+    });
   }
 
   /** Reseta todas as variáveis ao estado inicial */
@@ -213,28 +198,10 @@ export class NewPostComponent implements OnInit {
     this.enteredUrl = '';
     this.isAttaching = false;
     this.isAddingUrl = false;
+    this.videos = [''];
     this.files = [];
     this.images = [];
     this.overallUploadProgress = 0;
+    this.isSending = false;
   }
-
-  youtubeUrls: string[] = ['']; // inicia com 1 campo
-
-addYoutubeUrl() {
-  this.youtubeUrls.push('');
-}
-removeYoutubeUrl(index: number) {
-  this.youtubeUrls.splice(index, 1);
-}
-
-trackByIndex(index: number, item: string) {
-  return index;
-}
-
-confirmCancel() {
-  const confirmed = confirm('Deseja realmente cancelar o post?');
-  if (confirmed) {
-    this.onCancel();
-  }
-}
 }

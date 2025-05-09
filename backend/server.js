@@ -264,7 +264,7 @@ app.post("/getMuralPosts", async (req, res) => {
       req.body
     );
 
-    console.log("getMuralPosts response:", response.data);
+    console.log("getMuralPosts response:", JSON.parse(response.data.payload));
 
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);

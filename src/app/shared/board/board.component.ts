@@ -52,6 +52,8 @@ export class SubjectBoardComponent implements OnInit {
 
   posts!: Post[];
 
+  isLoading = true; 
+
   /** Controla a visibilidade do componente de criação de post */
   isCreatingPost = false;
 
