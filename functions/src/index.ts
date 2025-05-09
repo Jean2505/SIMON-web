@@ -271,3 +271,28 @@ export const getMuralPosts = onRequest({region: "southamerica-east1"}, async (re
     };
     res.status(200).send(result);
 });
+
+export const createStudent = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    try {
+        await db.collection("Alunos").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Student created successfully",
+            payload: "Student created successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating student",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+
+});
