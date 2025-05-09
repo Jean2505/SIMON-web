@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Post } from '../../../models/post.model';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-post',
@@ -11,14 +12,11 @@ export class PostComponent {
   @Input() post!: Post;
   @Output() close = new EventEmitter<void>();
 
-  postT: Post = {
-    title: 'Post Exemplo',
-    posterName: 'João',
-    date: '2025-05-08',
-    content: 'Veja os anexos abaixo!',
-    images: ['/gosling.jpg', '/simons.png'],
-    postId: ''
-  };
+  constructor(private sanitizer: DomSanitizer) {}
+
+  sanitizeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
 
   onClose() {
     this.close.emit();
@@ -29,7 +27,7 @@ export class PostComponent {
   
   zoomImage(src: string): void {
     this.zoomedImageSrc = src;
-    this.currentImageIndex = this.postT.images.indexOf(src); // Armazena o índice da imagem
+    this.currentImageIndex = (this.post.images as string[]).indexOf(src);
   }
   
   closeZoom(): void {
@@ -38,14 +36,14 @@ export class PostComponent {
   
   previousImage(event: Event): void {
     event.stopPropagation(); // Impede que o modal feche ao clicar nas setas
-    this.currentImageIndex = (this.currentImageIndex - 1 + this.postT.images.length) % this.postT.images.length;
-    this.zoomedImageSrc = this.postT.images[this.currentImageIndex];
+    this.currentImageIndex = (this.currentImageIndex - 1 + this.post.images.length) % this.post.images.length;
+    this.zoomedImageSrc = this.post.images[this.currentImageIndex];
   }
   
   nextImage(event: Event): void {
     event.stopPropagation(); // Impede que o modal feche ao clicar nas setas
-    this.currentImageIndex = (this.currentImageIndex + 1) % this.postT.images.length;
-    this.zoomedImageSrc = this.postT.images[this.currentImageIndex];
+    this.currentImageIndex = (this.currentImageIndex + 1) % this.post.images.length;
+    this.zoomedImageSrc = this.post.images[this.currentImageIndex];
   }
   
 }

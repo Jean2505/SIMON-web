@@ -11,7 +11,7 @@
   <div class="header">
     <div>
       <h2 class="titlename">{{ post.title }}</h2>
-      <p>{{ post.posterName }} - {{ post.date }}</p>
+      <p>{{ post.userName }} - {{ post.createdAt }}</p>
     </div>
     <div class="icons">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24s" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -35,7 +35,7 @@
   
   <!-- Lista horizontal de imagens -->
   <div class="image-list">
-    @for (image of postT.images; track $index) {
+    @for (image of post.images; track $index) {
         <img
         class="thumbnail"
           [src]="image"
@@ -49,20 +49,21 @@
     
     <!-- Vídeos -->
     <div class="video-list">
-        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/oHg5SJYRHA0" allowfullscreen></iframe>
+      @for (videoUrl of post.videos; track $index) {
+        <iframe [src]="sanitizeUrl(videoUrl)" allowfullscreen></iframe>
+      }
     </div>
     
     <hr />
-    
-    <!-- Arquivos -->
-
     <h4>Arquivos</h4>
-
-    <div class="file-list">
-        <a href="/files/relatorio.txt" download><i class="fa fa-file"></i> relatorio.txt</a>
-        <a href="/files/manual.pdf" download><i class="fa fa-file-pdf"></i> manual.pdf</a>
+    
+    <!-- <div class="file-list">
+      @for (file of post.files; track $index) {
+        <a [href]="file.url" download>
+          <i class="fa fa-file"></i> {{ file.name }}
+        </a>
+      }
+    </div> -->
     </div>
-</div>
 </div>
 </dialog>

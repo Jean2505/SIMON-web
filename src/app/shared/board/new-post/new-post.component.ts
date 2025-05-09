@@ -217,4 +217,24 @@ export class NewPostComponent implements OnInit {
     this.images = [];
     this.overallUploadProgress = 0;
   }
+
+  youtubeUrls: string[] = ['']; // inicia com 1 campo
+
+addYoutubeUrl() {
+  this.youtubeUrls.push('');
+}
+removeYoutubeUrl(index: number) {
+  this.youtubeUrls.splice(index, 1);
+}
+
+trackByIndex(index: number, item: string) {
+  return index;
+}
+
+confirmCancel() {
+  const confirmed = confirm('Deseja realmente cancelar o post?');
+  if (confirmed) {
+    this.onCancel();
+  }
+}
 }
