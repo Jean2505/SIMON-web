@@ -335,6 +335,7 @@ export const updateRequisition = onRequest({region: "southamerica-east1"}, async
                 payload: "No matching documents."
             };
             res.status(404).send(result);
+            
             return;
         }
         
