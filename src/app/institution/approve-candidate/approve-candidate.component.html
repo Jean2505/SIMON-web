@@ -1,42 +1,48 @@
-@for (enlistment of enlistments; track enlistment.enlistmentId) {
-    <div class="container">
-        <mat-accordion>
-            <mat-expansion-panel>
-                <mat-expansion-panel-header>
-                    <mat-panel-title> {{ enlistment.discipline }} - {{ enlistment.course }} </mat-panel-title>
-                    <mat-panel-description> {{ enlistment.studentName }} </mat-panel-description>
-                </mat-expansion-panel-header>
-                <div class="panel-content">
-                    <div class="info-section aluno-materia">
-                      <h2 class="field-label">Aluno</h2>
-                      <span class="field-value">João Augusto - 123456</span>
-                      <p>|</p>
-                      <h2 class="field-label">Matéria</h2>
-                      <span class="field-value">Orientação a Objetos - Engenharia de Software</span>
-                      <p>|</p>
-                      <h2 class="field-label">Remuneração</h2>
-                      @if(enlistment.remuneration){
-                          <span class="field-value">Sim</span>
-                        }@else {
-                            <span class="field-value">Não</span>
-                      }
-                    <p>|</p>
-                    <h2 class="field-label">Carga-Horária (h)</h2>
-                    <span class="field-value">12</span>
-                    </div>
-                    <div class="info-section">
-                      <h2 class="field-label">Justificativa/Motivação</h2>
-                      <p class="field-value">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit...
-                      </p>
-                    </div>
-                  </div>
-                  
-                <mat-action-row class="action-buttons">
-                    <button (click)="onRejection()" class="approve-btn">Reprovar</button>
-                    <button (click)="onApproval()" class="reject-btn">Aprovar</button>
-                </mat-action-row>
-            </mat-expansion-panel>
-        </mat-accordion>
-    </div>
-}
+<div class="container">
+  @for (tutor of tutors; track tutor.ra + tutor.disciplina) {
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ tutor.disciplina }}
+        </mat-panel-title>
+        <mat-panel-description>
+          {{ tutor.nome }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="panel-content">
+        <div class="info-section aluno-materia">
+          <h2 class="field-label">Aluno</h2>
+          <span class="field-value">{{ tutor.nome }} - {{ tutor.ra }}</span>
+          <p>|</p>
+          <h2 class="field-label">Matéria</h2>
+          <span class="field-value">
+            {{ tutor.disciplina }} - Engenharia de Software
+          </span>
+          <p>|</p>
+          <h2 class="field-label">Remuneração</h2>
+          @if(tutor.remuneracao){
+          <span class="field-value">Sim</span>
+          }@else {
+          <span class="field-value">Não</span>
+          }
+          <p>|</p>
+          <h2 class="field-label">Carga-Horária (h)</h2>
+          <span class="field-value">{{ tutor.cargaHoraria }}</span>
+        </div>
+        <div class="info-section">
+          <h2 class="field-label">Justificativa/Motivação</h2>
+          <p class="field-value">
+            {{ tutor.mensagem }}
+          </p>
+        </div>
+      </div>
+
+      <mat-action-row class="action-buttons">
+        <button (click)="sendResult(2, tutor.uid)" class="reject-btn">Reprovar</button>
+        <button (click)="sendResult(1, tutor.uid)" class="approve-btn">Aprovar</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+  }
+</div>

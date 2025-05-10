@@ -36,27 +36,6 @@ export class RoleGuard implements CanActivate {
           let tokenResult = await user.getIdTokenResult(true);
           let role = tokenResult.claims['role'] as string | undefined;
 
-          // 3) se não tiver role no token, busca no Firestore e seta no backend
-          if (!role) {
-            role = 'ALUNO'; // valor padrão
-            // const userRef = doc(this.firestore, `users/${user.uid}`);
-            // const snap = await getDoc(userRef);
-            // const fetchedRole = snap.exists() ? (snap.data() as any).role : null;
-
-            // if (fetchedRole) {
-            // chama seu endpoint para definir custom claim
-            await this.http
-              .post("localhost:3000/setUserRole", {
-                uid: user.uid,
-                role: role
-              })
-              .toPromise();
-
-            // 4) atualiza o token para obter o claim recém-setado
-            tokenResult = await user.getIdTokenResult(true);
-            role = tokenResult.claims['role'] as string | undefined;
-          }
-
           const expectedRoles = route.data['expectedRoles'] as string[];
 
           let flag = false;

@@ -24,8 +24,10 @@ app.post("/setUserRole", async (req, res) => {
 
   try {
     await admin.auth().setCustomUserClaims(uid, { role });
-    //res.json({ message: `Custom claim para role '${role}' foi setada no usuário ${uid}` });
-    res.send(`Custom claim para role '${role}' foi setada no usuário ${uid}`);
+    //alert(`Custom claim para role '${role}' foi setada no usuário ${uid}`);
+    //res.send(`Custom claim para role '${role}' foi setada no usuário ${uid}`);
+
+    res.sendFile(path.join(__dirname, "/screens/updateUser.html"));
   } catch (error) {
     res.send("Erro ao setar custom claim:", error);
     res.status(500).json({ error: error.message });
@@ -156,6 +158,22 @@ app.get("/loadCourses", (req, res) => {
   );
 });
 
+app.post("/createStudent", async (req, res) => {
+  try {
+    const student = req.body;
+    console.log("Requisição: ", student);
+    const response = await axios.post(
+      "https://createstudent-bz6uecg2pq-rj.a.run.app",
+      student
+    );
+    console.log("Resposta: ", response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao chamar função createUser:", error.message);
+    res.status(500).json({ error: "Erro ao criar o aluno externamente" });
+  }
+});
+
 app.post("/getStudent", async (req, res) => {
   try {
     const studentId = req.body;
@@ -189,6 +207,39 @@ app.post("/getTutor", async (req, res) => {
     res
       .status(500)
       .json({ error: "Erro ao obter dados do monitor externamente" });
+  }
+});
+
+app.get("/getRequisitions", async (req, res) => {
+  try {
+    const response = await axios.get(
+      "https://getrequisitions-bz6uecg2pq-rj.a.run.app"
+    );
+    console.log("Resposta: ", JSON.parse(response.data.payload));
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função getRequisitions:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao obter as requisições externamente" });
+  }
+});
+
+app.post("/updateRequisition", async (req, res) => {
+  try {
+    const requisition = req.body;
+    console.log("Requisição: ", requisition);
+    const response = await axios.post(
+      "https://updaterequisition-bz6uecg2pq-rj.a.run.app",
+      requisition
+    );
+    console.log("Resposta: ", JSON.stringify(response.data.payload));
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função updateRequisition:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao atualizar a requisição externamente" });
   }
 });
 

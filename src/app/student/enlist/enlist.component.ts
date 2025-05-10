@@ -35,7 +35,14 @@ export class StudentEnlistComponent implements OnInit {
   /** Nome da disciplina exibido ao carregar. */
   discipline: string = 'carregando...';
 
-  /** Objeto Student com informações do usuário autenticado. */
+  /**
+   * Objeto Student com informações do usuário autenticado.
+   * @param {string} nome - Nome do aluno.
+   * @param {string} uid - ID único do aluno.
+   * @param {string} ra - Registro Acadêmico do aluno.
+   * @param {string} curso - Curso do aluno.
+   * @param {string} foto - URL da foto do aluno.
+   * */
   student: Student = {
     nome: 'carregando...',
     uid: 'carregando...',
@@ -141,11 +148,12 @@ export class StudentEnlistComponent implements OnInit {
       cargaHoraria: this.selectedHours,
       disciplina: this.selectedSubject.name,
       disciplinaId: this.selectedSubject.id,
+      foto: this.student.foto,
       local: '',
       mensagem: this.message,
       nome: this.student.nome,
-      foto: this.student.foto,
       ra: this.student.ra,
+      remuneracao: this.isSwitchOn,
       sala: '',
       status: false,
       uid: this.student.uid

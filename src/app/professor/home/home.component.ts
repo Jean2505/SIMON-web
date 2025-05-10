@@ -38,8 +38,8 @@ export class ProfessorHomeComponent {
   goTutors(): void {
     this.router.navigate(['/professor/tutors'])
       .then(success => {
-        console.log('Navegação realizada:', success);
         console.clear(); // Limpa o console após navegação bem-sucedida
+        console.log('Navegação realizada:', success);
       })
       .catch(error => console.error('Erro na navegação:', error));
   }
@@ -50,8 +50,8 @@ export class ProfessorHomeComponent {
   goEnlist(): void {
     this.router.navigate(['/professor/enlist'])
       .then(success => {
-        console.log('Navegação realizada:', success);
         console.clear(); // Limpa o console após navegação bem-sucedida
+        console.log('Navegação realizada:', success);
       })
       .catch(error => console.error('Erro na navegação:', error));
   }

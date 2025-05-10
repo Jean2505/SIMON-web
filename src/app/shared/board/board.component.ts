@@ -52,7 +52,7 @@ export class SubjectBoardComponent implements OnInit {
 
   posts!: Post[];
 
-  isLoading = true; 
+  isLoading = true;
 
   /** Controla a visibilidade do componente de criação de post */
   isCreatingPost = false;
@@ -76,9 +76,7 @@ export class SubjectBoardComponent implements OnInit {
           this.subject.term = response[0].periodo_Disciplina;
           console.log('Objeto matéria:', this.subject);
         },
-        error: (error) => {
-          console.error('Erro ao carregar disciplina:', error);
-        }
+        error: (error) => console.error('Erro ao carregar disciplina:', error)
       });
       this.http.post('http://localhost:3000/getMuralPosts', { disciplinaId: subjectId }).subscribe({
         next: (response: any) => {
@@ -106,9 +104,7 @@ export class SubjectBoardComponent implements OnInit {
   }
 
   trackPosts(posts: [] | null): number {
-    if (posts) {
-      return posts.length;
-    }
+    if (posts) return posts.length
     return 0;
   }
 
