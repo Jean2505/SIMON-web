@@ -1,99 +1,107 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-*{
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+* {
   margin: 0;
   padding: 0;
   outline: none;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
-.body{
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    overflow: hidden;
-    align-items: center;
+.body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
 }
 
-.background{
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 10px;
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(115deg, #56d8e4 10%, #5301ea 90%);
+.background {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 10px;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(115deg, #56d8e4 10%, #5301ea 90%);
 }
 
-.container{
-    height: 100vh;
-    z-index: 2;
-    flex: 0.5;
-    background: #fff;
-    padding: 25px 40px 10px 40px;
-    box-shadow: 10px 0px 30px #5301ea41;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.container {
+  height: 100vh;
+  z-index: 2;
+  flex: 0.5;
+  background: #fff;
+  padding: 25px 40px 10px 40px;
+  box-shadow: 10px 0px 30px #5301ea41;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-img{
-    width: 70%;
-    filter: drop-shadow(0px 0px 0.45rem rgb(0, 0, 0));
+img {
+  width: 70%;
+  filter: drop-shadow(0px 0px 0.45rem rgb(0, 0, 0));
 }
 
-.container .text{
+.container .text {
   text-align: center;
   font-size: 41px;
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  background: -webkit-linear-gradient(right, #5301ea, #56d8e4, #5301ea, #56d8e4);
+  font-family: "Poppins", sans-serif;
+  background: -webkit-linear-gradient(
+    right,
+    #5301ea,
+    #56d8e4,
+    #5301ea,
+    #56d8e4
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.container form{
+.container form {
   padding: 0px 0 0 0;
 }
-.container form .form-row{
+.container form .form-row {
   display: flex;
   margin: 32px 0px;
   padding: auto;
   justify-content: center;
 }
-form .form-row .input-data{
+form .form-row .input-data {
   width: 100%;
   height: 40px;
   margin: 0 20px;
   position: relative;
 }
-form .form-row .textarea{
+form .form-row .textarea {
   height: 70px;
 }
 
 .input-data input,
-.textarea textarea{
+.textarea textarea {
   display: block;
   width: 100%;
   height: 100%;
   border: none;
   font-size: 17px;
-  border-bottom: 2px solid rgba(0,0,0, 0.12);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
-.input-data input:focus ~ label, .textarea textarea:focus ~ label,
-.input-data input:valid ~ label, .textarea textarea:valid ~ label{
+.input-data input:focus ~ label,
+.textarea textarea:focus ~ label,
+.input-data input:valid ~ label,
+.textarea textarea:valid ~ label {
   transform: translateY(-20px);
   font-size: 14px;
   color: #3498db;
 }
 
-.textarea textarea{
+.textarea textarea {
   resize: none;
   padding-top: 10px;
 }
 
-.input-data label{
+.input-data label {
   position: absolute;
   pointer-events: none;
   bottom: 10px;
@@ -101,20 +109,20 @@ form .form-row .textarea{
   transition: all 0.3s ease;
 }
 
-.textarea label{
+.textarea label {
   width: 100%;
   bottom: 40px;
   background: #fff;
 }
 
-.input-data .underline{
+.input-data .underline {
   position: absolute;
   bottom: 0;
   height: 2px;
   width: 100%;
 }
 
-.input-data .underline:before{
+.input-data .underline:before {
   position: absolute;
   content: "";
   height: 2px;
@@ -128,34 +136,40 @@ form .form-row .textarea{
 .input-data input:focus ~ .underline:before,
 .input-data input:valid ~ .underline:before,
 .textarea textarea:focus ~ .underline:before,
-.textarea textarea:valid ~ .underline:before{
+.textarea textarea:valid ~ .underline:before {
   transform: scale(1);
 }
 
-.submit-btn .input-data{
+.submit-btn .input-data {
   overflow: hidden;
-  height: 45px!important;
-  width: 100%!important;
+  height: 45px !important;
+  width: 100% !important;
 }
 
-.form-row.submit-btn{
-    margin-top: 64px!important;
+.form-row.submit-btn {
+  margin-top: 64px !important;
 }
 
-.submit-btn .input-data .inner{
+.submit-btn .input-data .inner {
   height: 100%;
   width: 300%;
   position: absolute;
   left: -100%;
-  background: -webkit-linear-gradient(right, #56d8e4, #5301ea, #56d8e4, #5301ea);
+  background: -webkit-linear-gradient(
+    right,
+    #56d8e4,
+    #5301ea,
+    #56d8e4,
+    #5301ea
+  );
   transition: all 0.4s;
 }
 
-.submit-btn .input-data:hover .inner{
+.submit-btn .input-data:hover .inner {
   left: 0;
 }
 
-.submit-btn .input-data input{
+.submit-btn .input-data input {
   background: none;
   border: none;
   color: #fff;
@@ -168,31 +182,32 @@ form .form-row .textarea{
   z-index: 2;
 }
 
-.Logo{
+.Logo {
   width: 70%;
   margin-top: -20%;
   margin-bottom: 10%;
   position: relative;
-  filter: brightness(0) saturate(100%) invert(16%) sepia(99%) saturate(2732%) hue-rotate(205deg) brightness(97%) contrast(101%);
+  filter: brightness(0) saturate(100%) invert(16%) sepia(99%) saturate(2732%)
+    hue-rotate(205deg) brightness(97%) contrast(101%);
   display: block;
   margin: -20% auto 10% auto;
   padding-right: 10px;
 }
 
 @media (max-width: 700px) {
-  .container .text{
+  .container .text {
     font-size: 30px;
   }
-  .container form{
+  .container form {
     padding: 10px 0 0 0;
   }
-  .container form .form-row{
+  .container form .form-row {
     display: block;
   }
-  form .form-row .input-data{
-    margin: 35px 0!important;
+  form .form-row .input-data {
+    margin: 35px 0 !important;
   }
-  .submit-btn .input-data{
-    width: 100%!important;
+  .submit-btn .input-data {
+    width: 100% !important;
   }
 }

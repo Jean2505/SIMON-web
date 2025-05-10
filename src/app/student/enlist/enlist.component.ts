@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from '@angular/fire/auth';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
@@ -29,8 +29,6 @@ import { Discipline } from '../../models/discipline.model';
   styleUrls: ['./enlist.component.scss']        // Caminho para estilos SCSS
 })
 export class StudentEnlistComponent implements OnInit {
-  /** ID da disciplina (ex.: parâmetro de rota). */
-  disciplineId!: string;
 
   /** Nome da disciplina exibido ao carregar. */
   discipline: string = 'carregando...';
@@ -81,7 +79,7 @@ export class StudentEnlistComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private auth: Auth,
-    private route: ActivatedRoute
+    private router: Router
   ) { }
 
   /**
@@ -89,7 +87,6 @@ export class StudentEnlistComponent implements OnInit {
    * Obtém parâmetro de rota e carrega dados do aluno.
    */
   ngOnInit(): void {
-    this.route.params.subscribe(params => this.disciplineId = params['id']);
     this.getStudent();
   }
 
@@ -126,7 +123,7 @@ export class StudentEnlistComponent implements OnInit {
     this.http.post('http://localhost:3000/getExternalCourses', { course: this.student.curso })
       .subscribe({
         next: (resp: any) => {
-          this.subjectsOptions = JSON.parse(resp.payload);
+          this.subjectsOptions = JSON.parse(resp);
           console.log('Matérias recebidas:', this.subjectsOptions);
         },
         error: err => console.error('Erro em getExternalCourses:', err)
@@ -144,7 +141,7 @@ export class StudentEnlistComponent implements OnInit {
     }
 
     const payload = {
-      aprovacao: 'Analise',
+      aprovacao: 0,
       cargaHoraria: this.selectedHours,
       disciplina: this.selectedSubject.name,
       disciplinaId: this.selectedSubject.id,
@@ -164,6 +161,13 @@ export class StudentEnlistComponent implements OnInit {
         next: res => {
           console.log('Candidatura enviada com sucesso:', res);
           alert('Candidatura enviada com sucesso!');
+
+          this.router.navigate(['/student/home'])
+            .then(success => {
+              console.log('Navegação realizada:', success);
+              console.clear();
+            })
+            .catch(error => console.error('Erro na navegação:', error));
         },
         error: err => {
           console.error('Erro ao enviar candidatura:', err);

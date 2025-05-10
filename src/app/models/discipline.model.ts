@@ -1,7 +1,7 @@
 /**
  * Interface da Disciplina
  * @property id: ID da disciplina
- * @property cursoId: ID do curso ao qual a disciplina pertence
+ * @property course: ID do curso ao qual a disciplina pertence
  * @property name: Nome da disciplina
  * @property professor: Nome do professor responsável pela disciplina
  * @property term: Período da disciplina
@@ -17,7 +17,7 @@ export interface Discipline {
      * ID do curso ao qual a disciplina pertence
      * @type {string}
      */
-    curso: string;
+    course: string;
     /**
      * Nome da disciplina
      * @type {string}

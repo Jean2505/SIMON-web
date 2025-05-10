@@ -30,18 +30,9 @@ export class SubjectComponent implements OnInit {
   /** ID da matéria recuperada da rota */
   subjectId = '';
 
-  /**
-   * Interface da Disciplina
-   * @property id: ID da disciplina
-   * @property curso: Curso ao qual a disciplina pertence
-   * @property name: Nome da disciplina
-   * @property professor: Nome do professor responsável pela disciplina
-   * @property term: Período da disciplina
-   * @optional monitorAmnt: Quantidade de monitores para a disciplina
-   */
   subject: Discipline = {
     id: '',
-    curso: '',
+    course: '',
     name: '',
     professor: '',
     term: 0
@@ -76,7 +67,7 @@ export class SubjectComponent implements OnInit {
     this.http.get('http://localhost:3000/discipline', { params: { disciplineId: this.subjectId } }).subscribe({
       next: (response: any) => {
         this.subject.id = response[0].id_Disciplina;
-        this.subject.curso = response[0].curso_Disciplina;
+        this.subject.course = response[0].curso_Disciplina;
         this.subject.name = response[0].nome_Disciplina;
         this.subject.professor = response[0].professor_Disciplina;
         this.subject.term = response[0].periodo_Disciplina;

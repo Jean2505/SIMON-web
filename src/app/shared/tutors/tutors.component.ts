@@ -77,15 +77,15 @@ export class SubjectTutorsComponent implements OnInit {
             result = JSON.parse(response.payload);
             console.log('Resposta do servidor:', result);
             this.tutors = result.map((monitor: any) => ({
-              approved: monitor.aprovacao,
+              aprovacao: monitor.aprovacao,
               discipline: monitor.disciplina,
-              disciplineId: monitor.disciplinaId,
-              photo: monitor.foto,
-              availability: monitor.horarioDisponivel,
+              disciplinaId: monitor.disciplinaId,
+              foto: monitor.foto,
+              horarioDisponivel: monitor.horarioDisponivel,
               local: monitor.local,
-              name: monitor.nome,
+              nome: monitor.nome,
               ra: monitor.ra,
-              room: monitor.sala,
+              sala: monitor.sala,
               status: monitor.status,
             }));
           },

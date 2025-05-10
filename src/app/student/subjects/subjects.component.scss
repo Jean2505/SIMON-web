@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
 
 * {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .container {
@@ -108,7 +108,7 @@ hr {
     padding: 0;
     margin: 0;
 
-    li+li {
+    li + li {
       margin-top: 16px;
     }
   }
@@ -121,7 +121,11 @@ hr {
     display: grid;
     grid-template-columns: 80px 1.5fr 1.5fr 1fr 1fr;
     padding: 12px 20px;
-    background: -webkit-linear-gradient(right, rgba(86, 216, 228, 0.3), rgb(83, 1, 234, 0.3));
+    background: -webkit-linear-gradient(
+      right,
+      rgba(86, 216, 228, 0.3),
+      rgb(83, 1, 234, 0.3)
+    );
     border-radius: 8px;
     font-weight: bold;
     color: #475569;

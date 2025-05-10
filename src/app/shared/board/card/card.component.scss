@@ -1,77 +1,75 @@
 .post-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    width: 300px;
-    height: 200px;
-    background-color: #f1f1f1;
-    transition: transform 0.2s;
-    position: relative; // Adicione esta linha
-  
-    &:hover {
-      transform: scale(1.07);
-      filter: drop-shadow(0 0 0.3rem rgba(0, 0, 0, 0.39));
-    }
-  
-    .color-strip {
-      height: 50px;
-      background-color: #{random-color-function}; // você pode gerar isso via binding ou classes
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  width: 300px;
+  height: 200px;
+  background-color: #f1f1f1;
+  transition: transform 0.2s;
+  position: relative; // Adicione esta linha
 
-    }
-    
-    .bi.bi-paperclip{
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 24px;
-        height: 24px;
-        opacity: 0.8;
-    }
-  
-    .card-content {
-      padding: 12px;
-      flex: 1;
+  &:hover {
+    transform: scale(1.07);
+    filter: drop-shadow(0 0 0.3rem rgba(0, 0, 0, 0.39));
+  }
+
+  .color-strip {
+    height: 50px;
+    background-color: #{random-color-function}; // você pode gerar isso via binding ou classes
+  }
+
+  .bi.bi-paperclip {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    opacity: 0.8;
+  }
+
+  .card-content {
+    padding: 12px;
+    flex: 1;
+    overflow: hidden;
+
+    .post-title {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 6px;
+      white-space: nowrap;
       overflow: hidden;
-  
-      .post-title {
-        font-size: 1rem;
-        font-weight: bold;
-        margin-bottom: 6px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-  
-      .post-body {
-        font-size: 0.875rem;
-        color: #444;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.2rem;
-      }
+      text-overflow: ellipsis;
     }
-  
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      padding: 8px 12px;
-      border-top: 1px solid #eee;
-      background-color: #dfdfdf;
-  
-      .post-date {
-        color: #777;
-      }
+
+    .post-body {
+      font-size: 0.875rem;
+      color: #444;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2rem;
     }
   }
-  
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    padding: 8px 12px;
+    border-top: 1px solid #eee;
+    background-color: #dfdfdf;
+
+    .post-date {
+      color: #777;
+    }
+  }
+}

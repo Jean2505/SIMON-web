@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 
-import { type Enlistment } from '../../models/enlistment.model';
-
-import { DUMMY_CANDIDATURAS } from './dummy-candidatura';
-import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Tutor } from '../../models/tutor.model';
 
@@ -35,9 +31,7 @@ export class ApproveCandidateComponent implements OnInit {
           console.log(result);
           this.tutors = result;
         },
-        error: (error) => {
-          console.error('Error fetching requisitions:', error);
-        }
+        error: (error) => console.error('Error fetching requisitions:', error)
       })
   }
 
@@ -59,9 +53,7 @@ export class ApproveCandidateComponent implements OnInit {
         console.log('Response:', response);
         window.location.reload();
       },
-      error: (error) => {
-        console.error('Error:', error);
-      }
+      error: (error) => console.error('Error:', error)
     });
   }
 }

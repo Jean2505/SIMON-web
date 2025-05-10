@@ -70,7 +70,7 @@ export class SubjectBoardComponent implements OnInit {
       this.http.get('http://localhost:3000/discipline', { params: { disciplineId: subjectId } }).subscribe({
         next: (response: any) => {
           this.subject.id = response[0].id_Disciplina;
-          this.subject.curso = response[0].curso_Disciplina;
+          this.subject.course = response[0].curso_Disciplina;
           this.subject.name = response[0].nome_Disciplina;
           this.subject.professor = response[0].professor_Disciplina;
           this.subject.term = response[0].periodo_Disciplina;

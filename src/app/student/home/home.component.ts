@@ -45,4 +45,16 @@ export class StudentHomeComponent {
       })
       .catch(error => console.error('Erro na navegação:', error));
   }
+
+  /**
+   * Navega para a tela de matérias monitoradas.
+   */
+  goTutorSubjects(): void {
+    this.router.navigate(['/student/tutor-subjects'])
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();                 // Limpa console após navegação bem-sucedida
+      })
+      .catch(error => console.error('Erro na navegação:', error));
+  }
 }

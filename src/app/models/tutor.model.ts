@@ -26,6 +26,11 @@ export interface Tutor {
      */
     foto: string;
     /**
+     * Horário disponível do monitor.
+     * @type {string}
+     */
+    horarioDisponivel: string;
+    /**
      * Local onde o monitor está aplicando a monitoria.
      * @type {string}
      */

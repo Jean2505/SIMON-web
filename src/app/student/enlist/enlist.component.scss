@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
 
 * {
@@ -43,7 +43,11 @@
     .value,
     mat-select {
       background-color: #4da0ff42;
-      background: linear-gradient(90deg, rgba(77, 160, 255, 0.3) 62%, rgba(1, 52, 110, 0.5) 100%);
+      background: linear-gradient(
+        90deg,
+        rgba(77, 160, 255, 0.3) 62%,
+        rgba(1, 52, 110, 0.5) 100%
+      );
       padding: 10px;
       border-radius: 8px !important;
       color: black;
@@ -59,7 +63,11 @@
       width: 100%;
       padding: 12px;
       background-color: #4da0ff42;
-      background: linear-gradient(90deg, rgba(77, 160, 255, 0.3) 62%, rgba(1, 52, 110, 0.5) 100%);
+      background: linear-gradient(
+        90deg,
+        rgba(77, 160, 255, 0.3) 62%,
+        rgba(1, 52, 110, 0.5) 100%
+      );
       border: 1px solid #4da0ff52;
       color: black;
       border-radius: 8px;

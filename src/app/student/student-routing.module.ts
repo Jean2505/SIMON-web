@@ -10,6 +10,7 @@ import { SubjectBoardComponent } from '../shared/board/board.component';
 import { SubjectComponent } from '../shared/subject/subject.component';
 import { SubjectTutorsComponent } from '../shared/tutors/tutors.component';
 import { SubjectForumComponent } from '../shared/forum/forum.component';
+import { TutorSubjectsComponent } from './tutor-subjects/subjects.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'home', component: StudentHomeComponent },
       { path: 'subjects', component: StudentSubjectsComponent },
       { path: 'enlist', component: StudentEnlistComponent },
+      { path: 'tutor-subjects', component: TutorSubjectsComponent},
       {
         path: 'subject/:id',
         component: SubjectComponent,

@@ -248,16 +248,63 @@ app.post("/getExternalCourses", async (req, res) => {
     const { course } = req.body;
     const payload = { course };
 
+    console.log("Requisição: ", payload);
+
     // Chama a Cloud Function usando axios
     const response = await axios.post(
       "https://getcourses-bz6uecg2pq-rj.a.run.app",
       payload
     );
 
+    console.log("getExternalCourses: ", JSON.parse(response.data.payload));
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função externa:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao obter as disciplinas externamente" });
+  }
+});
+
+// Endpoint para obter as disciplinas de acordo com um array de IDs
+app.post("/getCourseList", async (req, res) => {
+  try {
+    const payload = req.body;
+
+    console.log("Requisição: ", payload);
+    // Chama a Cloud Function usando axios
+    const response = await axios.post(
+      "https://getcourselist-bz6uecg2pq-rj.a.run.app",
+      payload
+    );
+    console.log("getCourseList: ", JSON.parse(response.data.payload));
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função externa:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao obter as disciplinas externamente" });
+  }
+});
+
+// Endpoint para obter os cursos de um monitor específico
+app.post("/getTutorCourses", async (req, res) => {
+  try {
+    const payload = req.body;
+
     console.log("Requisição: ", payload);
 
+    // Chama a Cloud Function usando axios
+    const response = await axios.post(
+      "https://getmonitorcourses-bz6uecg2pq-rj.a.run.app",
+      payload
+    );
+
+    console.log("getTutorCourses: ", JSON.parse(response.data.payload));
     // Retorna a resposta da função externa ao front-end
-    res.json(response.data);
+    res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função externa:", error.message);
     res
@@ -289,6 +336,7 @@ app.post("/updateCourse", async (req, res) => {
   }
 });
 
+// Endpoint para se candidatar a uma vaga de monitoria
 app.post("/enlist", async (req, res) => {
   try {
     // Chama a Cloud Function usando axios
@@ -306,6 +354,7 @@ app.post("/enlist", async (req, res) => {
   }
 });
 
+// Endpoint para obter os posts do mural
 app.post("/getMuralPosts", async (req, res) => {
   try {
     // Chama a Cloud Function usando axios
@@ -325,6 +374,7 @@ app.post("/getMuralPosts", async (req, res) => {
   }
 });
 
+// Endpoint para criar um novo post no mural
 app.post("/createMuralPost", async (req, res) => {
   const data = req.body;
   const createdAt = admin.firestore.Timestamp.now();
@@ -349,6 +399,28 @@ app.post("/createMuralPost", async (req, res) => {
   } catch (error) {
     console.error("Erro ao chamar função createPost:", error.message);
     res.status(500).json({ error: "Erro ao criar o post externamente" });
+  }
+});
+
+// Endpoint para deletar um post do mural
+app.post("/deleteMuralPost", async (req, res) => {
+  const data = req.body;
+  console.log("deleteMuralPost: ", data);
+
+  try {
+    // Chama a Cloud Function usando axios
+    const response = await axios.post(
+      "https://deletemuralpost-bz6uecg2pq-rj.a.run.app",
+      data
+    );
+
+    console.log(response.data);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao chamar função deletePost:", error.message);
+    res.status(500).json({ error: "Erro ao deletar o post externamente" });
   }
 });
 
