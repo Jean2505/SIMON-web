@@ -369,7 +369,6 @@ app.post("/getMuralPosts", async (req, res) => {
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);
   } catch (error) {
-    console.error("Erro ao chamar função getMuralPosts:", error.message);
     res.status(500).json({ error: "Erro ao obter os posts externamente" });
   }
 });

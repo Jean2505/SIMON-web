@@ -21,7 +21,7 @@ const routes: Routes = [
       { path: 'home', component: StudentHomeComponent },
       { path: 'subjects', component: StudentSubjectsComponent },
       { path: 'enlist', component: StudentEnlistComponent },
-      { path: 'tutor-subjects', component: TutorSubjectsComponent},
+      { path: 'tutor-subjects', component: TutorSubjectsComponent },
       {
         path: 'subject/:id',
         component: SubjectComponent,
@@ -33,7 +33,7 @@ const routes: Routes = [
         ]
       },
     ]
-  } 
+  }
 ];
 
 @NgModule({

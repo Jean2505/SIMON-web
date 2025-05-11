@@ -66,7 +66,7 @@ export class SubjectBoardComponent implements OnInit {
     let subjectId: string = '';
     this.route.parent!.paramMap.subscribe(async params => {
       subjectId = params.get('id') ?? '';
-      console.log(subjectId);
+      console.log('ID da disciplina', subjectId);
       this.http.get('http://localhost:3000/discipline', { params: { disciplineId: subjectId } }).subscribe({
         next: (response: any) => {
           this.subject.id = response[0].id_Disciplina;
@@ -98,6 +98,14 @@ export class SubjectBoardComponent implements OnInit {
             };
           });
           console.log(this.posts);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          if (error.status === 500) {
+            console.log('Nenhum post encontrado.');
+          } else {
+          console.error('Erro ao carregar posts:', error)
+          }
         }
       })
     });

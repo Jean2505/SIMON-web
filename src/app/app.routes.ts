@@ -36,7 +36,7 @@ export const routes: Routes = [
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  
+
   // Redireciona para o login caso a rota digitada não exista
   { path: '**', redirectTo: '404' },
   { path: '404', component: ErrorComponent }, // Componente de erro 404

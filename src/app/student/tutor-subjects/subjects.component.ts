@@ -23,10 +23,17 @@ import { Auth } from '@angular/fire/auth';
   styleUrls: ['./subjects.component.scss'] // Caminho para estilos SCSS
 })
 export class TutorSubjectsComponent implements OnInit {
-  /** ID do curso selecionado. */
-  courseId = 'cursoId';
 
-  /** Lista de disciplinas carregadas do Firebase (após sincronização). */
+  /**
+   * Lista de disciplinas carregadas do Firebase (após sincronização).
+   * @type {Discipline[]}
+   * @property {string} id - ID da disciplina.
+   * @property {string} course - ID do curso ao qual a disciplina pertence.
+   * @property {string} name - Nome da disciplina.
+   * @property {string} professor - Nome do professor responsável pela disciplina.
+   * @property {Number} term - Período da disciplina.
+   * @property {Number} monitorAmnt - Quantidade de monitores para a disciplina.
+   */
   subjects: Discipline[] = [];
 
   /** Indica se as disciplinas estão sendo carregadas. */
@@ -35,6 +42,8 @@ export class TutorSubjectsComponent implements OnInit {
   /** Indica se a sincronização de disciplinas está em andamento. */
   loadingSync = true;
 
+  /** Lista de IDs de disciplinas a serem carregadas. */
+  list: Array<string> = [];
   /**
    * Construtor do componente.
    * @param http - HttpClient para requisições HTTP.
@@ -52,7 +61,6 @@ export class TutorSubjectsComponent implements OnInit {
 
   /**
    * Carrega disciplinas via backend.
-   * @param course - Nome do curso para consulta.
    */
   loadSubjects(): void {
     const uid = this.auth.currentUser!.uid;
@@ -63,20 +71,19 @@ export class TutorSubjectsComponent implements OnInit {
         next: (tutorCourses: any) => {
           const result = JSON.parse(tutorCourses);
           console.log('Matérias recebidas:', result);
-          let list: Array<string> = [];
           result.forEach((course: any) => {
             if (course.aprovacao == 1) {
-              list.push(course.disciplinaId);
+              this.list.push(course.disciplinaId);
             }
           })
-          console.log('Lista de cursos:', list);
-          if (list.length === 0) {
+          console.log('Lista de cursos:', this.list);
+          if (this.list.length === 0) {
             console.log('Nenhuma disciplina encontrada.');
             this.loadingDisciplinas = false;
             this.loadingSync = false;
             return;
           }
-          this.http.post('http://localhost:3000/getCourseList', { courses: list })
+          this.http.post('http://localhost:3000/getCourseList', { courses: this.list })
             .subscribe({
               next: (CourseList: any) => {
                 this.subjects = JSON.parse(CourseList);

@@ -17,14 +17,16 @@
     <ul class="disciplines">
       @if (loadingDisciplinas) {
       <li class="loading">Carregando disciplinas...</li>
-      } @else {
-      <li *ngFor="let disciplina of subjects; trackBy: trackBySubject">
+      } @else if (list.length == 0) {
+      <li class="loading">Nenhuma disciplina encontrada.</li>
+      } @else { @for (subject of subjects; track subject) {
+      <li>
         <app-discipline
-          [cursoId]="courseId"
-          [discipline]="disciplina"
+          [cursoId]="subject.id"
+          [discipline]="subject"
         ></app-discipline>
       </li>
-      }
+      } }
     </ul>
   </div>
 </div>
