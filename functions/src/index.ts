@@ -357,3 +357,108 @@ export const updateRequisition = onRequest({region: "southamerica-east1"}, async
         res.status(500).send(result);
     }
 });
+
+export const getMonitorCourses = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.body.uid).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "Courses found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
+
+export const getCourseList = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body);
+
+    const snapshot = await db.collection("Courses").where("id", "in", req.body.courses).get();
+    logger.debug(snapshot.docs);
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+    result = {
+        status: "OK",
+        message: "Courses found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
+
+// export const getCourseList = onRequest({region: "southamerica-east1"}, async (req, res) => {
+//     let result: CallableResponse;
+//     logger.debug(req.body)
+
+//     let coursesId: String[] = req.body.courses;
+//     let courses: Course[] = [];
+//     try {
+//         logger.debug("passou aqui");
+//         coursesId.forEach(async (courseId: String) => {
+//             logger.debug("entrou no forEach");
+//             const snapshot = await db.collection("Courses").where("id", "in", coursesId).get();
+//             // const snapshot = await db.collection("Courses").where("id", "==", courseId).get();
+//             logger.debug(snapshot);
+
+//             if (snapshot.empty) {
+//                 logger.debug("No matching documents.");
+//                 result = {
+//                     status: "ERROR",
+//                     message: "No matching documents.",
+//                     payload: "No matching documents."
+//                 };
+//                 res.status(404).send(result);
+//                 return;
+//             }
+//             logger.debug(snapshot.docs[0].data());
+//             courses.push(snapshot.docs[0].data() as Course);
+//         });
+//         logger.debug("courses", courses);
+//         if(courses.length == 0){
+//             logger.debug("No matching documents.");
+//                 result = {
+//                     status: "ERROR",
+//                     message: "No matching documents.",
+//                     payload: "No matching documents."
+//                 };
+//                 res.status(404).send(result);
+//                 return;
+//         }
+//         result = {
+//         status: "OK",
+//         message: "Courses found",
+//         payload: JSON.stringify(courses)
+//         };
+//         res.status(200).send(result);
+//     }
+//     catch (error) {
+//         result = {
+//             status: "ERROR",
+//             message: "Error retrieving courses",
+//             payload: (error as Error).message
+//         };
+//         res.status(500).send(result);
+//     }
+// });
