@@ -58,8 +58,8 @@ export class StudentSubjectsComponent implements OnInit {
     this.http.post('http://localhost:3000/getExternalCourses', payload)
       .subscribe({
         next: (response: any) => {
-          console.log('Matérias recebidas:', JSON.stringify(response.payload));
-          this.subjects = JSON.parse(response.payload);
+          console.log('Matérias recebidas:', JSON.stringify(response));
+          this.subjects = JSON.parse(response);
         },
         error: (error) => {
           console.error('Erro ao carregar matérias:', error);

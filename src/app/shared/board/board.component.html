@@ -6,6 +6,6 @@
   <app-card [subject]="subject" [post]="post" />
   }
 </div>
-@if (role != 'ALUNO') {
+@if (isTutor || isProfessor) {
 <button type="button" (click)="onStartCreatePost()">+</button>
 }

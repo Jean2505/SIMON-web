@@ -58,17 +58,15 @@ app.get("/discipline", (req, res) => {
   const { disciplineId } = req.query;
   console.log("Requisição: ", disciplineId);
   if (!disciplineId) {
-    return res.status(400).json({ error: "Parâmetro 'course' é obrigatório." });
+    query = "SELECT * FROM DISCIPLINA";
+  } else {
+    query = "SELECT * FROM DISCIPLINA WHERE id_Disciplina = ?";
   }
-  db.all(
-    "SELECT * FROM DISCIPLINA WHERE id_Disciplina = ?",
-    [disciplineId],
-    (err, rows) => {
-      console.log("Resposta: ", rows);
-      if (err) return res.status(500).json({ error: err.message });
-      res.json(rows);
-    }
-  );
+  db.all(query, [disciplineId], (err, rows) => {
+    console.log("Resposta: ", rows);
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
+  });
 });
 
 /**
@@ -84,6 +82,7 @@ app.get("/courses", (req, res) => {
   if (!school) {
     return res.status(400).json({ error: "Parâmetro 'school' é obrigatório." });
   }
+  console.log("Requisição: ", school);
   db.all(
     "SELECT DISTINCT curso_Disciplina as cursoId, curso_Disciplina as name, escola_Disciplina as escolaId FROM DISCIPLINA WHERE escola_Disciplina = ?",
     [school],
@@ -210,6 +209,42 @@ app.post("/getTutor", async (req, res) => {
   }
 });
 
+app.post("/getCourseTutors", async (req, res) => {
+  try {
+    const courseId = req.body;
+    console.log("Requisição: ", courseId);
+    const response = await axios.post(
+      "https://getcoursemonitors-bz6uecg2pq-rj.a.run.app",
+      courseId
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função findTutor:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao obter dados do monitor externamente" });
+  }
+});
+
+app.post("/getProfessor", async (req, res) => {
+  try {
+    const professorId = req.body;
+    console.log("Requisição: ", professorId);
+    const response = await axios.post(
+      "https://getprofessor-bz6uecg2pq-rj.a.run.app",
+      professorId
+    );
+    console.log("Resposta: ", response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao chamar função findProfessor:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao obter dados do professor externamente" });
+  }
+});
+
 app.get("/getRequisitions", async (req, res) => {
   try {
     const response = await axios.get(
@@ -281,6 +316,55 @@ app.post("/getCourseList", async (req, res) => {
     console.log("getCourseList: ", JSON.parse(response.data.payload));
     // Retorna a resposta da função externa ao front-end
     res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função externa:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao obter as disciplinas externamente" });
+  }
+});
+
+app.post("/getProfessorDisciplines", async (req, res) => {
+  try {
+    const uid = req.body;
+    console.log("Requisição: ", uid);
+
+    const professorResponse = await axios.post(
+      "https://getprofessor-bz6uecg2pq-rj.a.run.app",
+      uid
+    );
+
+    const professor = JSON.parse(professorResponse.data.payload).nome;
+    console.log("Professor: ", professor);
+
+    const query = "SELECT * FROM DISCIPLINA";
+
+    let disciplinesId = [];
+    db.all(query, (err, rows) => {
+      rows.forEach((row) => {
+        if (row.professor_Disciplina == professor) {
+          disciplinesId.push(row.id_Disciplina);
+        }
+      });
+      console.log("Disciplinas do professor: ", disciplinesId);
+      const payload = { courses: disciplinesId };
+      console.log("Payload: ", payload);
+      // Chama a Cloud Function usando axios
+      axios
+        .post("https://getcourselist-bz6uecg2pq-rj.a.run.app", payload)
+        .then((response) => {
+          console.log("getCourseList: ", JSON.parse(response.data.payload));
+          // Retorna a resposta da função externa ao front-end
+          res.json(response.data.payload);
+        })
+        .catch((error) => {
+          console.error("Erro ao chamar função externa:", error.message);
+          res
+            .status(500)
+            .json({ error: "Erro ao obter as disciplinas externamente" });
+        });
+    });
+    // Chama a Cloud Function usando axios
   } catch (error) {
     console.error("Erro ao chamar função externa:", error.message);
     res

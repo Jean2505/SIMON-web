@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Auth, User } from '@angular/fire/auth';
+import { Auth, IdTokenResult, User } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
@@ -9,6 +9,8 @@ import { CardComponent } from "./card/card.component";
 import { DUMMY_POSTS } from './dummy-posts';
 import { NewPostComponent } from "./new-post/new-post.component";
 import { Post } from '../../models/post.model';
+import { getUser } from '../../core/services/user.service';
+import { Tutor } from '../../models/tutor.model';
 
 @Component({
   selector: 'app-board',
@@ -48,9 +50,11 @@ export class SubjectBoardComponent implements OnInit {
 
   user!: User;
 
-  role!: string;
+  isProfessor = false;
+  isTutor = false;
 
   posts!: Post[];
+  tutors: string[] = [];
 
   isLoading = true;
 
@@ -58,32 +62,17 @@ export class SubjectBoardComponent implements OnInit {
   isCreatingPost = false;
 
   async ngOnInit(): Promise<void> {
-    let user = this.auth.currentUser;
-    const idTokenResult = await user!.getIdTokenResult(true);
-    // pega o campo "role" dos claims
-    this.role = (idTokenResult.claims['role'] as string) ?? null;
-    console.log(this.role);
+    this.user = this.auth.currentUser!;
+    const idTokenResult = await this.user.getIdTokenResult(true);
     let subjectId: string = '';
     this.route.parent!.paramMap.subscribe(async params => {
       subjectId = params.get('id') ?? '';
       console.log('ID da disciplina', subjectId);
-      this.http.get('http://localhost:3000/discipline', { params: { disciplineId: subjectId } }).subscribe({
-        next: (response: any) => {
-          this.subject.id = response[0].id_Disciplina;
-          this.subject.course = response[0].curso_Disciplina;
-          this.subject.name = response[0].nome_Disciplina;
-          this.subject.professor = response[0].professor_Disciplina;
-          this.subject.term = response[0].periodo_Disciplina;
-          console.log('Objeto matéria:', this.subject);
-        },
-        error: (error) => console.error('Erro ao carregar disciplina:', error)
-      });
       this.http.post('http://localhost:3000/getMuralPosts', { disciplinaId: subjectId }).subscribe({
         next: (response: any) => {
           const result = JSON.parse(response.payload);
           this.posts = result.map((post: any) => {
             return {
-              postId: post.postId,
               title: post.title,
               content: post.content,
               userName: post.userName,
@@ -97,22 +86,46 @@ export class SubjectBoardComponent implements OnInit {
               disciplinaId: post.disciplinaId
             };
           });
+          this.getUserData(subjectId, idTokenResult);
           console.log(this.posts);
           this.isLoading = false;
         },
         error: (error) => {
-          if (error.status === 500) {
-            console.log('Nenhum post encontrado.');
-          } else {
-          console.error('Erro ao carregar posts:', error)
-          }
+          if (error.status === 500) console.log('Nenhum post encontrado.');
+          else console.error('Erro ao carregar posts:', error);
         }
       })
     });
   }
 
+  getUserData(disciplineId: string, idTokenResult: IdTokenResult): void {
+
+    // pega o campo "role" dos claims
+    const role = (idTokenResult.claims['role'] as string) ?? null;
+    console.log('Role:', role);
+    if (role === 'PROFESSOR') {
+      this.isProfessor = true;
+    } else {
+      this.http.post('http://localhost:3000/getCourseTutors', { courseId: disciplineId })
+        .subscribe({
+          next: (response: any) => {
+            const result = JSON.parse(response) as any[];
+            result.forEach((tutor: any) => {
+              if (tutor.aprovacao === 1) {
+                this.tutors.push(tutor.uid as string);
+              }
+            });
+            console.log('monitores da matéria:', this.tutors);
+            if (this.tutors.includes(this.user.uid)) {
+              this.isTutor = true;
+            }
+          }
+        })
+    }
+  }
+
   trackPosts(posts: [] | null): number {
-    if (posts) return posts.length
+    if (posts) return posts.length;
     return 0;
   }
 

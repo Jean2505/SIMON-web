@@ -1,3 +1,21 @@
+/**
+ * Modelo de dados para o monitor.
+ * @interface Tutor
+ * @property {number} aprovacao - Status de aprovação do monitor (0: em análise, 1: aprovado, 2: reprovado).
+ * @property {string} cargaHoraria - Carga horária do monitor.
+ * @property {string} disciplina - Disciplina monitorada.
+ * @property {string} disciplinaId - ID da disciplina do monitor.
+ * @property {string} foto - URL da foto do monitor.
+ * @property {string} horarioDisponivel - Horário disponível do monitor.
+ * @property {string} local - Local onde o monitor está aplicando a monitoria.
+ * @property {string} mensagem - Mensagem de justificativa do aluno.
+ * @property {string} nome - Nome do monitor.
+ * @property {string} ra - RA (Registro Acadêmico) do monitor.
+ * @property {boolean} remuneracao - Remuneração do monitor.
+ * @property {string} sala - Sala onde o monitor está aplicando a monitoria.
+ * @property {boolean} status - Status do monitor.
+ * @property {string} uid - UID (ID único) do monitor.
+ */
 export interface Tutor {
     /**
      * Status de aprovação do monitor.
