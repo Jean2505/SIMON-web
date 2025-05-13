@@ -217,7 +217,7 @@ app.post("/getCourseTutors", async (req, res) => {
       "https://getcoursemonitors-bz6uecg2pq-rj.a.run.app",
       courseId
     );
-    console.log("Resposta: ", response.data.payload);
+    console.log("Resposta: ", JSON.parse(response.data.payload));
     res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função findTutor:", error.message);

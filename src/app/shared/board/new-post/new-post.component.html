@@ -32,7 +32,7 @@
           Anexar vídeo do YouTube
           <button type="button" (click)="addYoutubeUrl()">+</button>
         </label>
-        @for (url of videos; let i = $index; track url) {
+        @for (url of videos; let i = $index; track i) {
           <div class="youtube-input-row">
             <button type="button" (click)="removeYoutubeUrl(i)">X</button>
             <input

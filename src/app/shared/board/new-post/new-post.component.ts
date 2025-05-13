@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import {
@@ -16,9 +16,9 @@ import { Discipline } from '../../../models/discipline.model';
   templateUrl: './new-post.component.html',
   styleUrls: ['./new-post.component.scss']
 })
-export class NewPostComponent {
-  /** MATÉRIA/Subject passado via Input para associar o post */
-  @Input() subject!: Discipline;
+export class NewPostComponent implements OnInit {
+  /** ID da matéria passado via Input para associar o post */
+  @Input() subjectId!: string;
 
   /** Emite quando o usuário fecha/cancela o diálogo */
   @Output() close = new EventEmitter<void>();
@@ -55,6 +55,11 @@ export class NewPostComponent {
     private storage: Storage,
     private http: HttpClient
   ) { }
+
+  ngOnInit(): void {
+    // Inicializa o estado do componente
+    console.log('Disciplina:', this.subjectId);
+  }
 
   /** Fecha o diálogo e reseta o estado */
   onCancel(): void {
@@ -138,6 +143,9 @@ export class NewPostComponent {
     const bytesArr = new Array<number>(allItems.length).fill(0);
     const downloadURLs: string[] = new Array(allItems.length).fill('');
 
+    console.log('youtube:', this.videos);
+    console.log('matéria:', this.subjectId);
+
     allItems.forEach((item, idx) => {
       const path = `${item.folder}/${Date.now()}_${item.file.name}`;
       const storageRef = ref(this.storage, path);
@@ -167,20 +175,20 @@ export class NewPostComponent {
                 videos: this.videos,
                 files,
                 images,
-                disciplinaId: this.subject.id
+                disciplinaId: this.subjectId
               };
-              this.http.post(this.apiUrl, payload).subscribe(
-                res => {
-                  console.log('Post enviado:', res);
+              this.http.post(this.apiUrl, payload).subscribe({
+                next: (response: any) => {
+                  console.log('Post enviado:', response);
                   this.resetState();
                   this.close.emit();
                 },
-                err => {
+                error: (err: any) => {
                   console.error('Erro ao enviar post:', err);
                   downloadURLs.forEach(u => deleteObject(ref(this.storage, u)));
                   this.isSending = false;
                 }
-              );
+              });
             }
           } catch (err) {
             console.error('Erro ao obter downloadURL:', err);

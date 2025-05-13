@@ -37,16 +37,7 @@ export class SubjectBoardComponent implements OnInit {
     //private storage: Storage
   ) { }
 
-  /**
-   * Interface da Disciplina
-   * @property id: ID da disciplina
-   * @property cursoId: ID do curso ao qual a disciplina pertence
-   * @property name: Nome da disciplina
-   * @property professor: Nome do professor responsável pela disciplina
-   * @property term: Período da disciplina
-   * @optional monitorAmnt: Quantidade de monitores para a disciplina
-   */
-  subject!: Discipline;
+  subjectId = '';
 
   user!: User;
 
@@ -64,11 +55,10 @@ export class SubjectBoardComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.user = this.auth.currentUser!;
     const idTokenResult = await this.user.getIdTokenResult(true);
-    let subjectId: string = '';
     this.route.parent!.paramMap.subscribe(async params => {
-      subjectId = params.get('id') ?? '';
-      console.log('ID da disciplina', subjectId);
-      this.http.post('http://localhost:3000/getMuralPosts', { disciplinaId: subjectId }).subscribe({
+      this.subjectId = params.get('id') ?? '';
+      console.log('ID da disciplina', this.subjectId);
+      this.http.post('http://localhost:3000/getMuralPosts', { disciplinaId: this.subjectId }).subscribe({
         next: (response: any) => {
           const result = JSON.parse(response.payload);
           this.posts = result.map((post: any) => {
@@ -86,7 +76,7 @@ export class SubjectBoardComponent implements OnInit {
               disciplinaId: post.disciplinaId
             };
           });
-          this.getUserData(subjectId, idTokenResult);
+          this.getUserData(this.subjectId, idTokenResult);
           console.log(this.posts);
           this.isLoading = false;
         },
