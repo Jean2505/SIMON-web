@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 
-import { type Post } from '../../../models/mural-post.model';
+import { type MuralPost } from '../../../models/mural-post.model';
 import { type Discipline } from '../../../models/discipline.model';
 
 import { PostComponent } from "../post/post.component";
@@ -14,7 +14,7 @@ import { PostComponent } from "../post/post.component";
 })
 export class CardComponent {
 
-  @Input() post?: Post;
+  @Input() post?: MuralPost;
   
   color: string = '';
 

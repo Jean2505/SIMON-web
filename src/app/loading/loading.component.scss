@@ -1,0 +1,54 @@
+.center-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+  }
+  
+  .ring-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+  }
+  
+  .ring {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transform: scaleX(-1);
+  }
+
+
+  
+  .orbit {
+    position: absolute;
+    width: 240px; // maior que o anel
+    height: 240px;
+    top: -60px; // (200-120)/2
+    left: -60px;
+    animation: rotateOrbit 3s linear infinite;
+    z-index: 2;
+  }
+  
+  .squirrel {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 90px;
+    height: 90px;
+    transform: translateX(-50%);
+  }
+  
+  @keyframes rotateOrbit {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
