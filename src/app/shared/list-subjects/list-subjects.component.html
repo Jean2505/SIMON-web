@@ -8,7 +8,11 @@
     <div class="discipline-header">
       <span>ID</span>
       <span>Nome</span>
+      @if (role === 'PROFESSOR') {
+      <span>Curso</span>
+      } @else {
       <span>Professor</span>
+      }
       <span>Período</span>
       <span>Ações</span>
     </div>

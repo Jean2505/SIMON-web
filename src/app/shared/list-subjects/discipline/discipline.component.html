@@ -1,9 +1,12 @@
 <div class="discipline-row">
-    <span>{{ discipline.id }}</span>
-    <span>{{ discipline.name }}</span>
-    <span>{{ discipline.professor }}</span>
-    <span>{{ discipline.term }}</span>
-  
-    <button (click)="viewSubject(discipline)">Acessar</button>
-  </div>
-  
+  <span>{{ discipline.id }}</span>
+  <span>{{ discipline.name }}</span>
+  @if (role === 'PROFESSOR') {
+  <span>{{ discipline.course }}</span>
+  } @else {
+  <span>{{ discipline.professor }}</span>
+  }
+  <span>{{ discipline.term }}</span>
+
+  <button (click)="viewSubject(discipline)">Acessar</button>
+</div>
