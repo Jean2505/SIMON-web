@@ -1,16 +1,18 @@
 /**
  * Modelo de dados para o aluno
- * @optional celular: Telefone do aluno
- * @optional curso: ID do curso do aluno
- * @optional email: E-mail do aluno
- * @optional foto: URL da foto do aluno
- * @optional horario: Horário disponível do aluno
- * @property nome: Nome do aluno
- * @optional predio: Prédio onde o aluno estuda
- * @optional sala: Sala onde o aluno estuda
- * @optional status: Status do aluno (ativo/inativo)
- * @property uid: ID único do aluno (Firebase)
- * @property ra: Registro Acadêmico do aluno
+ * @interface Student
+ * @description Este modelo representa um aluno no sistema.
+ * @property {string} [celular] - Telefone do aluno (opcional)
+ * @property {string} [curso] - ID do curso do aluno (opcional)
+ * @property {string} [email] - E-mail do aluno (opcional)
+ * @property {string} [foto] - URL da foto do aluno (opcional)
+ * @property {string} [horario] - Horário disponível do aluno (opcional)
+ * @property {string} nome - Nome do aluno
+ * @property {string} [predio] - Prédio onde o aluno estuda (opcional)
+ * @property {string} [sala] - Sala onde o aluno estuda (opcional)
+ * @property {boolean} [status] - Status do aluno (ativo/inativo) (opcional)
+ * @property {string} uid - ID único do aluno (Firebase)
+ * @property {string} ra - Registro Acadêmico do aluno
  */
 export interface Student {
     /**

@@ -7,7 +7,7 @@ export const DUMMY_FORUM_POSTS = [
         createdAt: new Date(),
         disciplineId: 'd01',
         likes: 26,
-        comments: ['a', 'aa', 'aaa']
+        commentsIDs: ['a', 'aa', 'aaa']
     },
 
     {
@@ -18,6 +18,6 @@ export const DUMMY_FORUM_POSTS = [
         createdAt: new Date(),
         disciplineId: 'd02',
         likes: 21,
-        comments: ['a', 'aa', 'aaa', 'aaaa']
+        commentsIDs: ['a', 'aa', 'aaa', 'aaaa']
     }
 ]

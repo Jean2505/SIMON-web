@@ -9,7 +9,7 @@
  * @property createdAt: Timestamp do momento em que o post foi criado
  * @property disciplineId: ID da disciplina à qual o post pertence
  */
-export interface Post {
+export interface MuralPost {
     /**
      * Título do post
      * @type {string}

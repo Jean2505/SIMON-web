@@ -1,12 +1,12 @@
 /**
  * Interface da Disciplina
- * @property course: ID do curso ao qual a disciplina pertence
- * @property id: ID da disciplina
- * @optional monitors: Quantidade de monitores para a disciplina
- * @property name: Nome da disciplina
- * @property professor: Nome do professor responsável pela disciplina
- * @property school: Nome da escola a qual o curso pertence
- * @property term: Período da disciplina
+ * @property course - ID do curso ao qual a disciplina pertence
+ * @property {string} id - ID da disciplina
+ * @property {string} [monitors] - Quantidade de monitores para a disciplina (opcional)
+ * @property {string} name - Nome da disciplina
+ * @property {string} professor - Nome do professor responsável pela disciplina
+ * @property {string} school - Nome da escola a qual o curso pertence
+ * @property {string} term - Período da disciplina
  */
 export interface Discipline {
     /**

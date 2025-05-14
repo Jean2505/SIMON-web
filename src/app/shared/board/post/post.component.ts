@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Post } from '../../../models/post.model';
+import { MuralPost } from '../../../models/mural-post.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
@@ -9,7 +9,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrl: './post.component.scss'
 })
 export class PostComponent {
-  @Input() post!: Post;
+  @Input() post!: MuralPost;
   @Output() close = new EventEmitter<void>();
 
   constructor(private sanitizer: DomSanitizer) { }

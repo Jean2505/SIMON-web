@@ -8,7 +8,6 @@ import {
   getDownloadURL,
   deleteObject
 } from '@angular/fire/storage';
-import { Discipline } from '../../../models/discipline.model';
 
 @Component({
   selector: 'app-new-post',

@@ -8,7 +8,7 @@ import { type Discipline } from '../../models/discipline.model';
 import { CardComponent } from "./card/card.component";
 import { DUMMY_POSTS } from './dummy-posts';
 import { NewPostComponent } from "./new-post/new-post.component";
-import { Post } from '../../models/post.model';
+import { MuralPost } from '../../models/mural-post.model';
 import { getUser } from '../../core/services/user.service';
 import { Tutor } from '../../models/tutor.model';
 
@@ -44,7 +44,7 @@ export class SubjectBoardComponent implements OnInit {
   isProfessor = false;
   isTutor = false;
 
-  posts!: Post[];
+  posts!: MuralPost[];
   tutors: string[] = [];
 
   isLoading = true;
