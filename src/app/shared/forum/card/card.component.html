@@ -1,0 +1,16 @@
+<a class="post-card">
+    <div class="card-content">
+        <div class="card-header">
+            <p class="poster-name">{{ post?.userName }}</p>
+            <p class="post-date">{{ post?.createdAt }}</p>
+        </div>
+        <div class="card-content">
+            <h3 class="post-title">{{ post?.title }}</h3>
+            <p class="post-body">{{ post?.content }}</p>
+        </div>
+        <div class="card-footer">
+            <button class="like-button" type="button">{{ post?.likes }}</button>
+            <p class="comment-quantity">{{ post?.comments?.length }}</p>
+        </div>
+    </div>
+</a>

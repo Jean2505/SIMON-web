@@ -1,1 +1,5 @@
-<p>forum works!</p>
+<div class="card-list">
+    @for (post of posts; track post.createdAt) {
+        <app-forum-card [post]="post"/>
+    }
+</div>

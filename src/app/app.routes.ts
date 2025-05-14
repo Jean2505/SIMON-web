@@ -4,6 +4,7 @@ import { RoleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
 import { ApproveCandidateComponent } from './institution/approve-candidate/approve-candidate.component';
+import { SubjectForumComponent } from './shared/forum/forum.component';
 
 export const routes: Routes = [
 
@@ -31,7 +32,7 @@ export const routes: Routes = [
     data: { expectedRoles: ['INSTITUICAO'] }
   },
 
-  { path: 'approve-candidate', component: ApproveCandidateComponent },
+  { path: 'forum', component: SubjectForumComponent },
 
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },
