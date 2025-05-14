@@ -432,3 +432,73 @@ export const getProfessor = onRequest({region: "southamerica-east1"}, async (req
     };
     res.status(200).send(result);
 });
+
+export const getForumPosts = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("ForumPosts").where("courseId", "==", req.body.courseId).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "Posts found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => {
+            return {
+                docId: doc.id,
+                data: doc.data()
+            }
+        }))
+    };
+    res.status(200).send(result);
+});
+
+export const getComments = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+    const snapshot = await db.collection("ForumPosts").doc(req.body.postId).get();
+
+    if (!snapshot.exists) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "Post has no comments.",
+            payload: "Post has no comments."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    const data = snapshot.data();
+
+    const ids: admin.firestore.DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>[] = [];
+    data?.comments.forEach((docId: string) => {
+        ids.push(db.collection("Comments").doc(docId));
+    });
+
+    const comments = await db.getAll(...ids);
+
+    const documents: any[] = [];
+    comments.forEach((doc) => {
+        if (doc.exists) {
+            documents.push(doc.data())
+        }
+    });
+
+    result = {
+            status: "OK",
+            message: "Comments found",
+            payload: JSON.stringify(documents)
+        };
+        res.status(200).send(result);
+});
