@@ -1,3 +1,5 @@
+import { doc } from "firebase/firestore";
+
 export const DUMMY_FORUM_POSTS = [
     {
         title: 'Dummy Title',
@@ -5,9 +7,9 @@ export const DUMMY_FORUM_POSTS = [
         userId: 'u01',
         userName: 'Jean Victor',
         createdAt: new Date(),
-        disciplineId: 'd01',
+        courseId: 'd01',
         likes: 26,
-        commentsIDs: ['a', 'aa', 'aaa']
+        comments: ['a', 'aa', 'aaa']
     },
 
     {
@@ -16,8 +18,8 @@ export const DUMMY_FORUM_POSTS = [
         userId: 'u02',
         userName: 'Luan Magri',
         createdAt: new Date(),
-        disciplineId: 'd02',
+        courseId: 'd02',
         likes: 21,
-        commentsIDs: ['a', 'aa', 'aaa', 'aaaa']
+        comments: ['a', 'aa', 'aaa', 'aaaa']
     }
 ]

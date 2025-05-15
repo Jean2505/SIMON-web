@@ -430,6 +430,8 @@ app.post("/enlist", async (req, res) => {
       req.body
     );
 
+    console.log("enlist: ", JSON.parse(response.data.payload));
+
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);
   } catch (error) {
@@ -475,7 +477,7 @@ app.post("/createMuralPost", async (req, res) => {
       payload
     );
 
-    console.log(response.data);
+    console.log("createMuralPost: ", JSON.parse(response.data.payload));
 
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);
@@ -504,6 +506,170 @@ app.post("/deleteMuralPost", async (req, res) => {
   } catch (error) {
     console.error("Erro ao chamar função deletePost:", error.message);
     res.status(500).json({ error: "Erro ao deletar o post externamente" });
+  }
+});
+
+app.post("/getForumPosts", async (req, res) => {
+  try {
+    // Chama a Cloud Function usando axios
+    console.log("getForumPosts requisition: ", req.body);
+    const response = await axios.post(
+      "https://getforumposts-bz6uecg2pq-rj.a.run.app",
+      req.body
+    );
+
+    console.log("getForumPosts response:", JSON.parse(response.data.payload));
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao obter os posts externamente" });
+  }
+});
+
+app.post("/createForumPost", async (req, res) => {
+  const data = req.body;
+  const createdAt = admin.firestore.Timestamp.now();
+
+  // 2) Monte um novo objeto com tudo que veio no body + createdAt
+  const payload = {
+    ...data,
+    createdAt,
+  };
+  try {
+    // Chama a Cloud Function usando axios
+    console.log("createForumPost: ", req.body);
+    const response = await axios.post(
+      "https://createforumpost-bz6uecg2pq-rj.a.run.app",
+      payload
+    );
+
+    console.log(response.data.payload);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função createPost:", error.message);
+    res.status(500).json({ error: "Erro ao criar o post externamente" });
+  }
+});
+
+app.post("/deleteForumPost", async (req, res) => {
+  const data = req.body;
+  console.log("deleteForumPost: ", data);
+
+  try {
+    // Chama a Cloud Function usando axios
+    const response = await axios.post(
+      "https://deleteforumpost-bz6uecg2pq-rj.a.run.app",
+      data
+    );
+
+    console.log(response.data.payload);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função deletePost:", error.message);
+    res.status(500).json({ error: "Erro ao deletar o post externamente" });
+  }
+});
+
+app.post("/getComments", async (req, res) => {
+  try {
+    // Chama a Cloud Function usando axios
+    console.log("getComments requisition: ", req.body);
+    const response = await axios.post(
+      "https://getcomments-bz6uecg2pq-rj.a.run.app",
+      req.body
+    );
+
+    console.log("getComments response:", JSON.parse(response.data.payload));
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    res.status(500).json({ error: "Erro ao obter os comentários externamente" });
+  }
+});
+
+app.post("/createComment", async (req, res) => {
+  const data = req.body;
+  const createdAt = admin.firestore.Timestamp.now();
+
+  // 2) Monte um novo objeto com tudo que veio no body + createdAt
+  const payload = {
+    ...data,
+    createdAt,
+  };
+  try {
+    // Chama a Cloud Function usando axios
+    console.log("createComment: ", req.body);
+    const response = await axios.post(
+      "https://createcomment-bz6uecg2pq-rj.a.run.app",
+      payload
+    );
+
+    console.log(response.data.payload);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função createPost:", error.message);
+    res.status(500).json({ error: "Erro ao criar o comentário externamente" });
+  }
+});
+
+app.post("/deleteComment", async (req, res) => {
+  const data = req.body;
+  console.log("deleteComment: ", data);
+
+  try {
+    // Chama a Cloud Function usando axios
+    const response = await axios.post(
+      "https://deletecomment-bz6uecg2pq-rj.a.run.app",
+      data
+    );
+
+    console.log(response.data.payload);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função deletePost:", error.message);
+    res.status(500).json({ error: "Erro ao deletar o comentário externamente" });
+  }
+});
+
+app.post("/likePost", async (req, res) => {
+  try {
+    const data = req.body;
+    console.log("likePost: ", data);
+
+    // Chama a Cloud Function usando axios
+    /*
+    const response = await axios.post(
+      "https://likepost-bz6uecg2pq-rj.a.run.app",
+      data
+    ); */
+
+    const response = {
+      data: {
+        payload: {
+          postId: data.postId,
+          userId: data.userId,
+          like: data.like,
+        },
+      },
+    };
+
+    console.log(response.data.payload);
+
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função likePost:", error.message);
+    res.status(500).json({ error: "Erro ao curtir o post externamente" });
   }
 });
 
