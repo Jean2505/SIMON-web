@@ -5,6 +5,7 @@ import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
 import { ApproveCandidateComponent } from './institution/approve-candidate/approve-candidate.component';
 import { SubjectForumComponent } from './shared/forum/forum.component';
+import { ForumPostComponent } from './shared/forum/post/post.component';
 
 export const routes: Routes = [
 
@@ -32,7 +33,7 @@ export const routes: Routes = [
     data: { expectedRoles: ['INSTITUICAO'] }
   },
 
-  { path: 'forum', component: SubjectForumComponent },
+  { path: 'forum-post', component: ForumPostComponent },
 
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },
