@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ForumPost } from '../../../models/forum-post.model';
+import { PostComment } from '../../../models/forum-post.model';
 
 @Component({
   selector: 'app-comments',
@@ -8,5 +8,5 @@ import { ForumPost } from '../../../models/forum-post.model';
   styleUrl: './comments.component.scss'
 })
 export class CommentsComponent {
-  @Input() post!: ForumPost;
+  @Input() comment?: PostComment;
 }

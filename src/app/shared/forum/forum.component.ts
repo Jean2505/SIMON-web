@@ -4,13 +4,13 @@ import { CardComponent } from "./card/card.component";
 import { HttpClient } from '@angular/common/http';
 
 import { ForumPost } from '../../models/forum-post.model';
-import { PostComment } from '../../models/forum-post.model';
+import { NewPostComponent } from './new-post/new-post.component';
 import { Auth, User } from '@angular/fire/auth';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-forum',
-  imports: [CardComponent],
+  imports: [CardComponent, NewPostComponent],
   templateUrl: './forum.component.html',
   styleUrl: './forum.component.scss'
 })
@@ -20,6 +20,8 @@ export class SubjectForumComponent implements OnInit {
   subjectId = '1234567890';
 
   user!: User;
+
+  isCreatingPost = false;
 
   /**
    * Lista de posts do fórum.
@@ -38,7 +40,9 @@ export class SubjectForumComponent implements OnInit {
 
   /**
    * constructor
+   * @param auth - Serviço de autenticação do Firebase.
    * @param http - HttpClient para fazer requisições HTTP.
+   * @param route - Rota ativa do Angular.
    */
   constructor(
     /** Referência ao serviço de autenticação do Firebase @type {Auth} */
@@ -71,6 +75,10 @@ export class SubjectForumComponent implements OnInit {
         },
       })
     })
+  }
+
+  createPost(): void {
+    this.isCreatingPost = !this.isCreatingPost;
   }
 
 }

@@ -1,5 +1,9 @@
 <div class="card-list">
-    @for (post of posts; track post.createdAt) {
-        <app-forum-card [post]="post" [userId]="user!.uid"/>
-    }
+  @for (post of posts; track post.createdAt) {
+  <app-forum-card [post]="post" [userId]="user!.uid" />
+  }
 </div>
+<button type="button" (click)="createPost()">+</button>
+@if (isCreatingPost) {
+<app-forum-new-post></app-forum-new-post>
+}
