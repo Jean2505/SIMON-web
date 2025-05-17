@@ -10,6 +10,7 @@ import { SubjectBoardComponent } from '../shared/board/board.component';
 import { SubjectTutorsComponent } from '../shared/tutors/tutors.component';
 import { SubjectForumComponent } from '../shared/forum/forum.component';
 import { ListSubjectsComponent } from '../shared/list-subjects/list-subjects.component';
+import { ForumPostComponent } from '../shared/forum/post/post.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,8 @@ const routes: Routes = [
           { path: 'board', component: SubjectBoardComponent },
           { path: 'tutors', component: SubjectTutorsComponent },
           { path: 'forum', component: SubjectForumComponent },
+          { path: 'forum/:postId', component: ForumPostComponent },
+
         ]
       },
     ]

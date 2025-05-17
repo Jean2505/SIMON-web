@@ -10,6 +10,7 @@ import { SubjectBoardComponent } from '../shared/board/board.component';
 import { SubjectTutorsComponent } from '../shared/tutors/tutors.component';
 import { SubjectForumComponent } from '../shared/forum/forum.component';
 import { ApproveCandidateComponent } from './approve-candidate/approve-candidate.component';
+import { ForumPostComponent } from '../shared/forum/post/post.component';
 
 const routes: Routes = [
   {
@@ -19,7 +20,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: InstitutionHomeComponent },
       { path: 'manage-subjects', component: InstitutionManageSubjectsComponent },
-      {  path: 'manage-tutors', component: ApproveCandidateComponent },
+      { path: 'manage-tutors', component: ApproveCandidateComponent },
       {
         path: 'subject/:id',
         component: SubjectComponent,
@@ -28,6 +29,7 @@ const routes: Routes = [
           { path: 'board', component: SubjectBoardComponent },
           { path: 'tutors', component: SubjectTutorsComponent },
           { path: 'forum', component: SubjectForumComponent },
+          { path: 'forum/:postId', component: ForumPostComponent },
         ]
       },
     ]

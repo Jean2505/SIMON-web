@@ -80,46 +80,26 @@ export interface ForumPost {
 /**
  * PostComment model
  * @description Interface que representa um comentário em um post do fórum.
+ * @property {string} content - Conteúdo do comentário
+ * @property {Date} createdAt - Data de criação do comentário
+ * @property {number} likes - Número de curtidas do comentário
  * @property {string} userId - ID do usuário que fez o comentário
  * @property {string} userName - Nome do usuário que fez o comentário
- * @property {string} content - Conteúdo do comentário
- * @property {string} createdAt - Timestamp do momento em que o comentário foi criado
- * @property {string} postId - ID do post ao qual o comentário pertence
+ * @property {string} userRole - Papel do usuário que fez o comentário
  */
 export interface PostComment {
-    /**
-     * ID do usuário que fez o comentário
-     * @description O ID do usuário que fez o comentário.
-     * @type {string}
-     * @example "1234567890"
-     */
-    userId: string;
-    /**
-     * Nome do usuário que fez o comentário
-     * @description O nome do usuário que fez o comentário.
-     * @type {string}
-     * @example "João Silva"
-     */
-    userName: string;
-    /**
-     * Conteúdo do comentário
-     * @description O conteúdo do comentário.
-     * @type {string}
-     * @example "Ótima pergunta!"
-     */
+    /** Conteúdo do comentário @type {string} */
     content: string;
-    /**
-     * Timestamp do momento em que o comentário foi criado
-     * @description O timestamp do momento em que o comentário foi criado.
-     * @type {Date}
-     * @example "2023-10-01T12:00:00Z"
-     */
+    /** Data de criação do comentário @type {Date} */
     createdAt: Date;
-    /**
-     * ID do post ao qual o comentário pertence
-     * @description O ID do post ao qual o comentário pertence.
-     * @type {string}
-     * @example "1234567890"
-     */
+    /** Número de curtidas do comentário @type {number} */
+    likes: number;
+    /** ID do post ao qual o comentário pertence @type {string} */
     postId: string;
+    /** ID do usuário que fez o comentário @type {string} */
+    userId: string;
+    /** Nome do usuário que fez o comentário @type {string} */
+    userName: string;
+    /** Papel do usuário que fez o comentário @type {string} */
+    userRole: string;
 }
