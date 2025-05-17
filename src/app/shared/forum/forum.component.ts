@@ -55,7 +55,6 @@ export class SubjectForumComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.user = this.auth.currentUser!;
-    const idTokenResult = await this.user.getIdTokenResult(true);
     this.route.parent!.paramMap.subscribe(async params => {
       this.subjectId = params.get('id') ?? '';
       console.log('ID da disciplina', this.subjectId);

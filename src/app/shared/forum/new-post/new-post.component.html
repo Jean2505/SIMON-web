@@ -1,0 +1,12 @@
+<div class="new-post">
+  <h2>Criar Novo Post</h2>
+  <form (ngSubmit)="onSubmit()">
+    <label for="title">Título</label>
+    <input type="text" id="title" [(ngModel)]="enteredTitle" name="title" required>
+
+    <label for="content">Conteúdo</label>
+    <textarea id="content" [(ngModel)]="enteredContent" name="content" required></textarea>
+
+    <button type="submit" [disabled]="isSending">Enviar</button>
+  </form>
+</div>

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';  
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';  
 import { Router } from '@angular/router';  
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../service/auth.service';
 
 /**
  * Componente de login responsável por autenticar usuários e redirecioná-los conforme seu role.
@@ -23,11 +25,14 @@ export class LoginComponent {
   /**
    * Construtor do componente.
    * @param auth   - Serviço de autenticação do Firebase para login.
+   * @param http   - Serviço de requisições HTTP para comunicação com o backend.
    * @param router - Serviço Router para navegação programática após login.
    */
   constructor(
     private auth: Auth,
-    private router: Router
+    private router: Router,
+    private http: HttpClient,
+    private authService: AuthService
   ) {}
 
   /**
@@ -47,6 +52,26 @@ export class LoginComponent {
       const idTokenResult = await userCredential.user.getIdTokenResult(true);
       const role = idTokenResult.claims['role'] || '';
       console.log('Role do usuário:', role);
+
+      if (role === 'ALUNO' || role === 'MONITOR') {
+        // Obtém o ID do aluno
+        const uid = this.auth.currentUser?.uid;
+        console.log('ID do aluno:', uid);
+
+        // Faz uma requisição para obter os dados do aluno
+        this.http.post('http://localhost:3000/getStudent', { uid }).subscribe({
+          next: async (response: any) => {
+            const result = JSON.parse(response.payload);
+            console.log('Dados do aluno:', result);
+            await this.authService.updateDisplayName(result.nome);
+            // Armazena os dados do aluno no localStorage
+            localStorage.setItem('studentData', JSON.stringify(result));
+          },
+          error: (error) => {
+            console.error('Erro ao obter dados do aluno:', error);
+          }
+        });
+      }
 
       // Redireciona de acordo com o role
       switch (role) {

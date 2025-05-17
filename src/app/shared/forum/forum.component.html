@@ -5,5 +5,5 @@
 </div>
 <button type="button" (click)="createPost()">+</button>
 @if (isCreatingPost) {
-<app-forum-new-post></app-forum-new-post>
+<app-forum-new-post [subjectId]="subjectId"></app-forum-new-post>
 }

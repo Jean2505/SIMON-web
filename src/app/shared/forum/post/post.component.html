@@ -3,10 +3,19 @@
     <p>{{ post.userName }}</p>
     <h2>{{ post.title }}</h2>
     <p>{{ post.content }}</p>
-    <button class="like-btn" type="button">{{ post.likes }}</button>
+    <button class="like-btn" type="button" (click)="likePost(post.docId)">{{ post.likes }}</button>
   </div>
   <hr />
   @for (comment of comments; track comment.createdAt) {
   <app-comments [comment]="comment" />
+  <hr />
   }
+
+  <input
+    type="text"
+    placeholder="Escreva um comentário..."
+    [(ngModel)]="enteredComment"
+    (keyup.enter)="onAddComment()"
+  />
+  <button type="button" (click)="onAddComment()">Enviar</button>
 </div>

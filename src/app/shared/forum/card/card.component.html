@@ -2,7 +2,7 @@
     <div class="card-content">
         <div class="card-header">
             <p class="poster-name">{{ post.userName }}</p>
-            <p class="post-date">{{ post.createdAt }}</p>
+            <p class="post-date">{{ post.createdAt | date:'dd/MM/yyyy - HH:mm' }}</p>
         </div>
         <div class="card-content">
             <h3 class="post-title">{{ post.title }}</h3>

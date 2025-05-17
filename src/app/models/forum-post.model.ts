@@ -39,21 +39,22 @@ export interface ForumPost {
      * @type {Date}
      * @example "2023-10-01T12:00:00Z"
      */
-    createdAt: Date;
+    createdAt?: Date;
     /**
      * ID do post
      * @description O ID do post.
+     * @optional
      * @type {string}
      * @example "lkpHQhmfqeufb1ozMMtx"
      */
-    docId: string;
+    docId?: string;
     /**
      * Número de curtidas no post
      * @description O número de curtidas no post.
-     * @type {Number}
+     * @type {number}
      * @example 10
      */
-    likes: Number;
+    likes: number;
     /**
      * Título do post
      * @description O título do post no fórum.
@@ -82,7 +83,6 @@ export interface ForumPost {
  * @description Interface que representa um comentário em um post do fórum.
  * @property {string} content - Conteúdo do comentário
  * @property {Date} createdAt - Data de criação do comentário
- * @property {number} likes - Número de curtidas do comentário
  * @property {string} userId - ID do usuário que fez o comentário
  * @property {string} userName - Nome do usuário que fez o comentário
  * @property {string} userRole - Papel do usuário que fez o comentário
@@ -92,8 +92,6 @@ export interface PostComment {
     content: string;
     /** Data de criação do comentário @type {Date} */
     createdAt: Date;
-    /** Número de curtidas do comentário @type {number} */
-    likes: number;
     /** ID do post ao qual o comentário pertence @type {string} */
     postId: string;
     /** ID do usuário que fez o comentário @type {string} */

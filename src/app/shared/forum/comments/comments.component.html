@@ -1,7 +1,7 @@
 <div class="comment-container">
   <div class="comment-header">
     <p>{{ comment?.userName }}</p>
-    <p>{{ comment?.createdAt?.getDay }}</p>
+    <p>{{ comment?.createdAt | date:'dd/MM/yyyy - HH:mm' }}</p>
     <p>{{ comment?.userRole }}</p>
   </div>
   <div class="comment-content">
