@@ -8,6 +8,7 @@
  */
 
 import {onRequest} from "firebase-functions/v2/https";
+import {onDocumentCreated} from "firebase-functions/v2/firestore";
 import * as logger from "firebase-functions/logger";
 import * as admin from "firebase-admin";
 
@@ -463,6 +464,67 @@ export const getForumPosts = onRequest({region: "southamerica-east1"}, async (re
     res.status(200).send(result);
 });
 
+export const createForumPost = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    try {
+        await db.collection("ForumPosts").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Post created successfully",
+            payload: "Post created successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating post",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+
+});
+
+export const createComment = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    try {
+        await db.collection("Comments").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Comment created successfully",
+            payload: "Comment created successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating comment",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+
+});
+
+export const addComment = onDocumentCreated({document: "Comments/{commentId}", region: "southamerica-east1"}, async (event) => {
+    const docId = event.params.commentId;
+    const postId = event.data?.data().postId;
+    const snapshot = await db.collection("ForumPosts").doc(postId).get();
+
+    const comments = snapshot.data()?.comments;
+
+    comments.push(docId);
+    await db.collection("ForumPosts").doc(postId).set({comments: comments}, {merge: true});
+});
+
 export const getComments = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
     logger.debug(req.body)
@@ -482,23 +544,66 @@ export const getComments = onRequest({region: "southamerica-east1"}, async (req,
     const data = snapshot.data();
 
     const ids: admin.firestore.DocumentReference<admin.firestore.DocumentData, admin.firestore.DocumentData>[] = [];
-    data?.comments.forEach((docId: string) => {
-        ids.push(db.collection("Comments").doc(docId));
+    if (data?.comments.length != 0) {
+        data?.comments.forEach((docId: string) => {
+            ids.push(db.collection("Comments").doc(docId));
     });
+        const comments = await db.getAll(...ids);
 
-    const comments = await db.getAll(...ids);
-
-    const documents: any[] = [];
-    comments.forEach((doc) => {
-        if (doc.exists) {
-            documents.push(doc.data())
-        }
-    });
-
-    result = {
+        const documents: any[] = [];
+        comments.forEach((doc) => {
+            if (doc.exists) {
+                documents.push(doc.data())
+            }
+        
+        result = {
             status: "OK",
             message: "Comments found",
             payload: JSON.stringify(documents)
         };
         res.status(200).send(result);
+        return;
+    });
+    }
+    result = {
+            status: "OK",
+            message: "Post has no comments.",
+            payload: JSON.stringify([])
+        };
+        res.status(200).send(result);
+});
+
+export const likePost = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("ForumPosts").doc(req.body.postId).get();
+
+    if (!snapshot.exists) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "Post doen't exist.",
+            payload: "Post doesn't exist."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    const data = snapshot.data();
+    
+    let like = 0;
+    if (req.body.like) {
+        like = data?.likes + 1;
+    } else {
+        like = data?.likes - 1;
+    }
+    await db.collection("ForumPosts").doc(req.body.postId).set({likes: like}, {merge: true});
+
+    result = {
+        status: "OK",
+        message: "Post liked",
+        payload: "Post liked"
+    };
+    res.status(200).send(result);
 });
