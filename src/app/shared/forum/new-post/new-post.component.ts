@@ -72,4 +72,14 @@ export class NewPostComponent implements OnInit {
     });
   }
 
+    showModal = false;
+
+  openModal() {
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+  }
+
 }
