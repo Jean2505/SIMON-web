@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { type Discipline } from '../../../models/discipline.model';
 
@@ -33,23 +33,22 @@ export class DisciplineComponent {
   /**
    * Construtor do componente.
    * @param router - Serviço Router para navegação programática.
+   * @param route  - Serviço ActivatedRoute para acessar informações da rota atual.
+   * @description Este construtor inicializa o componente com os serviços necessários para navegação e manipulação de rotas.
    */
-  constructor(private router: Router) { }
+  constructor(
+    /** Referência ao serviço de roteamento @type {Router} */
+    private router: Router,
+    /** Referência ao serviço de rota ativa @type {ActivatedRoute} */
+    private route: ActivatedRoute
+  ) { }
 
   /**
    * Navega para a página de detalhes de um monitor.
    * @param discipline - Objeto Discipline selecionado para visualização.
    */
   viewSubject(discipline: Discipline): void {
-    let route = '';
-      if (this.role === 'PROFESSOR') {
-        route = `/professor/subject/${discipline.id}`;
-      } else if (this.role === 'ESTUDANTE' || this.role === 'MONITOR') {
-        route = `/student/subject/${discipline.id}`;
-      } else {
-        route = `/institution/subject/${discipline.id}`;
-      }
-    this.router.navigate([route])
+    this.router.navigate([discipline.id], { relativeTo: this.route })
       .then(success => {
         console.log('Navegação realizada:', success);
         console.clear();                         // Limpa o console após navegação bem-sucedida

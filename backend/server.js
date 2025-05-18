@@ -528,17 +528,11 @@ app.post("/getForumPosts", async (req, res) => {
 });
 
 app.post("/createForumPost", async (req, res) => {
-  const data = req.body;
-  const createdAt = admin.firestore.Timestamp.now();
+  const payload = req.body;
 
-  // 2) Monte um novo objeto com tudo que veio no body + createdAt
-  const payload = {
-    ...data,
-    createdAt,
-  };
   try {
     // Chama a Cloud Function usando axios
-    console.log("createForumPost: ", req.body);
+    console.log("createForumPost: ", payload);
     const response = await axios.post(
       "https://createforumpost-bz6uecg2pq-rj.a.run.app",
       payload
@@ -589,22 +583,17 @@ app.post("/getComments", async (req, res) => {
     // Retorna a resposta da função externa ao front-end
     res.json(response.data.payload);
   } catch (error) {
+    console.error("Erro ao chamar função getComments:", error.message);
     res.status(500).json({ error: "Erro ao obter os comentários externamente" });
   }
 });
 
 app.post("/createComment", async (req, res) => {
-  const data = req.body;
-  const createdAt = admin.firestore.Timestamp.now();
+  const payload = req.body;
 
-  // 2) Monte um novo objeto com tudo que veio no body + createdAt
-  const payload = {
-    ...data,
-    createdAt,
-  };
   try {
     // Chama a Cloud Function usando axios
-    console.log("createComment: ", req.body);
+    console.log("createComment: ", payload);
     const response = await axios.post(
       "https://createcomment-bz6uecg2pq-rj.a.run.app",
       payload
@@ -647,21 +636,20 @@ app.post("/likePost", async (req, res) => {
     console.log("likePost: ", data);
 
     // Chama a Cloud Function usando axios
-    /*
     const response = await axios.post(
       "https://likepost-bz6uecg2pq-rj.a.run.app",
       data
-    ); */
+    );
 
-    const response = {
-      data: {
-        payload: {
-          postId: data.postId,
-          userId: data.userId,
-          like: data.like,
-        },
-      },
-    };
+    // const response = {
+    //   data: {
+    //     payload: {
+    //       postId: data.postId,
+    //       userId: data.userId,
+    //       like: data.like,
+    //     },
+    //   },
+    // };
 
     console.log(response.data.payload);
 

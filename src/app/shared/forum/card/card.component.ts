@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { type ForumPost } from '../../../models/forum-post.model';
 
 @Component({
   selector: 'app-forum-card',
-  imports: [],
+  imports: [CommonModule, DatePipe],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss'
 })
@@ -36,25 +37,35 @@ export class CardComponent implements OnInit {
     console.log(this.userId);
   }
 
-  likePost(docId: string | undefined): void {
+  likePost(postId: string | undefined): void {
     // Implementar lógica para curtir o post
-    this.http.post('http://localhost:3000/likePost', { docId, like: !this.isLiked }).subscribe({
+    this.http.post('http://localhost:3000/likePost', { postId, like: !this.isLiked }).subscribe({
       next: (response: any) => {
         console.log('Post curtido com sucesso:', response);
+        // Atualiza o estado da curtida
+        this.post.likes = this.isLiked ? (this.post.likes - 1) : (this.post.likes + 1);
         this.isLiked = !this.isLiked;
       },
       error: (error) => {
         console.error('Erro ao curtir o post:', error);
       }
     });
-    console.log('Curtindo o post:', docId);
+    console.log('Curtindo o post:', postId);
   }
 
   goPost(event: MouseEvent): void {
     const element = event.target as HTMLElement
     console.log(element)
     // Implementar lógica para navegar para o post
-    //this.router.navigate([this.post.docId], { relativeTo: this.route, state: { post: this.post } });
+    this.router.navigate(
+      [this.post.docId],
+      {
+        relativeTo: this.route,
+        state: {
+          post: this.post,
+          isLiked: this.isLiked,
+        }
+      });
     console.log('Navegando para o post:', this.post.docId);
   }
 
