@@ -80,4 +80,8 @@ export class SubjectForumComponent implements OnInit {
     this.isCreatingPost = !this.isCreatingPost;
   }
 
+  closePost() {
+    this.isCreatingPost = false;
+  }
+
 }

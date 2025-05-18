@@ -5,5 +5,6 @@
 </div>
 <button type="button" (click)="createPost()">+</button>
 @if (isCreatingPost) {
+<div class="modal-backdrop" (click)="closePost()"></div>
 <app-forum-new-post [subjectId]="subjectId"></app-forum-new-post>
 }

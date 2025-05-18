@@ -110,6 +110,10 @@
       transition: background-color 0.2s;
   
       &:hover {
+        background-color: #0077ff33;
+      }
+
+      &.liked{
         background-color: rgba(0, 119, 255, 0.2);
       }
     }
