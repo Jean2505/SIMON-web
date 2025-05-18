@@ -548,29 +548,52 @@ export const getComments = onRequest({region: "southamerica-east1"}, async (req,
         data?.comments.forEach((docId: string) => {
             ids.push(db.collection("Comments").doc(docId));
     });
-        const comments = await db.getAll(...ids);
+        await db.getAll(...ids).then((comments) => {
+            logger.debug(comments);
+            logger.debug(comments.length);
 
-        const documents: any[] = [];
-        comments.forEach((doc) => {
-            if (doc.exists) {
-                documents.push(doc.data())
-            }
+            const documents: any[] = [];
+            comments.forEach((doc) => {
+                if (doc.exists) {
+                    documents.push(doc.data())
+                }
+            });
+            
+            logger.debug(documents);    
         
-        result = {
-            status: "OK",
-            message: "Comments found",
-            payload: JSON.stringify(documents)
-        };
-        res.status(200).send(result);
-        return;
-    });
+            result = {
+                status: "OK",
+                message: "Comments found",
+                payload: JSON.stringify(documents)
+            };
+            res.status(200).send(result);
+            return;
+        });
+        // logger.debug(comments);
+        // logger.debug(comments.length);
+
+        // const documents: any[] = [];
+        // comments.forEach((doc) => {
+        //     if (doc.exists) {
+        //         documents.push(doc.data())
+        //     }
+        // logger.debug(documents);    
+        
+        // result = {
+        //     status: "OK",
+        //     message: "Comments found",
+        //     payload: JSON.stringify(documents)
+        // };
+        // res.status(200).send(result);
+        // return;
+    // });
     }
     result = {
             status: "OK",
             message: "Post has no comments.",
             payload: JSON.stringify([])
         };
-        res.status(200).send(result);
+    res.status(200).send(result);
 });
 
 export const likePost = onRequest({region: "southamerica-east1"}, async (req, res) => {
