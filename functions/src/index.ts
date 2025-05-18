@@ -575,7 +575,7 @@ export const getComments = onRequest({region: "southamerica-east1"}, async (req,
 
 export const likePost = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
-    logger.debug(req.body)
+    logger.debug(req.body);
 
     const snapshot = await db.collection("ForumPosts").doc(req.body.postId).get();
 
