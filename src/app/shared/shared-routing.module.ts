@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { SubjectComponent } from './subject/subject.component';
 import { SubjectBoardComponent } from './board/board.component';
@@ -8,7 +7,6 @@ import { SubjectForumComponent } from './forum/forum.component';
 import { ForumPostComponent } from './forum/post/post.component';
 
 const routes: Routes = [
-
   {
     path: '',
     component: SubjectComponent,

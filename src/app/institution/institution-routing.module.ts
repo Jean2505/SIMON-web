@@ -2,20 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 /* Importação de telas da instituição */
-import { InstitutionHeaderComponent } from './header/header.component';
 import { InstitutionHomeComponent } from './home/home.component';
 import { InstitutionManageSubjectsComponent } from './manage-subjects/manage-subjects.component';
-import { SubjectComponent } from '../shared/subject/subject.component';
-import { SubjectBoardComponent } from '../shared/board/board.component';
-import { SubjectTutorsComponent } from '../shared/tutors/tutors.component';
-import { SubjectForumComponent } from '../shared/forum/forum.component';
 import { ApproveCandidateComponent } from './approve-candidate/approve-candidate.component';
-import { ForumPostComponent } from '../shared/forum/post/post.component';
+import { HeaderComponent } from '../shared/header/header.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: InstitutionHeaderComponent,
+    component:HeaderComponent,
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: InstitutionHomeComponent },

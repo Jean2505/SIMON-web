@@ -3,8 +3,6 @@ import { Routes } from '@angular/router';
 import { RoleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
-import { ApproveCandidateComponent } from './institution/approve-candidate/approve-candidate.component';
-import { SubjectForumComponent } from './shared/forum/forum.component';
 import { ForumPostComponent } from './shared/forum/post/post.component';
 
 export const routes: Routes = [

@@ -2,20 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 /* Importação de telas do professor */
-import { ProfessorHeaderComponent } from './header/header.component';
 import { ProfessorHomeComponent } from './home/home.component';
 import { ProfessorTutorsComponent } from './tutors/tutors.component';
-import { SubjectComponent } from '../shared/subject/subject.component';
-import { SubjectBoardComponent } from '../shared/board/board.component';
-import { SubjectTutorsComponent } from '../shared/tutors/tutors.component';
-import { SubjectForumComponent } from '../shared/forum/forum.component';
 import { ListSubjectsComponent } from '../shared/list-subjects/list-subjects.component';
-import { ForumPostComponent } from '../shared/forum/post/post.component';
+import { HeaderComponent } from '../shared/header/header.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProfessorHeaderComponent,
+    component: HeaderComponent,
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: ProfessorHomeComponent },
