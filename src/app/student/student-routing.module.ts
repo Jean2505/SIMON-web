@@ -23,21 +23,9 @@ const routes: Routes = [
       { path: 'subjects', component: StudentSubjectsComponent },
       { path: 'enlist', component: StudentEnlistComponent },
       { path: 'tutor-subjects', component: TutorSubjectsComponent },
-      // rota com arquivos compartilhados entre aluno, professor e instituição
-      {
-        path: 'shared',
-        loadChildren: () => import('../shared/shared.module').then(m => m.SharedModule)
-      },
       {
         path: 'subject/:id',
-        component: SubjectComponent,
-        children: [
-          { path: '', redirectTo: 'board', pathMatch: 'full' },
-          { path: 'board', component: SubjectBoardComponent },
-          { path: 'tutors', component: SubjectTutorsComponent },
-          { path: 'forum', component: SubjectForumComponent },
-          { path: 'forum/:postId', component: ForumPostComponent },
-        ]
+        loadChildren: () => import('../shared/shared.module').then(m => m.SharedModule),
       },
     ]
   }

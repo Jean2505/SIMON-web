@@ -10,7 +10,7 @@ import { ForumPostComponent } from './forum/post/post.component';
 const routes: Routes = [
 
   {
-    path: 'subject/:id',
+    path: '',
     component: SubjectComponent,
     children: [
       { path: '', redirectTo: 'board', pathMatch: 'full' },
