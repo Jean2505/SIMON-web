@@ -10,6 +10,29 @@
   overflow: hidden;
   display: flex;
   justify-content: space-between;
+  .logout {
+    position: relative;
+    // width: 20vw;
+    z-index: 2;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    padding: 2.8vh;
+    display: flex;
+    .name {
+      cursor: default;
+    }
+    .text {
+      margin-left: 10px;
+    }
+    img {
+      height: 8vh;
+      margin: auto;
+      margin-top: 5px;
+      cursor: pointer;
+    }
+  }
 }
 
 .inner {
@@ -43,17 +66,6 @@
   margin-left: 10px;
 }
 
-.header .logout {
-  position: relative;
-  width: 20vw;
-  z-index: 2;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  margin-left: 10px;
-  padding: 2.8vh;
-}
-
 .text {
   position: relative;
   width: auto;
@@ -63,13 +75,6 @@
 svg {
   margin-left: 3px;
   vertical-align: middle;
-}
-
-.logout img {
-  height: 8vh;
-  margin: auto;
-  margin-top: 5px;
-  cursor: pointer;
 }
 
 .logo img {
