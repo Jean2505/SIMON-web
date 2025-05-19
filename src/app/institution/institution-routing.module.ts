@@ -10,7 +10,7 @@ import { HeaderComponent } from '../shared/header/header.component';
 const routes: Routes = [
   {
     path: '',
-    component:HeaderComponent,
+    component: HeaderComponent,
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: InstitutionHomeComponent },
