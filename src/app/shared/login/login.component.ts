@@ -71,6 +71,26 @@ export class LoginComponent {
             console.error('Erro ao obter dados do aluno:', error);
           }
         });
+      } else if (role === 'PROFESSOR') {
+        // Obtém o ID do professor
+        const uid = this.auth.currentUser?.uid;
+        console.log('ID do professor:', uid);
+
+        // Faz uma requisição para obter os dados do professor
+        this.http.post('http://localhost:3000/getProfessor', { uid }).subscribe({
+          next: async (response: any) => {
+            const result = JSON.parse(response.payload);
+            console.log('Dados do professor:', result);
+            await this.authService.updateDisplayName(result.nome);
+            // Armazena os dados do professor no localStorage
+            localStorage.setItem('professorData', JSON.stringify(result));
+          },
+          error: (error) => {
+            console.error('Erro ao obter dados do professor:', error);
+          }
+        });
+      } else if (role === 'INSTITUICAO') {
+        await this.authService.updateDisplayName('PUC Campinas');
       }
 
       // Redireciona de acordo com o role

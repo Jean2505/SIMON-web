@@ -44,11 +44,11 @@ export class ForumPostComponent implements OnInit {
     if (state.isLiked) {
       this.isLiked = state.isLiked;
     }
-    console.log(this.post);
     this.http.post('http://localhost:3000/getComments', { postId: this.post.docId }).subscribe({
       next: (response: any) => {
         let result = JSON.parse(response);
         this.comments = result;
+        console.log(this.comments);
       },
       error: (error) => {
         console.error('Erro ao obter comentários do post:', error);
