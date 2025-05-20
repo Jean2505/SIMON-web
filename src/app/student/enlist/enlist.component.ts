@@ -4,12 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Auth } from '@angular/fire/auth';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
-import { Student } from '../../models/student.model';
-import { Discipline } from '../../models/discipline.model';
+import { type Student } from '../../models/student.model';
+import { type Discipline } from '../../models/discipline.model';
 
 /**
  * Componente de candidatura à monitoria do estudante.
