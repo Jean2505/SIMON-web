@@ -477,7 +477,7 @@ app.post("/createMuralPost", async (req, res) => {
       payload
     );
 
-    console.log("createMuralPost: ", JSON.parse(response.data.payload));
+    //console.log("createMuralPost: ", JSON.parse(response.data.payload));
 
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);

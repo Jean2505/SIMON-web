@@ -38,12 +38,8 @@ export class ForumPostComponent implements OnInit {
 
   ngOnInit(): void {
     const state = this.location.getState() as { post?: ForumPost, isLiked?: boolean };
-    if (state.post) {
-      this.post = state.post;
-    }
-    if (state.isLiked) {
-      this.isLiked = state.isLiked;
-    }
+    if (state.post) this.post = state.post;
+    if (state.isLiked) this.isLiked = state.isLiked;
     this.http.post('http://localhost:3000/getComments', { postId: this.post.docId }).subscribe({
       next: (response: any) => {
         let result = JSON.parse(response);

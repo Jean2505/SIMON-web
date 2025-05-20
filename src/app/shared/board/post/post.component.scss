@@ -1,226 +1,231 @@
-*{
+* {
   font-family: "Poppins", sans-serif;
 }
+
 .backdrop {
-    background-color: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 998;
-  }
-  
-  dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    max-width: 50rem;
-    max-height: 90vh;
-    border-radius: 6px;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
-    overflow: auto;
-    padding: 1rem;
-    z-index: 999;
-  }
-  
-  .backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-  }
+  background-color: rgba(0, 0, 0, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 998;
+}
 
-  dialog {
-    width: 80%;
-    max-width: 1000px;
-    max-height: 90vh;
-    border: none;
-    border-radius: 8px;
-    padding: 1rem;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
+dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 50rem;
+  max-height: 90vh;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+  overflow: auto;
+  padding: 1rem;
+  z-index: 999;
+}
 
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-  }
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
 
-  .icons {
-    display: flex;
-    gap: 0.5rem;
-  }
+dialog {
+  width: 80%;
+  max-width: 1000px;
+  max-height: 90vh;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
-  .icons i {
-    cursor: pointer;
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
 
-  .content-scrollable {
-    flex: 1;
-    overflow-y: auto;
-    margin: 1rem 0;
-    border-top: 1px solid #ccc;
-    padding-top: 1rem;
-  }
+.icons {
+  display: flex;
+  gap: 0.5rem;
+}
 
-  .attachments {
-    padding-top: 1rem;
-  }
+.icons i {
+  cursor: pointer;
+}
 
-  .attachment-grid {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
+.content-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  margin: 1rem 0;
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+}
 
-  .attachment-item {
-    width: 100px;
-    height: 100px;
-    background: #eee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    flex-shrink: 0;
-  }
+.attachments {
+  padding-top: 1rem;
+}
 
-  .file-list {
-    margin-top: 0.5rem;
-  }
+.attachment-grid {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
 
-  .image-carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    padding: 0.5rem 0;
-  }
-  
-  .image-carousel img {
-    height: 80px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  
-  .image-carousel img:hover {
-    transform: scale(1.1);
-  }
-  
-  .modal {
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal-content {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 12px;
-  }
-  
-  .video-list iframe {
-    width: 100%;
-    max-width: 560px;
-    height: 315px;
-    margin-bottom: 1rem;
-  }
-  
-  .file-list a {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #007bff;
-    text-decoration: none;
-  }
+.attachment-item {
+  width: 100px;
+  height: 100px;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
 
-  .video-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 0;
-  }
-  
-  .video-list iframe {
-    width: 100%;
-    max-width: 480px; /* tamanho menor e responsivo */
-    aspect-ratio: 16 / 9; /* mantém proporção correta de vídeo */
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  }
+.file-list {
+  margin-top: 0.5rem;
+}
 
-  .thumbnail {
-    width: 80px;
-    height: auto;
-    margin-right: 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
-  
-  .thumbnail:hover {
-    transform: scale(1.05);
-  }
-  
-  .image-list {
-    display: flex;
-    overflow-x: auto;
-    gap: 8px;
-    margin-top: 8px;
-    margin-bottom: 1rem;
-    padding: 1rem 1rem;
-  }
-  
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    background-color: rgba(0, 0, 0, 0.85);
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    cursor: zoom-out;
-  }
-  
-  .modal-content {
-    max-width: 100%;
-    max-height: 100%;
-    border-radius: 10px;
-  }
+.image-carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 0.5rem 0;
+}
 
-  h4{
-    margin-top: 1rem;
-  }
+.image-carousel img {
+  height: 80px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
 
-  img{
-    filter: drop-shadow(0 0 0.5rem black);
-  }
+.image-carousel img:hover {
+  transform: scale(1.1);
+}
 
-  .titlename{
-    font-size: 1.8rem;
-  }
-  /* Estilização do Modal */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+}
+
+.video-list iframe {
+  width: 100%;
+  max-width: 560px;
+  height: 315px;
+  margin-bottom: 1rem;
+}
+
+.file-list a {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.video-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.video-list iframe {
+  width: 100%;
+  max-width: 480px;
+  /* tamanho menor e responsivo */
+  aspect-ratio: 16 / 9;
+  /* mantém proporção correta de vídeo */
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.thumbnail {
+  width: 80px;
+  height: auto;
+  margin-right: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.image-list {
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 1rem;
+  padding: 1rem 1rem;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  cursor: zoom-out;
+}
+
+.modal-content {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+}
+
+h4 {
+  margin-top: 1rem;
+}
+
+img {
+  filter: drop-shadow(0 0 0.5rem black);
+}
+
+.titlename {
+  font-size: 1.8rem;
+}
+
+/* Estilização do Modal */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro */
+  background-color: rgba(0, 0, 0, 0.8);
+  /* Fundo escuro */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -241,13 +246,18 @@ button {
   transform: translateY(-50%);
   background-color: rgba(255, 255, 255, 0.7);
   border: none;
-  font-size: 2rem; /* Tamanho da seta */
-  width: 50px; /* Largura fixa do botão */
-  height: 50px; /* Altura fixa do botão */
-  border-radius: 50%; /* Torna o botão redondo */
+  font-size: 2rem;
+  /* Tamanho da seta */
+  width: 50px;
+  /* Largura fixa do botão */
+  height: 50px;
+  /* Altura fixa do botão */
+  border-radius: 50%;
+  /* Torna o botão redondo */
   display: flex;
   justify-content: center;
-  align-items: center; /* Centraliza a seta dentro do botão */
+  align-items: center;
+  /* Centraliza a seta dentro do botão */
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
@@ -275,15 +285,37 @@ button:focus {
 }
 
 .thumbnail {
-  max-height: 85px; /* Altura máxima fixa */
+  max-height: 85px;
+  /* Altura máxima fixa */
   height: auto;
   width: auto;
-  object-fit: contain; /* Garante que a imagem se ajuste sem cortar nem esticar */
-  margin: 0 8px; /* Espaçamento horizontal entre imagens */
+  object-fit: contain;
+  /* Garante que a imagem se ajuste sem cortar nem esticar */
+  margin: 0 8px;
+  /* Espaçamento horizontal entre imagens */
   cursor: pointer;
   transition: transform 0.3s ease;
 
   &:hover {
     transform: scale(1.05);
+  }
+}
+
+.file-list-section {
+  margin-top: 1rem;
+
+  h4 {
+    margin-bottom: 0.5rem;
+  }
+}
+
+mat-list-item a {
+  text-decoration: none;
+  color: inherit;
+  mat-icon {
+    font-family: 'Material Icons';
+  }
+  &:hover {
+    text-decoration: underline;
   }
 }

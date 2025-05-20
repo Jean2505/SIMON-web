@@ -8,6 +8,7 @@ import {
   getDownloadURL,
   deleteObject
 } from '@angular/fire/storage';
+import { AuthService } from '../../service/auth.service';
 
 @Component({
   selector: 'app-new-post',
@@ -49,14 +50,25 @@ export class NewPostComponent implements OnInit {
   overallUploadProgress = 0;
   /** Impede envios duplicados enquanto estiver em progresso */
   isSending = false;
+  /** Nome do usuário autenticado */
+  userName: string = '';
 
   constructor(
+    /** Referência ao serviço de armazenamento do Firebase @type {Storage} */
     private storage: Storage,
-    private http: HttpClient
+    /** Referência ao serviço de requisições HTTP @type {HttpClient} */
+    private http: HttpClient,
+    /** Referência ao serviço de autenticação @type {AuthService} */
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    // Inicializa o estado do componente
+    // Obtém o nome do usuário autenticado
+    this.authService.getUserName().then(name => {
+      this.userName = name || '';
+    }).catch(err => {
+      console.error('Erro ao obter nome do usuário:', err);
+    });
     console.log('Disciplina:', this.subjectId);
   }
 
@@ -126,13 +138,40 @@ export class NewPostComponent implements OnInit {
 
   /**
    * Faz upload resumível de cada arquivo e imagem,
-   * atualizando o progresso geral e envia um único payload
-   * com arrays de URLs de arquivos, imagens, vídeos e disciplina.
+   * ou envia diretamente se não houver anexos.
    */
   onPost(): void {
     if (this.isSending) return;
     this.isSending = true;
 
+    // Se não houver arquivos nem imagens, envia diretamente
+    if (this.files.length === 0 && this.images.length === 0) {
+      const payload = {
+        title: this.enteredTitle,
+        content: this.enteredContent,
+        videos: this.videos.filter(v => v.trim()).filter(v => v.trim()),
+        files: [] as string[],
+        images: [] as string[],
+        disciplinaId: this.subjectId,
+        userName: this.userName,
+      };
+      console.log('Payload sem anexos:', payload);
+      this.http.post(this.apiUrl, payload).subscribe({
+        next: () => {
+          console.log('Post sem anexos enviado com sucesso');
+          this.resetState();
+          this.close.emit();
+        },
+        error: err => {
+          console.error('Erro ao enviar post sem anexos:', err);
+          this.isSending = false;
+        }
+      });
+      window.location.reload();
+      return;
+    }
+
+    // Caso haja anexos, faz upload resumível
     const allItems = [
       ...this.files.map(f => ({ file: f, folder: 'uploads/files' })),
       ...this.images.map(img => ({ file: img, folder: 'uploads/images' }))
@@ -141,9 +180,6 @@ export class NewPostComponent implements OnInit {
     const totalBytes = allItems.reduce((sum, item) => sum + item.file.size, 0);
     const bytesArr = new Array<number>(allItems.length).fill(0);
     const downloadURLs: string[] = new Array(allItems.length).fill('');
-
-    console.log('youtube:', this.videos);
-    console.log('matéria:', this.subjectId);
 
     allItems.forEach((item, idx) => {
       const path = `${item.folder}/${Date.now()}_${item.file.name}`;
@@ -170,24 +206,28 @@ export class NewPostComponent implements OnInit {
               const payload = {
                 title: this.enteredTitle,
                 content: this.enteredContent,
-                url: this.enteredUrl || undefined,
                 videos: this.videos,
                 files,
                 images,
-                disciplinaId: this.subjectId
+                disciplinaId: this.subjectId,
+                userName: this.userName,
               };
+              console.log('Payload com anexos:', payload);
               this.http.post(this.apiUrl, payload).subscribe({
-                next: (response: any) => {
-                  console.log('Post enviado:', response);
+                next: () => {
+                  console.log('Post com anexos enviado com sucesso');
                   this.resetState();
                   this.close.emit();
+                  window.location.reload();
                 },
-                error: (err: any) => {
-                  console.error('Erro ao enviar post:', err);
+                error: err => {
+                  console.error('Erro ao enviar post com anexos:', err);
                   downloadURLs.forEach(u => deleteObject(ref(this.storage, u)));
                   this.isSending = false;
                 }
               });
+            } else {
+              console.log('Aguardando todas downloadURLs');
             }
           } catch (err) {
             console.error('Erro ao obter downloadURL:', err);
