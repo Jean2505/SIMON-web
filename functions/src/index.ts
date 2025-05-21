@@ -32,6 +32,7 @@ interface Course {
     school: string;
     course: string;
     monitors: number;
+    currentMonitors: number;
 }
 
 // export const helloWorld = onRequest((req, res) => {
@@ -106,7 +107,8 @@ export const createCourses = onRequest({region: "southamerica-east1"}, (req, res
                 id: course.id_Disciplina,
                 school: course.escola_Disciplina,
                 course: course.curso_Disciplina,
-                monitors: 0
+                monitors: 0,
+                currentMonitors: 0
             }
             await db.collection("Courses").add(coursefb);
         })
