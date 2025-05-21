@@ -4,6 +4,7 @@ import { RoleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
 import { ForumPostComponent } from './shared/forum/post/post.component';
+import { TutorProfileComponent } from './shared/tutor-profile/tutor-profile.component';
 
 export const routes: Routes = [
 
@@ -31,7 +32,7 @@ export const routes: Routes = [
     data: { expectedRoles: ['INSTITUICAO'] }
   },
 
-  { path: 'forum-post', component: ForumPostComponent },
+  { path: 'perfil-monitor', component: TutorProfileComponent },
 
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },

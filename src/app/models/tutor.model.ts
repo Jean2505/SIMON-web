@@ -15,6 +15,7 @@
  * @property {string} sala - Sala onde o monitor está aplicando a monitoria.
  * @property {boolean} status - Status do monitor.
  * @property {string} uid - UID (ID único) do monitor.
+ * @property {string} email - E-mail para contato do monitor.
  */
 export interface Tutor {
     /**
@@ -88,4 +89,9 @@ export interface Tutor {
      * @type {string}
      */
     uid: string;
+    /**
+     * E-mail para contato do monitor.
+     * @type {string}
+     */
+    email: string;
 }
