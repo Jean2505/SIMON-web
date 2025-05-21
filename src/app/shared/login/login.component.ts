@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';  
-import { FormsModule } from '@angular/forms';  
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';  
-import { Router } from '@angular/router';  
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../service/auth.service';
 
@@ -33,7 +33,7 @@ export class LoginComponent {
     private router: Router,
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) { }
 
   /**
    * Método acionado ao submeter o formulário de login.
@@ -66,30 +66,37 @@ export class LoginComponent {
             await this.authService.updateDisplayName(result.nome);
             // Armazena os dados do aluno no localStorage
             localStorage.setItem('studentData', JSON.stringify(result));
+            this.router.navigate(['/student']);
           },
           error: (error) => {
             console.error('Erro ao obter dados do aluno:', error);
           }
         });
-      }
+      } else if (role === 'PROFESSOR') {
+        // Obtém o ID do professor
+        const uid = this.auth.currentUser?.uid;
+        console.log('ID do professor:', uid);
 
-      // Redireciona de acordo com o role
-      switch (role) {
-        case 'ALUNO':
-          this.router.navigate(['/student']);
-          break;
-        case 'MONITOR':
-          this.router.navigate(['/student']);
-          break;
-        case 'PROFESSOR':
-          this.router.navigate(['/professor']);
-          break;
-        case 'INSTITUICAO':
-          this.router.navigate(['/institution']);
-          break;
-        default:
-          this.router.navigate(['/login']);
-          break;
+        // Faz uma requisição para obter os dados do professor
+        this.http.post('http://localhost:3000/getProfessor', { uid }).subscribe({
+          next: async (response: any) => {
+            const result = JSON.parse(response.payload);
+            console.log('Dados do professor:', result);
+            await this.authService.updateDisplayName(result.nome);
+            // Armazena os dados do professor no localStorage
+            localStorage.setItem('professorData', JSON.stringify(result));
+            this.router.navigate(['/professor']);
+          },
+          error: (error) => {
+            console.error('Erro ao obter dados do professor:', error);
+          }
+        });
+      } else if (role === 'INSTITUICAO') {
+        await this.authService.updateDisplayName('PUC Campinas');
+        this.router.navigate(['/institution']);
+      } else {
+        this.router.navigate(['/login']);
+
       }
     } catch (error) {
       console.error('Erro no login:', error);

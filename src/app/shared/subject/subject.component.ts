@@ -55,5 +55,6 @@ export class SubjectComponent implements OnInit {
 
   /** Método chamado quando o componente é inicializado */
   ngOnInit(): void {
+    // Obtém monitores da matéria
   }
 }
