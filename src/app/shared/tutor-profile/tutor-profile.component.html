@@ -1,91 +1,43 @@
 <div class="container">
-  <header class="profile-banner"></header>
-
-  <img src="" alt="Foto do monitor" />
-
-  <section>
-    <div>
-      <div>
-        <p>{{ tutor.nome }}</p>
-        <p>{{ tutor.ra }}</p>
-        <p>{{ tutor.email }}</p>
-      </div>
+  <!-- Banner com imagem centralizada -->
+  <header class="profile-banner">
+    <div class="banner-bg"></div>
+    <div class="profile-img-wrapper">
+      <img src="/gosling.jpg" alt="Foto do monitor" class="profile-img" />
     </div>
+  </header>
 
-    <div class="materias-monitoradas">
-      <!-- toggle Online / Offline -->
-      <div>
-        <label class="switch">
-          <input
-            type="checkbox"
-            [(ngModel)]="isTutoring"
-            name="tutoringToggle"
-            (ngModelChange)="onToggle($event)"
-          />
-          <span class="slider round"></span>
-        </label>
-        <p *ngIf="isTutoring; else offlineTpl">Online</p>
-        <ng-template #offlineTpl><p>Offline</p></ng-template>
-      </div>
-
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-description> n </mat-panel-description>
-          </mat-expansion-panel-header>
-
-          <div class="panel-content">
-            <table mat-table [dataSource]="times" class="schedule-table">
-              <!-- Coluna fixa de horário -->
-              <ng-container matColumnDef="time">
-                <th mat-header-cell *matHeaderCellDef>Horário</th>
-                <td mat-cell *matCellDef="let t">{{ t }}</td>
-              </ng-container>
-
-              <!-- Colunas dinâmicas de cada dia -->
-              @for (day of days; track $index) {
-              <ng-container [matColumnDef]="day">
-                <th mat-header-cell *matHeaderCellDef>{{ day }}</th>
-                <td mat-cell *matCellDef="let t">
-                  <mat-checkbox
-                    [(ngModel)]="selection[$index][t]"
-                    name="slot-{{ $index }}-{{ t }}"
-                    (ngModelChange)="toggleSlot($index, t)"
-                  >
-                  </mat-checkbox>
-                </td>
-              </ng-container>
-              }
-
-              <!-- header e rows usando displayedColumns -->
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="verSelecionados(getSelected())"
-            >
-              Ver Selecionados
-            </button>
-
-            <p>Dias disponíveis</p>
-            <p>Horário Disponível</p>
-            <p>Local - Sala</p>
-          </div>
-
-          <!-- botões Editar / Salvar -->
-          <div class="action-buttons">
-            <button *ngIf="!isEditting" type="button" (click)="onEdit()">
-              Editar
-            </button>
-            <button *ngIf="isEditting" type="button" (click)="onSave()">
-              Salvar
-            </button>
-          </div>
-        </mat-expansion-panel>
-      </mat-accordion>
+  <!-- Informações do Tutor -->
+  <section class="tutor-info">
+    <div class="info-block">
+      <p><strong>Nome:</strong> {{ tutor.nome }}</p>
+      <p><strong>Email:</strong> {{ tutor.email }}</p>
+    </div>
+    <div class="action-buttons">
+      <button *ngIf="!isEditting" mat-button type="button" (click)="onEdit()">Editar</button>
+      <button *ngIf="isEditting" mat-raised-button color="primary" type="button" (click)="onSave()">Salvar</button>
     </div>
   </section>
+
+  <!-- Matérias Monitoradas -->
+  <div class="materias-monitoradas">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Nome da Matéria</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="panel-content">
+          <p><strong>Dias:</strong> (dropdown de seleção)</p>
+          <p><strong>Horários:</strong> (seleção de horário)</p>
+          <p><strong>Local:</strong> Sala</p>
+
+          <div class="action-buttons">
+            <button *ngIf="!isEditting" mat-button type="button" (click)="onEdit()">Editar</button>
+            <button *ngIf="isEditting" mat-raised-button color="primary" type="button" (click)="onSave()">Salvar</button>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
 </div>
