@@ -1,21 +1,31 @@
-import { Component } from '@angular/core';
-import {FormsModule, FormGroup, FormArray, FormControl} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { type Tutor } from '../../models/tutor.model';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-tutor-profile',
-  imports: [MatExpansionModule, MatSlideToggleModule, FormsModule, CommonModule, MatTableModule, MatCheckboxModule],
+  standalone: true,
+  imports: [
+    MatExpansionModule,
+    MatSlideToggleModule,
+    CommonModule,
+    MatTableModule,
+    MatCheckboxModule,
+    FormsModule,
+  ],
   templateUrl: './tutor-profile.component.html',
-  styleUrl: './tutor-profile.component.scss'
+  styleUrl: './tutor-profile.component.scss',
 })
-export class TutorProfileComponent {
-
+export class TutorProfileComponent implements OnInit {
+  /** Componente para exibir o perfil do tutor */
   tutor!: Tutor;
 
   dias!: string;
@@ -25,25 +35,44 @@ export class TutorProfileComponent {
   isEditting = false;
 
   /** Dias da semana exibidos como colunas */
-  days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+  /** Colunas da tabela, incluindo horários e dias */
+  displayedColumns: string[] = ['time', ...this.days];
 
   /** Horários a cada 15 minutos (por ex.) */
-  times: string[] = Array
-    .from({ length: (23 - 6) * 4 + 1 })
+  times: string[] = Array.from({ length: 22 - 8 + 1 }) // 22-8 = 14, +1 = 15 slots (08, 09, …, 22)
     .map((_, i) => {
-      const hour = 6 + Math.floor(i / 4);
-      const mins = (i % 4) * 15;
-      return `${hour.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}`;
+      const hour = 8 + i;
+      return `${hour.toString().padStart(2, '0')}:00`;
     });
 
   /** Armazena as marcações: selection[diaIndex][hora] = true/false */
   selection: Record<number, Record<string, boolean>> = {};
 
-  constructor() {
-    // inicializa todo o grid como false
+  constructor(
+    /** Serviço HTTP para chamadas de API @type {HttpClient} */
+    private http: HttpClient,
+    /** Serviço de autenticação @type {AuthService} */
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
     this.days.forEach((_, dayIdx) => {
       this.selection[dayIdx] = {};
-      this.times.forEach(t => this.selection[dayIdx][t] = false);
+      this.times.forEach((t) => (this.selection[dayIdx][t] = false));
+    });
+
+    this.authService.getUserId().then((userId) => {
+      this.http.post('http://localhost:3000/getTutor', { userId }).subscribe({
+        next: (response: any) => {
+          this.tutor = JSON.parse(response);
+          console.log('Perfil do tutor:', this.tutor);
+        },
+        error: (error) => {
+          console.error('Erro ao carregar o perfil do tutor:', error);
+        },
+      });
     });
   }
 
@@ -56,7 +85,7 @@ export class TutorProfileComponent {
   getSelected(): { day: string; time: string }[] {
     const result: { day: string; time: string }[] = [];
     this.days.forEach((day, d) => {
-      this.times.forEach(t => {
+      this.times.forEach((t) => {
         if (this.selection[d][t]) {
           result.push({ day, time: t });
         }
@@ -65,7 +94,7 @@ export class TutorProfileComponent {
     return result;
   }
 
-  verSelecionados(input: any): any {
+  verSelecionados(input: { day: string; time: string }[]): any {
     return input;
   }
 
@@ -73,11 +102,11 @@ export class TutorProfileComponent {
     this.isTutoring = !toggle;
   }
 
-  onEdit(){
+  onEdit() {
     this.isEditting = !this.isEditting;
   }
 
-  onSave(){
+  onSave() {
     this.isEditting = !this.isEditting;
   }
 }

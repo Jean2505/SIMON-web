@@ -7,6 +7,7 @@ import { StudentSubjectsComponent } from './subjects/subjects.component';
 import { StudentEnlistComponent } from './enlist/enlist.component';
 import { TutorSubjectsComponent } from './tutor-subjects/subjects.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { TutorProfileComponent } from '../shared/tutor-profile/tutor-profile.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'subjects', component: StudentSubjectsComponent },
       { path: 'enlist', component: StudentEnlistComponent },
       { path: 'tutor-subjects', component: TutorSubjectsComponent },
+      { path: 'tutor-profile', component: TutorProfileComponent },
       {
         path: 'subject/:id',
         loadChildren: () => import('../shared/shared.module').then(m => m.SharedModule),

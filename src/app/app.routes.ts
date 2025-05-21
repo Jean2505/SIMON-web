@@ -32,7 +32,7 @@ export const routes: Routes = [
     data: { expectedRoles: ['INSTITUICAO'] }
   },
 
-  { path: 'perfil-monitor', component: TutorProfileComponent },
+  // { path: 'perfil-monitor', component: TutorProfileComponent },
 
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },

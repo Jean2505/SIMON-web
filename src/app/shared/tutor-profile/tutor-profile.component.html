@@ -1,69 +1,91 @@
 <div class="container">
-    <header class="profile-banner"></header>
-    <img src="" alt="Foto do monitor">
-    <section>
-        <div>
-            <div>
-                <p>Nome do monitor</p>
-                <p>RA do monitor</p>
-                <p>E-mail do monitor</p>
-            </div>
-        </div>
-        <div class="materias-monitoradas">
-            <div>
-                <label class="switch">
-                    <input type="checkbox" [(ngModel)]="isTutoring" (ngModelChange)="onToggle($event)">
-                    <span class="slider round"></span>
-                </label>
-                @if (isTutoring) {
-                <p>Online</p>
-                } @else {
-                <p>Offline</p>
-                }
-            </div>
-            <mat-accordion>
-                <mat-expansion-panel>
-                    <mat-expansion-panel-header>
-                        <mat-panel-description>Nome da discplina monitorada</mat-panel-description>
-                    </mat-expansion-panel-header>
-                    <div class="panel-content">
-                        <table mat-table [dataSource]="times" class="schedule-table">
+  <header class="profile-banner"></header>
 
-                            <!-- Coluna de horário (primeira coluna fixa) -->
-                            <ng-container matColumnDef="time">
-                                <th mat-header-cell *matHeaderCellDef>Horário</th>
-                                <td mat-cell *matCellDef="let t">{{ t }}</td>
-                            </ng-container>
+  <img src="" alt="Foto do monitor" />
 
-                            <!-- Colunas de cada dia -->
-                            <ng-container *ngFor="let day of days; let di = index" [matColumnDef]="day">
-                                <th mat-header-cell *matHeaderCellDef>{{ day }}</th>
-                                <td mat-cell *matCellDef="let t">
-                                    <mat-checkbox [checked]="selection[di][t]" (change)="toggleSlot(di, t)">
-                                    </mat-checkbox>
-                                </td>
-                            </ng-container>
+  <section>
+    <div>
+      <div>
+        <p>{{ tutor.nome }}</p>
+        <p>{{ tutor.ra }}</p>
+        <p>{{ tutor.email }}</p>
+      </div>
+    </div>
 
-                            <!-- Header row -->
-                            <tr mat-header-row *matHeaderRowDef="['dias', days]"></tr>
-                            <!-- Data rows -->
-                            <tr mat-row *matRowDef="let row; columns: ['time', days];"></tr>
-                        </table>
+    <div class="materias-monitoradas">
+      <!-- toggle Online / Offline -->
+      <div>
+        <label class="switch">
+          <input
+            type="checkbox"
+            [(ngModel)]="isTutoring"
+            name="tutoringToggle"
+            (ngModelChange)="onToggle($event)"
+          />
+          <span class="slider round"></span>
+        </label>
+        <p *ngIf="isTutoring; else offlineTpl">Online</p>
+        <ng-template #offlineTpl><p>Offline</p></ng-template>
+      </div>
 
-                        <button mat-raised-button color="primary" (click)="verSelecionados(getSelected())">
-                            Ver Selecionados
-                        </button>
-                        <p>Dias disponíveis</p>
-                        <p>Horário Disponível</p>
-                        <p>Local - Sala</p>
-                    </div>
-                    @if (!isEditting) {
-                    <button type="button" [(ngModel)]="isEditting" (click)="onEdit()">Editar</button>
-                    } @else {
-                    <button type="submit" [(ngModel)]="isEditting" (click)="onSave()">Salvar</button>
-                    }
-                </mat-expansion-panel>
-            </mat-accordion>
-        </div>
-    </section>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-description> n </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="panel-content">
+            <table mat-table [dataSource]="times" class="schedule-table">
+              <!-- Coluna fixa de horário -->
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef>Horário</th>
+                <td mat-cell *matCellDef="let t">{{ t }}</td>
+              </ng-container>
+
+              <!-- Colunas dinâmicas de cada dia -->
+              @for (day of days; track $index) {
+              <ng-container [matColumnDef]="day">
+                <th mat-header-cell *matHeaderCellDef>{{ day }}</th>
+                <td mat-cell *matCellDef="let t">
+                  <mat-checkbox
+                    [(ngModel)]="selection[$index][t]"
+                    name="slot-{{ $index }}-{{ t }}"
+                    (ngModelChange)="toggleSlot($index, t)"
+                  >
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+              }
+
+              <!-- header e rows usando displayedColumns -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="verSelecionados(getSelected())"
+            >
+              Ver Selecionados
+            </button>
+
+            <p>Dias disponíveis</p>
+            <p>Horário Disponível</p>
+            <p>Local - Sala</p>
+          </div>
+
+          <!-- botões Editar / Salvar -->
+          <div class="action-buttons">
+            <button *ngIf="!isEditting" type="button" (click)="onEdit()">
+              Editar
+            </button>
+            <button *ngIf="isEditting" type="button" (click)="onSave()">
+              Salvar
+            </button>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </section>
 </div>

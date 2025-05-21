@@ -13,6 +13,7 @@
  * @property {boolean} [status] - Status do aluno (ativo/inativo) (opcional)
  * @property {string} uid - ID único do aluno (Firebase)
  * @property {string} ra - Registro Acadêmico do aluno
+ * @property {number} term - semestre do aluno
  */
 export interface Student {
     /**
@@ -78,4 +79,9 @@ export interface Student {
      * @type {string}
      */
     ra: string;
+    /**
+     * semestre do aluno
+     * @type {number}
+     */
+    term: number;
 }

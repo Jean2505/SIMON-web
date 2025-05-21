@@ -46,6 +46,7 @@ export class StudentEnlistComponent implements OnInit {
     uid: 'carregando...',
     ra: 'carregando...',
     curso: 'carregando...',
+    term: 0,
     foto: ''
   };
 
@@ -107,7 +108,8 @@ export class StudentEnlistComponent implements OnInit {
             uid: result.uid,
             ra: result.ra,
             curso: result.curso,
-            foto: result.photo
+            foto: result.photo,
+            term: result.term,
           };
           this.loadSubjects();
         },
