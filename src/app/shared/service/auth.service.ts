@@ -17,7 +17,7 @@ export class AuthService {
     }
   }
 
-  async getUser(): Promise<User | null> {
+   getUser(): User | null {
     return this.auth.currentUser;
   }
 
@@ -25,7 +25,7 @@ export class AuthService {
    * Obtém o ID do usuário autenticado.
    * @returns ID do usuário ou null se não estiver autenticado.
    */
-  async getUserId(): Promise<string | null> {
+  getUserId(): string | null {
     const user = this.auth.currentUser;
     return user ? user.uid : null;
   }
@@ -33,15 +33,30 @@ export class AuthService {
    * Obtém o nome do usuário autenticado.
    * @returns Nome do usuário ou null se não estiver autenticado.
    */
-  async getUserName(): Promise<string | null> {
+  getUserName(): string | null {
     const user = this.auth.currentUser;
     return user ? user.displayName : null;
   }
 
-  async getUserRole(): Promise<string> {
+  /**
+   * Obtém o e-mail do usuário autenticado.
+   * @returns E-mail do usuário ou null se não estiver autenticado.
+   */
+  getUserEmail(): string | null {
+    const user = this.auth.currentUser;
+    return user ? user.email : null;
+  }
+
+  /**
+   * Obtém o papel do usuário autenticado.
+   * @returns O papel do usuário autenticado ou 'ESTUDANTE' se não estiver definido.
+   */
+  getUserRole(): string {
     const user = this.auth.currentUser!;
-    const idTokenResult = await user.getIdTokenResult(true);
-    return idTokenResult.claims['role'] as string || 'ESTUDANTE';
+    user.getIdTokenResult(true).then(idTokenResult => {
+      return idTokenResult.claims['role'] as string;
+    });
+    return 'ESTUDANTE';
   }
 
 }

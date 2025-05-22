@@ -64,11 +64,7 @@ export class NewPostComponent implements OnInit {
 
   ngOnInit(): void {
     // Obtém o nome do usuário autenticado
-    this.authService.getUserName().then(name => {
-      this.userName = name || '';
-    }).catch(err => {
-      console.error('Erro ao obter nome do usuário:', err);
-    });
+    this.userName = this.authService.getUserName() || '';
     console.log('Disciplina:', this.subjectId);
   }
 

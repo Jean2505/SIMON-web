@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { type Tutor } from '../../models/tutor.model';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../service/auth.service';
+import { Discipline } from '../../models/discipline.model';
 
 @Component({
   selector: 'app-tutor-profile',
@@ -26,13 +27,25 @@ import { AuthService } from '../service/auth.service';
 })
 export class TutorProfileComponent implements OnInit {
   /** Componente para exibir o perfil do tutor */
-  tutor!: Tutor;
+  subjects: Tutor[] = [];
+
+  /** Nome do usuário autenticado */
+  userName!: string;
+
+  /** E-mail do usuário autenticado */
+  userEmail!: string;
+
+  /** ID do usuário autenticado */
+  uid!: string;
 
   dias!: string;
   horario!: string;
 
+  isEditingProfile = false;
+  isEditingSubject = false;
+
+  /** Indica se o tutor está disponível para dar aulas */
   isTutoring = false;
-  isEditting = false;
 
   /** Dias da semana exibidos como colunas */
   days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -62,17 +75,19 @@ export class TutorProfileComponent implements OnInit {
       this.selection[dayIdx] = {};
       this.times.forEach((t) => (this.selection[dayIdx][t] = false));
     });
+    this.uid = this.authService.getUserId()!;
+    this.userName = this.authService.getUserName()!;
+    this.userEmail = this.authService.getUserEmail()!;
 
-    this.authService.getUserId().then((userId) => {
-      this.http.post('http://localhost:3000/getTutor', { userId }).subscribe({
-        next: (response: any) => {
-          this.tutor = JSON.parse(response);
-          console.log('Perfil do tutor:', this.tutor);
-        },
-        error: (error) => {
-          console.error('Erro ao carregar o perfil do tutor:', error);
-        },
-      });
+    const request = { uid: this.uid }
+    this.http.post('http://localhost:3000/getTutorCourses', request).subscribe({
+      next: (response: any) => {
+        this.subjects = JSON.parse(response);
+        console.log('Perfil do tutor:', this.subjects);
+      },
+      error: (error) => {
+        console.error('Erro ao carregar o perfil do tutor:', error);
+      },
     });
   }
 
@@ -102,11 +117,23 @@ export class TutorProfileComponent implements OnInit {
     this.isTutoring = !toggle;
   }
 
-  onEdit() {
-    this.isEditting = !this.isEditting;
+  /** Método chamado quando o usuário clica no botão de editar perfil */
+  onEditProfile() {
+    this.isEditingProfile = !this.isEditingProfile;
   }
 
-  onSave() {
-    this.isEditting = !this.isEditting;
+  /** Método chamado quando o usuário clica no botão de salvar perfil */
+  onSaveProfile() {
+    this.isEditingProfile = !this.isEditingProfile;
+  }
+
+  /** Método chamado quando o usuário clica no botão de editar matéria */
+  onEditSubject() {
+    this.isEditingSubject = !this.isEditingSubject;
+  }
+
+  /** Método chamado quando o usuário clica no botão de salvar matéria */
+  onSaveSubject() {
+    this.isEditingSubject = !this.isEditingSubject;
   }
 }
