@@ -5,22 +5,23 @@ import { Injectable } from '@angular/core';
 /** Serviço para gerenciar o armazenamento de dados do usuário na sessão. @class SessionStorageService */
 export class SessionStorageService {
   /** Objeto com os dados armazenados na sessão */
-  private data: Record<string, any> = {};
+  private key = 'sessionData';
 
   /**
    * Armazena dados na sessão.
    * @param data - Dados a serem armazenados na sessão
    */
-  setData(data: any): void {
-    Object.assign(this.data, data);
+  setData(data: Record<string, any>): void {
+    sessionStorage.setItem(this.key, JSON.stringify(data));
   }
 
   /**
    * Recupera dados armazenados na sessão.
    * @returns Objeto com os dados armazenados na sessão
    */
-  getData(): {} {
-    return this.data;
+  getData(): Record<string, any> {
+    const data = sessionStorage.getItem(this.key);
+    return data ? JSON.parse(data) : {};
   }
 
   /**
@@ -28,11 +29,13 @@ export class SessionStorageService {
    * @param key - Chave do valor a ser removido
    */
   clearData<K extends keyof Record<string, any>>(key: K): void {
-    this.data[key] = '';
+    const data = this.getData();
+    delete data[key];
+    this.setData(data);
   }
 
   /** Remove todos os dados armazenados na sessão. */
   clearAllData(): void {
-    this.data = {};
+    sessionStorage.removeItem(this.key);
   }
 }

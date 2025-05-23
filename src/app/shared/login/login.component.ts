@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, signInWithEmailAndPassword, user } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -11,11 +11,11 @@ import { SessionStorageService } from '../../core/services/session-storage.servi
  * Componente de login responsável por autenticar usuários e redirecioná-los conforme seu role.
  */
 @Component({
-  selector: 'app-login',                // Seletor HTML para usar este componente
-  standalone: true,                     // Componente standalone sem necessidade de NgModule externo
-  imports: [FormsModule],               // Módulo para formulários necessários no template
-  templateUrl: './login.component.html',// Caminho para o template HTML
-  styleUrls: ['./login.component.scss'],// Caminho para os estilos SCSS
+  selector: 'app-login', // Seletor HTML para usar este componente
+  standalone: true, // Componente standalone sem necessidade de NgModule externo
+  imports: [FormsModule], // Módulo para formulários necessários no template
+  templateUrl: './login.component.html', // Caminho para o template HTML
+  styleUrls: ['./login.component.scss'], // Caminho para os estilos SCSS
 })
 export class LoginComponent {
   /** Email digitado pelo usuário. */
@@ -40,7 +40,7 @@ export class LoginComponent {
     /** Referência ao serviço de autenticação @type {AuthService} */
     private authService: AuthService,
     /** Referência ao serviço de armazenamento de sessão @type {SessionStorageService} */
-    private sessionStorage: SessionStorageService,
+    private sessionStorage: SessionStorageService
   ) {}
 
   /**
@@ -61,6 +61,8 @@ export class LoginComponent {
       const role = idTokenResult.claims['role'] || '';
       console.log('Role do usuário:', role);
 
+      this.sessionStorage.setData({ role });
+
       if (role === 'ALUNO' || role === 'MONITOR') {
         // Obtém o ID do aluno
         const uid = this.auth.currentUser?.uid;
@@ -72,13 +74,13 @@ export class LoginComponent {
             const result = JSON.parse(response.payload);
             console.log('Dados do aluno:', result);
             await this.authService.updateDisplayName(result.nome);
-            // Armazena os dados do aluno no localStorage
-            localStorage.setItem('studentData', JSON.stringify(result));
+            // Armazena os dados do aluno no sessionStorage
+            this.sessionStorage.setData({ ...result });
             this.router.navigate(['/student']);
           },
           error: (error) => {
             console.error('Erro ao obter dados do aluno:', error);
-          }
+          },
         });
       } else if (role === 'PROFESSOR') {
         // Obtém o ID do professor
@@ -86,19 +88,21 @@ export class LoginComponent {
         console.log('ID do professor:', uid);
 
         // Faz uma requisição para obter os dados do professor
-        this.http.post('http://localhost:3000/getProfessor', { uid }).subscribe({
-          next: async (response: any) => {
-            const result = JSON.parse(response.payload);
-            console.log('Dados do professor:', result);
-            await this.authService.updateDisplayName(result.nome);
-            // Armazena os dados do professor no localStorage
-            localStorage.setItem('professorData', JSON.stringify(result));
-            this.router.navigate(['/professor']);
-          },
-          error: (error) => {
-            console.error('Erro ao obter dados do professor:', error);
-          }
-        });
+        this.http
+          .post('http://localhost:3000/getProfessor', { uid })
+          .subscribe({
+            next: async (response: any) => {
+              const result = JSON.parse(response.payload);
+              console.log('Dados do professor:', result);
+              await this.authService.updateDisplayName(result.nome);
+              // Armazena os dados do professor no sessionStorage
+              this.sessionStorage.setData({ ...result });
+              this.router.navigate(['/professor']);
+            },
+            error: (error) => {
+              console.error('Erro ao obter dados do professor:', error);
+            },
+          });
       } else if (role === 'INSTITUICAO') {
         await this.authService.updateDisplayName('PUC Campinas');
         this.router.navigate(['/institution']);
