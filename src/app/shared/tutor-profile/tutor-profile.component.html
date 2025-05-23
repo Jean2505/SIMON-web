@@ -14,32 +14,96 @@
       <p><strong>Email:</strong> {{ userEmail }}</p>
     </div>
     <div class="action-buttons">
-      <button *ngIf="!isEditingProfile" mat-button type="button" (click)="onEditProfile()">Editar</button>
-      <button *ngIf="isEditingProfile" mat-raised-button color="primary" type="button" (click)="onSaveProfile()">Salvar</button>
+      <button
+        *ngIf="!isEditingProfile"
+        mat-button
+        type="button"
+        (click)="onEditProfile()"
+      >
+        Editar
+      </button>
+      <button
+        *ngIf="isEditingProfile"
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="onSaveProfile()"
+      >
+        Salvar
+      </button>
     </div>
   </section>
 
   <!-- Matérias Monitoradas -->
   <div class="materias-monitoradas">
     @for (subject of subjects; track subject.disciplinaId) {
-      <mat-accordion>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title>{{ subject.disciplina }}</mat-panel-title>
-          </mat-expansion-panel-header>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ subject.disciplina }}</mat-panel-title>
+        </mat-expansion-panel-header>
 
         <div class="panel-content">
           <p><strong>Dias:</strong> (dropdown de seleção)</p>
           <p><strong>Horários:</strong> (seleção de horário)</p>
           <p><strong>Local:</strong> {{ subject.local }}</p>
+          <table mat-table [dataSource]="times" class="schedule-table">
+            <!-- Coluna fixa de horário -->
+            <ng-container matColumnDef="time">
+              <th mat-header-cell *matHeaderCellDef>Horário</th>
+              <td mat-cell *matCellDef="let t">{{ t }}</td>
+            </ng-container>
+
+            <!-- Colunas dinâmicas de cada dia -->
+            @for (day of days; track $index) {
+            <ng-container [matColumnDef]="day">
+              <th mat-header-cell *matHeaderCellDef>{{ day }}</th>
+              <td mat-cell *matCellDef="let t">
+                <mat-checkbox
+                  [(ngModel)]="selection[$index][t]"
+                  name="slot-{{ $index }}-{{ t }}"
+                  (ngModelChange)="toggleSlot($index, t)"
+                >
+                </mat-checkbox>
+              </td>
+            </ng-container>
+            }
+
+            <!-- header e rows usando displayedColumns -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="verSelecionados(getSelected())"
+          >
+            Ver Selecionados        
+          </button>
 
           <div class="action-buttons">
-            <button *ngIf="!isEditingSubject" mat-button type="button" (click)="onEditSubject()">Editar</button>
-            <button *ngIf="isEditingSubject" mat-raised-button color="primary" type="button" (click)="onSaveSubject()">Salvar</button>
+            <button
+              *ngIf="!isEditingSubject"
+              mat-button
+              type="button"
+              (click)="onEditSubject()"
+            >
+              Editar
+            </button>
+            <button
+              *ngIf="isEditingSubject"
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="onSaveSubject()"
+            >
+              Salvar
+            </button>
           </div>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-  }
+    }
   </div>
 </div>
