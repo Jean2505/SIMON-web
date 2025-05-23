@@ -3,14 +3,10 @@ import { Auth, IdTokenResult, User } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
-import { type Discipline } from '../../models/discipline.model';
+import { type MuralPost } from '../../models/mural-post.model';
 
 import { CardComponent } from "./card/card.component";
-import { DUMMY_POSTS } from './dummy-posts';
 import { NewPostComponent } from "./new-post/new-post.component";
-import { MuralPost } from '../../models/mural-post.model';
-import { getUser } from '../../core/services/user.service';
-import { Tutor } from '../../models/tutor.model';
 
 @Component({
   selector: 'app-board',

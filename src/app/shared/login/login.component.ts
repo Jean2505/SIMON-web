@@ -3,7 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../service/auth.service';
+
+import { AuthService } from '../../core/services/auth.service';
+import { SessionStorageService } from '../../core/services/session-storage.service';
 
 /**
  * Componente de login responsável por autenticar usuários e redirecioná-los conforme seu role.
@@ -29,11 +31,17 @@ export class LoginComponent {
    * @param router - Serviço Router para navegação programática após login.
    */
   constructor(
+    /** Referência ao serviço de autenticação do Firebase @type {Auth} */
     private auth: Auth,
+    /** Referência ao serviço de roteamento @type {Router} */
     private router: Router,
+    /** Referência ao serviço de requisições HTTP @type {HttpClient} */
     private http: HttpClient,
-    private authService: AuthService
-  ) { }
+    /** Referência ao serviço de autenticação @type {AuthService} */
+    private authService: AuthService,
+    /** Referência ao serviço de armazenamento de sessão @type {SessionStorageService} */
+    private sessionStorage: SessionStorageService,
+  ) {}
 
   /**
    * Método acionado ao submeter o formulário de login.
@@ -96,7 +104,6 @@ export class LoginComponent {
         this.router.navigate(['/institution']);
       } else {
         this.router.navigate(['/login']);
-
       }
     } catch (error) {
       console.error('Erro no login:', error);

@@ -8,7 +8,7 @@ import {
   getDownloadURL,
   deleteObject
 } from '@angular/fire/storage';
-import { AuthService } from '../../service/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-new-post',

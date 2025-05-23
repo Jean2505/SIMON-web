@@ -4,10 +4,10 @@ import {
   CanActivate,
   ActivatedRouteSnapshot,
   Router,
-  UrlTree
+  UrlTree,
 } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
-import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Firestore } from '@angular/fire/firestore';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -16,14 +16,12 @@ export class RoleGuard implements CanActivate {
   constructor(
     private router: Router,
     private auth: Auth,
-    private firestore: Firestore,
-    private http: HttpClient
-  ) { }
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
-    return new Observable<boolean | UrlTree>(observer => {
+    return new Observable<boolean | UrlTree>((observer) => {
       // Monitora estado de autenticação
-      const unsubscribe = this.auth.onAuthStateChanged(async user => {
+      const unsubscribe = this.auth.onAuthStateChanged(async (user) => {
         if (!user) {
           // 1) não autenticado
           observer.next(this.router.parseUrl('/login'));

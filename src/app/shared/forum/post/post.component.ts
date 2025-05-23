@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { type PostComment, type ForumPost } from '../../../models/forum-post.model';
 import { CommentsComponent } from "../comments/comments.component";
-import { AuthService } from '../../service/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-forum-post',

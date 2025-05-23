@@ -8,7 +8,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { type Tutor } from '../../models/tutor.model';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../service/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-tutor-profile',

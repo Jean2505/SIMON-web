@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 import { type Tutor } from '../../../models/tutor.model';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../../service/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 /**
