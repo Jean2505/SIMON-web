@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SubjectComponent } from './subject/subject.component';
-import { SubjectBoardComponent } from './board/board.component';
-import { SubjectTutorsComponent } from './tutors/tutors.component';
-import { SubjectForumComponent } from './forum/forum.component';
-import { ForumPostComponent } from './forum/post/post.component';
+
+import { SubjectComponent } from '../../shared/subject/subject.component';
+import { SubjectBoardComponent } from '../../shared/board/board.component';
+import { SubjectTutorsComponent } from '../../shared/tutors/tutors.component';
+import { SubjectForumComponent } from '../../shared/forum/forum.component';
+import { ForumPostComponent } from '../../shared/forum/post/post.component';
 
 const routes: Routes = [
   {

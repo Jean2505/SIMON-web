@@ -3,15 +3,13 @@ import { Routes } from '@angular/router';
 import { RoleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
-import { ForumPostComponent } from './shared/forum/post/post.component';
-import { TutorProfileComponent } from './shared/tutor-profile/tutor-profile.component';
 
 export const routes: Routes = [
 
   // Rota para usuários Aluno
   {
     path: 'student',
-    loadChildren: () => import('./student/student.module').then(m => m.StudentModule),
+    loadChildren: () => import('./core/routing/student.module').then(m => m.StudentModule),
     canActivate: [RoleGuard],
     data: { expectedRoles: ['ALUNO', 'MONITOR'] }
   },
@@ -19,7 +17,7 @@ export const routes: Routes = [
   // Rota para usuários Professor
   {
     path: 'professor',
-    loadChildren: () => import('./professor/professor.module').then(m => m.ProfessorModule),
+    loadChildren: () => import('./core/routing/professor.module').then(m => m.ProfessorModule),
     canActivate: [RoleGuard],
     data: { expectedRoles: ['PROFESSOR'] }
   },
@@ -27,7 +25,7 @@ export const routes: Routes = [
   // Rota para usuários Instituição
   {
     path: 'institution',
-    loadChildren: () => import('./institution/institution.module').then(m => m.InstitutionModule),
+    loadChildren: () => import('./core/routing/institution.module').then(m => m.InstitutionModule),
     canActivate: [RoleGuard],
     data: { expectedRoles: ['INSTITUICAO'] }
   },

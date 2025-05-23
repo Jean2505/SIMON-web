@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 /* Importação de telas do aluno */
-import { StudentHomeComponent } from './home/home.component';
-import { StudentSubjectsComponent } from './subjects/subjects.component';
-import { StudentEnlistComponent } from './enlist/enlist.component';
-import { TutorSubjectsComponent } from './tutor-subjects/subjects.component';
-import { HeaderComponent } from '../shared/header/header.component';
-import { TutorProfileComponent } from '../shared/tutor-profile/tutor-profile.component';
+import { StudentHomeComponent } from '../../student/home/home.component';
+import { StudentSubjectsComponent } from '../../student/subjects/subjects.component';
+import { StudentEnlistComponent } from '../../student/enlist/enlist.component';
+import { TutorSubjectsComponent } from '../../student/tutor-subjects/subjects.component';
+import { HeaderComponent } from '../../shared/header/header.component';
+import { TutorProfileComponent } from '../../shared/tutor-profile/tutor-profile.component';
 
 const routes: Routes = [
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
       { path: 'tutor/:id', component: TutorProfileComponent },
       {
         path: 'subject/:id',
-        loadChildren: () => import('../shared/shared.module').then(m => m.SharedModule),
+        loadChildren: () => import('./shared.module').then(m => m.SharedModule),
       },
     ]
   }
