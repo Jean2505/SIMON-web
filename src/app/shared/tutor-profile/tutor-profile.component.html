@@ -36,7 +36,7 @@
 
   <!-- Matérias Monitoradas -->
   <div class="materias-monitoradas">
-    @for (subject of subjects; track subject.disciplinaId) {
+    @if (isTutor) { @for (subject of subjects; track subject.disciplinaId) {
     <mat-accordion>
       <mat-expansion-panel>
         <mat-expansion-panel-header>
@@ -104,6 +104,6 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    }
+    } }
   </div>
 </div>

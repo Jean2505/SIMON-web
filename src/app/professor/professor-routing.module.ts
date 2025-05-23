@@ -6,6 +6,7 @@ import { ProfessorHomeComponent } from './home/home.component';
 import { ProfessorTutorsComponent } from './tutors/tutors.component';
 import { ListSubjectsComponent } from '../shared/list-subjects/list-subjects.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { TutorProfileComponent } from '../shared/tutor-profile/tutor-profile.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,7 @@ const routes: Routes = [
       { path: 'home', component: ProfessorHomeComponent },
       { path: 'subjects', component: ListSubjectsComponent },
       { path: 'tutors', component: ProfessorTutorsComponent },
+            { path: 'tutor/:id', component: TutorProfileComponent },
       {
         path: 'subject/:id',
         loadChildren: () => import('../shared/shared.module').then(m => m.SharedModule),

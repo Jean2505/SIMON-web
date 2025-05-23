@@ -9,7 +9,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { type Tutor } from '../../models/tutor.model';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../service/auth.service';
-import { Discipline } from '../../models/discipline.model';
 
 @Component({
   selector: 'app-tutor-profile',
@@ -26,7 +25,9 @@ import { Discipline } from '../../models/discipline.model';
   styleUrl: './tutor-profile.component.scss',
 })
 export class TutorProfileComponent implements OnInit {
-  /** Componente para exibir o perfil do tutor */
+  /** Indica se o usuário é um monitor */
+  isTutor: boolean = false;
+  /** Componente para exibir o perfil do monitor */
   subjects: Tutor[] = [];
 
   /** Nome do usuário autenticado */
@@ -44,7 +45,7 @@ export class TutorProfileComponent implements OnInit {
   isEditingProfile = false;
   isEditingSubject = false;
 
-  /** Indica se o tutor está disponível para dar aulas */
+  /** Indica se o monitor está disponível para dar aulas */
   isTutoring = false;
 
   /** Dias da semana exibidos como colunas */

@@ -20,6 +20,7 @@ const routes: Routes = [
       { path: 'enlist', component: StudentEnlistComponent },
       { path: 'tutor-subjects', component: TutorSubjectsComponent },
       { path: 'tutor-profile', component: TutorProfileComponent },
+      { path: 'tutor/:id', component: TutorProfileComponent },
       {
         path: 'subject/:id',
         loadChildren: () => import('../shared/shared.module').then(m => m.SharedModule),
