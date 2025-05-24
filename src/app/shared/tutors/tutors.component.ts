@@ -87,6 +87,7 @@ export class SubjectTutorsComponent implements OnInit {
               ra: monitor.ra,
               sala: monitor.sala,
               status: monitor.status,
+              uid: monitor.uid,
             }));
           },
           error: error => {
