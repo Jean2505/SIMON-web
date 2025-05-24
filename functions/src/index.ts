@@ -632,3 +632,67 @@ export const likePost = onRequest({region: "southamerica-east1"}, async (req, re
     };
     res.status(200).send(result);
 });
+
+export const updateMonitor = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.body.uid).get();
+
+    logger.debug(snapshot.docs);
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    snapshot.docs.forEach(async (doc) => {
+        if (doc.data().disciplinaId == req.body.disciplinaId) {
+            // await db.collection("Monitores").doc(doc.id).set(req.body.update, {merge: true});
+            await db.collection("Monitores").doc(doc.id).update(req.body.updates).then(() => {
+                logger.debug("Monitor updated successfully");
+                result = {
+                    status: "OK",
+                    message: "Monitor updated successfully",
+                    payload: "Monitor updated successfully"
+                };
+                res.status(200).send(result);
+                return;
+            });
+        }
+    });
+});
+
+export const updateUser = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("Alunos").where("uid", "==", req.body.uid).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    let docId = snapshot.docs[0].id;
+
+    await db.collection("Alunos").doc(docId).update(req.body.updates).then(() => {
+        result = {
+        status: "OK",
+        message: "User updated successfully",
+        payload: "User updated successfully"
+    };
+    res.status(200).send(result);
+    });
+});
