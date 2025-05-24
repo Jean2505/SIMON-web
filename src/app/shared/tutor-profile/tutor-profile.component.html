@@ -40,15 +40,15 @@
   <div class="materias-monitoradas">
     @if (isTutor) { @for (subject of subjects; track subject.disciplinaId) {
     <mat-accordion>
-      <mat-expansion-panel>
+      <mat-expansion-panel class="materia-panel">
         <mat-expansion-panel-header>
           <mat-panel-title>{{ subject.disciplina }}</mat-panel-title>
         </mat-expansion-panel-header>
 
         <div class="panel-content">
-          <p><strong>Dias:</strong> (dropdown de seleção)</p>
+          <!-- <p><strong>Dias:</strong> (dropdown de seleção)</p>
           <p><strong>Horários:</strong> (seleção de horário)</p>
-          <p><strong>Local:</strong> {{ subject.local }}</p>
+          <p><strong>Local:</strong> {{ subject.local }}</p> -->
           <table mat-table [dataSource]="times" class="schedule-table">
             <!-- Coluna fixa de horário -->
             <ng-container matColumnDef="time">
@@ -58,17 +58,20 @@
 
             <!-- Colunas dinâmicas de cada dia -->
             @for (day of days; track $index) {
-            <ng-container [matColumnDef]="day">
-              <th mat-header-cell *matHeaderCellDef>{{ day }}</th>
-              <td mat-cell *matCellDef="let t">
-                <mat-checkbox
-                  [(ngModel)]="selection[$index][t]"
-                  name="slot-{{ $index }}-{{ t }}"
-                  (ngModelChange)="toggleSlot($index, t)"
-                >
-                </mat-checkbox>
-              </td>
-            </ng-container>
+              <ng-container [matColumnDef]="day">
+                <th mat-header-cell *matHeaderCellDef
+                    [ngClass]="{'day-active': hasCheckedSlot($index)}">
+                  {{ day }}
+                </th>
+                <td mat-cell *matCellDef="let t" [ngClass]="{ 'checked-cell': selection[$index]?.[t] }">
+                  <mat-checkbox
+                    [(ngModel)]="selection[$index][t]"
+                    name="slot-{{ $index }}-{{ t }}"
+                    [disabled]="!isTutor"
+                  >
+                  </mat-checkbox>
+                </td>            
+              </ng-container>
             }
 
             <!-- header e rows usando displayedColumns -->
@@ -76,23 +79,23 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
 
-          <button
+          <!-- <button
             mat-raised-button
             color="primary"
             (click)="verSelecionados(getSelected())"
           >
             Ver Selecionados        
-          </button>
+          </button> -->
 
           <div class="action-buttons">
-            <button
+            <!-- <button
               *ngIf="!isEditingSubject"
               mat-button
               type="button"
               (click)="onEditSubject()"
             >
               Editar
-            </button>
+            </button> -->
             <button
               *ngIf="isEditingSubject"
               mat-raised-button

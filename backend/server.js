@@ -196,7 +196,7 @@ app.post("/getTutor", async (req, res) => {
     const tutorId = req.body;
     console.log("Requisição: ", tutorId);
     const response = await axios.post(
-      "https://getcoursemonitors-bz6uecg2pq-rj.a.run.app",
+      "https://findmonitor-bz6uecg2pq-rj.a.run.app",
       tutorId
     );
     console.log("Resposta: ", response.data);
