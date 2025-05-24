@@ -61,7 +61,7 @@ export class LoginComponent {
       const role = idTokenResult.claims['role'] || '';
       console.log('Role do usuário:', role);
 
-      this.sessionStorage.setData({ role });
+      this.sessionStorage.setData('role', { role });
 
       if (role === 'ALUNO' || role === 'MONITOR') {
         // Obtém o ID do aluno
@@ -75,7 +75,7 @@ export class LoginComponent {
             console.log('Dados do aluno:', result);
             await this.authService.updateDisplayName(result.nome);
             // Armazena os dados do aluno no sessionStorage
-            this.sessionStorage.setData({ ...result });
+            this.sessionStorage.setData('user', { ...result });
             this.router.navigate(['/student']);
           },
           error: (error) => {
@@ -96,7 +96,7 @@ export class LoginComponent {
               console.log('Dados do professor:', result);
               await this.authService.updateDisplayName(result.nome);
               // Armazena os dados do professor no sessionStorage
-              this.sessionStorage.setData({ ...result });
+              this.sessionStorage.setData('user', { ...result });
               this.router.navigate(['/professor']);
             },
             error: (error) => {

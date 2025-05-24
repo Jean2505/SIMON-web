@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterModule,
+  UrlSegment,
+} from '@angular/router';
 import { Auth, signOut } from '@angular/fire/auth';
 import { SessionStorageService } from '../../core/services/session-storage.service';
 
@@ -12,12 +17,15 @@ import { SessionStorageService } from '../../core/services/session-storage.servi
 })
 export class HeaderComponent {
   /**
-   * Variável para armazenar o nome do usuário logado.
+   * Variável para armazenar o usuário logado.
+   * @type {any}
+   */
+  user!: any;
+  /**
+   * Variável para armazenar o papel (role) do usuário logado.
    * @type {string}
    */
-  nome!: string;
-
-  user!: any;
+  role!: string;
 
   /**
    * Construtor do componente.
@@ -34,10 +42,10 @@ export class HeaderComponent {
     /** Referência ao serviço de armazenamento de sessão @type {SessionStorageService} */
     private sessionStorage: SessionStorageService
   ) {
-    this.user = this.sessionStorage.getData();
-    console.log(this.user);
-    // Inicializa o nome do usuário logado com o valor armazenado no sessionStorage
-    this.nome = this.user.nome;
+    this.user = this.sessionStorage.getAllData('user');
+    this.role = this.sessionStorage.getData('role', 'role');
+    console.log('Usuário:', this.user);
+    console.log('Role:', this.role);
   }
 
   /**
@@ -56,9 +64,9 @@ export class HeaderComponent {
    * Usa o Router.navigate e registra no console se a navegação foi bem-sucedida ou não.
    */
   goManageProfile(): void {
-    if (this.user.role === 'MONITOR') {
+    if (this.role === 'MONITOR') {
       this.router
-        .navigate(['manage-profile'], { relativeTo: this.route.pathFromRoot[1] })
+        .navigate([`/student/tutor-profile`])
         .then((success) => console.log('Navegação realizada:', success))
         .catch((error) => console.error('Erro na navegação:', error));
     }

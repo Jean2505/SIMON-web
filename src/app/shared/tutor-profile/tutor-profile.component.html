@@ -3,27 +3,27 @@
   <header class="profile-banner">
     <div class="banner-bg"></div>
     <div class="profile-img-wrapper">
-      <img src="/gosling.jpg" alt="Foto do monitor" class="profile-img" />
+      <img src="{{ userPhoto }}" alt="Foto do monitor" class="profile-img" />
     </div>
   </header>
 
   <!-- Informações do Tutor -->
   <section class="tutor-info">
     <div class="info-block">
+      @if (isEditingProfile) {
+      <p><strong>Nome:</strong> <input [(ngModel)]="userName" /></p>
+      <p><strong>Email:</strong> <input [(ngModel)]="userEmail" /></p>
+      } @else {
       <p><strong>Nome:</strong> {{ userName }}</p>
       <p><strong>Email:</strong> {{ userEmail }}</p>
+      }
     </div>
+    @if (isTutor) {
     <div class="action-buttons">
+      @if (!isEditingProfile) {
+      <button mat-button type="button" (click)="onEditProfile()">Editar</button>
+      } @else {
       <button
-        *ngIf="!isEditingProfile"
-        mat-button
-        type="button"
-        (click)="onEditProfile()"
-      >
-        Editar
-      </button>
-      <button
-        *ngIf="isEditingProfile"
         mat-raised-button
         color="primary"
         type="button"
@@ -31,7 +31,9 @@
       >
         Salvar
       </button>
+      }
     </div>
+    }
   </section>
 
   <!-- Matérias Monitoradas -->

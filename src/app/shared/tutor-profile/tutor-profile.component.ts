@@ -8,7 +8,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { type Tutor } from '../../models/tutor.model';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '../../core/services/auth.service';
+import { SessionStorageService } from '../../core/services/session-storage.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-tutor-profile',
@@ -32,9 +33,10 @@ export class TutorProfileComponent implements OnInit {
 
   /** Nome do usuário autenticado */
   userName!: string;
-
   /** E-mail do usuário autenticado */
   userEmail!: string;
+  /** Foto do usuário autenticado */
+  userPhoto: string = '/gosling.jpg';
 
   /** ID do usuário autenticado */
   uid!: string;
@@ -67,8 +69,10 @@ export class TutorProfileComponent implements OnInit {
   constructor(
     /** Serviço HTTP para chamadas de API @type {HttpClient} */
     private http: HttpClient,
-    /** Serviço de autenticação @type {AuthService} */
-    private authService: AuthService
+    /** Serviço de roteamento @type {ActivatedRoute} */
+    private route: ActivatedRoute,
+    /** Serviço de armazenamento de sessão @type {SessionStorageService} */
+    private sessionStorage: SessionStorageService
   ) {}
 
   ngOnInit(): void {
@@ -76,11 +80,17 @@ export class TutorProfileComponent implements OnInit {
       this.selection[dayIdx] = {};
       this.times.forEach((t) => (this.selection[dayIdx][t] = false));
     });
-    this.uid = this.authService.getUserId()!;
-    this.userName = this.authService.getUserName()!;
-    this.userEmail = this.authService.getUserEmail()!;
+    if (this.route.snapshot.url[0].path === 'tutor-profile') {
+      this.isTutor = true;
+      this.managingProfile();
+    } else {
+      console.log('ID do tutor:', this.route.snapshot.data['id']);
+      this.isTutor = false;
+      // this.viewingProfile(this.route.snapshot.data['id']);
+    }
+    console.log('É tutor:', this.isTutor);
 
-    const request = { uid: this.uid }
+    const request = { uid: this.uid };
     this.http.post('http://localhost:3000/getTutorCourses', request).subscribe({
       next: (response: any) => {
         this.subjects = JSON.parse(response);
@@ -90,6 +100,23 @@ export class TutorProfileComponent implements OnInit {
         console.error('Erro ao carregar o perfil do tutor:', error);
       },
     });
+  }
+
+  managingProfile(): void {
+    this.uid = this.sessionStorage.getData('user', 'uid');
+    this.userEmail = this.sessionStorage.getData('user', 'email');
+    this.userName = this.sessionStorage.getData('user', 'nome');
+    this.userPhoto = this.sessionStorage.getData('user', 'foto')
+      ? this.sessionStorage.getData('user', 'foto')
+      : '/gosling.jpg';
+    console.log(this.userPhoto);
+  }
+
+  viewingProfile(tutor: Tutor): void {
+    this.uid = tutor.uid;
+    this.userEmail = tutor.email;
+    this.userName = tutor.nome;
+    this.userPhoto = tutor.foto ? tutor.foto : '/gosling.jpg';
   }
 
   /** Chama quando o usuário checa/desmarca um slot */
@@ -126,6 +153,30 @@ export class TutorProfileComponent implements OnInit {
   /** Método chamado quando o usuário clica no botão de salvar perfil */
   onSaveProfile() {
     this.isEditingProfile = !this.isEditingProfile;
+    const request = {
+      uid: this.uid,
+      nome: this.userName,
+      email: this.userEmail,
+      foto: this.userPhoto,
+    };
+    // this.http.post('http://localhost:3000/updateTutor', request).subscribe({
+    //   next: (response: any) => {
+    //     console.log('Perfil atualizado com sucesso:', response);
+    //   },
+    //   error: (error) => {
+    //     console.error('Erro ao atualizar o perfil:', error);
+    //   },
+    // });
+    this.sessionStorage.setData('user', {
+      ...this.sessionStorage.getAllData('user'),
+      uid: this.uid,
+      nome: this.userName,
+      email: this.userEmail,
+      foto: this.userPhoto,
+    });
+
+    window.location.reload();
+
   }
 
   /** Método chamado quando o usuário clica no botão de editar matéria */
