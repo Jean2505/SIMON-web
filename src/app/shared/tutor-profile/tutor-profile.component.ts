@@ -265,4 +265,18 @@ export class TutorProfileComponent implements OnInit {
       }
     };
   }
+  hasCheckedSlot(dayIndex: number): boolean {
+    const daySelection = this.selection[dayIndex];
+    if (!daySelection) return false;
+  
+    // Percorrer todos os horários (keys do objeto daySelection)
+    for (const time in daySelection) {
+      if (daySelection[time]) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
 }
+
