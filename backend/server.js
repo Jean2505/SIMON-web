@@ -191,6 +191,24 @@ app.post("/getStudent", async (req, res) => {
   }
 });
 
+app.post("/updateUser", async (req, res) => {
+  try {
+    const user = req.body;
+    console.log("Requisição: ", user);
+    const response = await axios.post(
+      "https://updateuser-bz6uecg2pq-rj.a.run.app",
+      user
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload );
+  } catch (error) {
+    console.error("Erro ao chamar função updateUser:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao atualizar o aluno externamente" });
+  }
+});
+
 app.post("/getTutor", async (req, res) => {
   try {
     const tutorId = req.body;
@@ -206,6 +224,24 @@ app.post("/getTutor", async (req, res) => {
     res
       .status(500)
       .json({ error: "Erro ao obter dados do monitor externamente" });
+  }
+});
+
+app.post("/updateTutor", async (req, res) => {
+  try {
+    const tutor = req.body;
+    console.log("Requisição: ", tutor);
+    const response = await axios.post(
+      "https://updatemonitor-bz6uecg2pq-rj.a.run.app",
+      tutor
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função updateTutor:", error.message);
+    res
+      .status(500)
+      .json({ error: "Erro ao atualizar o monitor externamente" });
   }
 });
 

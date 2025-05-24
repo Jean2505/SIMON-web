@@ -71,10 +71,10 @@ export class SubjectTutorsComponent implements OnInit {
       console.log('ID da disciplina:', this.disciplineId);
 
       // Solicita lista de monitores disponíveis
-      this.http.post('http://localhost:3000/getTutor', { courseId: this.disciplineId })
+      this.http.post('http://localhost:3000/getCourseTutors', { courseId: this.disciplineId })
         .subscribe({
           next: (response: any) => {
-            result = JSON.parse(response.payload);
+            result = JSON.parse(response);
             console.log('Resposta do servidor:', result);
             this.tutors = result.map((monitor: any) => ({
               aprovacao: monitor.aprovacao,
