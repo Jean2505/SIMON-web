@@ -1,3 +1,7 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+
 .container {
   padding-top: 10vh;
   max-width: 800px;
@@ -59,12 +63,6 @@
   flex: 1;
 }
 
-.action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .materias-monitoradas {
   margin-top: 2rem;
 }
@@ -75,4 +73,228 @@
 
 mat-expansion-panel {
   margin-bottom: 1rem;
+}
+
+.materias-monitoradas {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+mat-expansion-panel {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+mat-expansion-panel:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+mat-expansion-panel-header {
+  background-color: #f9f9f9;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 1rem;
+}
+
+.panel-content {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 12px 12px;
+  max-height: 300px; /* ou a altura que desejar */
+  overflow-y: auto;
+  /* opcional: para dar largura fixa e deixar a tabela ajustar */
+  width: 100%; 
+  /* para manter header visível quando rolar a tabela, precisaria ajustar header fixo, mas já é um começo */
+}
+
+.panel-content p {
+  margin: 0.5rem 0;
+}
+
+.schedule-table {
+  width: 100%;
+  margin-top: 1rem;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+}
+
+.schedule-table th,
+.schedule-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.schedule-table th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
+
+.schedule-table mat-checkbox {
+  margin: auto;
+}
+
+button {
+  margin-top: 1rem;
+}
+
+button[mat-raised-button] {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+}
+
+
+/* Fundo quando checkbox estiver marcada */
+.checked-cell {
+  background-color: #e3f2fd; /* azul claro suave */
+  transition: background-color 0.3s ease;
+}
+
+/* Estilo quando checkbox está desativada */
+mat-checkbox[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.day-active {
+  background-color: #bbdefb; /* azul claro */
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.tutor-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+}
+
+.info-block {
+  flex: 1;
+  min-width: 260px;
+}
+
+.info-block p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.info-block strong {
+  display: inline-block;
+  width: 80px;
+  color: #333;
+}
+
+.info-block input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  width: calc(100% - 90px);
+  max-width: 300px;
+}
+
+
+button {
+  background-color: #0ea5e9;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0284c7;
+  }
+
+  &:active {
+    background-color: #016ba0;
+  }
+}
+
+.tutor-info {
+  position: relative;
+  background-color: #ffffff;
+  padding: 2rem 2rem 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-block p {
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-block strong {
+  width: 70px;
+  color: #333;
+}
+
+.info-block input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  flex: 1;
+  transition: border-color 0.3s ease;
+}
+
+.info-block input:focus {
+  border-color: #00b0ff; /* azul do botão */
+  outline: none;
+}
+
+.action-buttons {
+  position: absolute;
+  top: 0rem;
+  right: 1rem;
+}
+
+.checked-cell {
+  background-color: #e3f2fd; // azul claro
+  transition: background-color 0.3s ease;
+}
+
+::ng-deep .checked-cell {
+  background-color: #e3f2fd !important;
+  transition: background-color 0.3s ease;
+}
+
+
+.day-active {
+  background-color: #00b0ff !important;
+  font-weight: bold;
+}
+
+.materia-panel {
+  margin-bottom: 2rem !important;
 }
