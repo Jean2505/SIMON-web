@@ -110,7 +110,7 @@ export class SubjectBoardComponent implements OnInit {
     }
   }
 
-  trackPosts(posts: [] | null): number {
+  trackPosts(posts: any[] | null): number {
     if (posts) return posts.length;
     return 0;
   }

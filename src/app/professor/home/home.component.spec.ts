@@ -1,23 +1,61 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { ProfessorHomeComponent } from './home.component';
+import { Location } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Component } from '@angular/core';
 
-import { HomeComponent } from './home.component';
+@Component({ template: '' })
+class DummySubjectsComponent {}
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+@Component({ template: '' })
+class DummyTutorsComponent {}
+
+@Component({ template: '' })
+class DummyEnlistComponent {}
+
+describe('ProfessorHomeComponent', () => {
+  let component: ProfessorHomeComponent;
+  let fixture: ComponentFixture<ProfessorHomeComponent>;
+  let router: Router;
+  let location: Location;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HomeComponent]
-    })
-    .compileComponents();
+      imports: [
+        RouterTestingModule.withRoutes([
+          { path: 'professor/subjects', component: DummySubjectsComponent },
+          { path: 'professor/tutors', component: DummyTutorsComponent },
+          { path: 'professor/enlist', component: DummyEnlistComponent }
+        ])
+      ],
+      declarations: [ProfessorHomeComponent, DummySubjectsComponent, DummyTutorsComponent, DummyEnlistComponent]
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(HomeComponent);
+    router = TestBed.inject(Router);
+    location = TestBed.inject(Location);
+    fixture = TestBed.createComponent(ProfessorHomeComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+
+    router.initialNavigation(); // Necessário para simular navegação
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('deve navegar para /professor/subjects ao chamar goSubjects()', fakeAsync(() => {
+    component.goSubjects();
+    tick();
+    expect(location.path()).toBe('/professor/subjects');
+  }));
+
+  it('deve navegar para /professor/tutors ao chamar goTutors()', fakeAsync(() => {
+    component.goTutors();
+    tick();
+    expect(location.path()).toBe('/professor/tutors');
+  }));
+
+  it('deve navegar para /professor/enlist ao chamar goEnlist()', fakeAsync(() => {
+    component.goEnlist();
+    tick();
+    expect(location.path()).toBe('/professor/enlist');
+  }));
 });
+
