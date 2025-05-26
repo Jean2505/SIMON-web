@@ -41,6 +41,26 @@
         </mat-expansion-panel-header>
 
         <div class="panel-content">
+          @if (isTutor) {
+          <div class="action-buttons discipline-actions">
+            <mat-slide-toggle
+              [checked]="isTutoring[subject.disciplinaId]"
+              (change)="onToggleTutoring(subject.disciplinaId)"
+            >
+            </mat-slide-toggle>
+            @if (!isEditingSubject) {
+            <button mat-button (click)="onEditSubject()">Editar</button>
+            } @else {
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onSaveSubject(subject.disciplinaId)"
+            >
+              Salvar
+            </button>
+            }
+          </div>
+          }
           <table mat-table [dataSource]="times" class="schedule-table">
             <!-- Colunas dos dias -->
             @for (day of days; track $index) {
@@ -48,15 +68,25 @@
               <th
                 mat-header-cell
                 *matHeaderCellDef
-                [ngClass]="{ 'day-active': hasCheckedSlot($index, subject.disciplinaId) }"
+                [ngClass]="{
+                  'day-active': hasCheckedSlot($index, subject.disciplinaId)
+                }"
               >
                 {{ day }}
               </th>
-              <td mat-cell *matCellDef="let time" [ngClass]="{ 'checked-cell': selection[subject.disciplinaId][$index][time] }">
+              <td
+                mat-cell
+                *matCellDef="let time"
+                [ngClass]="{
+                  'checked-cell': selection[subject.disciplinaId][$index][time]
+                }"
+              >
                 @if (isTutor) {
                 <mat-checkbox
                   [(ngModel)]="selection[subject.disciplinaId][$index][time]"
-                  [name]="'slot-' + subject.disciplinaId + '-' + $index + '-' + time"
+                  [name]="
+                    'slot-' + subject.disciplinaId + '-' + $index + '-' + time
+                  "
                   [disabled]="!isTutor"
                 >
                   {{ formatTime(time) }}
@@ -71,22 +101,6 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
-
-          @if (isTutor) {
-          <div class="action-buttons">
-            @if (!isEditingSubject) {
-            <button mat-button (click)="onEditSubject()">Editar</button>
-            } @else {
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="onSaveSubject(subject.disciplinaId)"
-            >
-              Salvar
-            </button>
-            }
-          </div>
-          }
         </div>
       </mat-expansion-panel>
     </mat-accordion>

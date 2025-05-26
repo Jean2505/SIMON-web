@@ -109,7 +109,7 @@ mat-expansion-panel-header {
   max-height: 300px; /* ou a altura que desejar */
   overflow-y: auto;
   /* opcional: para dar largura fixa e deixar a tabela ajustar */
-  width: 100%; 
+  width: 100%;
   /* para manter header visível quando rolar a tabela, precisaria ajustar header fixo, mas já é um começo */
 }
 
@@ -150,7 +150,6 @@ button[mat-raised-button] {
   font-weight: 500;
   padding: 0.5rem 1.25rem;
 }
-
 
 /* Fundo quando checkbox estiver marcada */
 .checked-cell {
@@ -209,7 +208,6 @@ mat-checkbox[disabled] {
   width: calc(100% - 90px);
   max-width: 300px;
 }
-
 
 button {
   background-color: #0ea5e9;
@@ -277,6 +275,10 @@ button {
   position: absolute;
   top: 0rem;
   right: 1rem;
+  &.discipline-actions {
+    right: 3rem;
+    gap: 0.5rem;
+  }
 }
 
 .checked-cell {
@@ -289,6 +291,55 @@ button {
   transition: background-color 0.3s ease;
 }
 
+/* Track (fundo do botão) */
+::ng-deep .mat-mdc-slide-toggle .mdc-switch__track {
+  background-color: #ccc;
+  border-radius: 8px; /* 🔥 Torna mais reto */
+  transition: background-color 0.3s ease;
+}
+
+/* Ativo */
+::ng-deep .mat-mdc-slide-toggle.mat-checked .mdc-switch__track {
+  background-color: #22c55e; /* verde */
+}
+
+/* Inativo */
+::ng-deep .mat-mdc-slide-toggle:not(.mat-checked) .mdc-switch__track {
+  background-color: #ef4444; /* vermelho */
+}
+
+/* Handle (bolinha) */
+::ng-deep .mat-mdc-slide-toggle .mdc-switch__handle {
+  background-color: white;
+  border-radius: 6px; /* 🔥 Deixa a bolinha mais retinha */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+/* Posição da bolinha */
+::ng-deep .mat-mdc-slide-toggle .mdc-switch--checked .mdc-switch__handle {
+  transform: translateX(0);
+}
+
+::ng-deep .mat-mdc-slide-toggle:not(.mat-checked) .mdc-switch__handle {
+  transform: translateX(0);
+}
+
+/* Remove borda de focus */
+::ng-deep .mat-mdc-slide-toggle .mdc-switch:focus,
+::ng-deep .mat-mdc-slide-toggle .mdc-switch:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Efeito hover (opcional) */
+::ng-deep .mat-mdc-slide-toggle:hover .mdc-switch__track {
+  filter: brightness(0.95);
+}
+
+::ng-deep .mdc-switch__handle {
+  top: 4px; /* Ajusta a posição vertical da bolinha */
+}
 
 .day-active {
   background-color: #00b0ff !important;

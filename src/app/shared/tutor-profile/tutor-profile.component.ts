@@ -51,8 +51,8 @@ export class TutorProfileComponent implements OnInit {
   /** Controle de edição de matéria */
   isEditingSubject = false;
 
-  /** Disponibilidade do tutor */
-  isTutoring = false;
+  /** Controle de tutoria por disciplina */
+  isTutoring: Record<string, boolean> = {};
 
   /** Dias da semana e horários */
   days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -89,6 +89,7 @@ export class TutorProfileComponent implements OnInit {
 
         this.subjects.forEach((subject) => {
           this.inicializarSelecao(subject.disciplinaId);
+          this.isTutoring[subject.disciplinaId] = subject.status;
           if (subject.horarioDisponivel) {
             this.preencherSelecao(
               subject.disciplinaId,
@@ -247,6 +248,54 @@ export class TutorProfileComponent implements OnInit {
   }
 
   /**
+   * Altera o estado de tutoria, e tira o estado de monitoria das outras disciplinas
+   * @param disciplinaId ID da disciplina
+   */
+  onToggleTutoring(disciplinaId: string) {
+    const newState = !this.isTutoring[disciplinaId];
+    // Desativa todas
+    Object.keys(this.isTutoring).forEach((key) => {
+      this.isTutoring[key] = false;
+    });
+
+    const tutorRequest = {
+      uid: this.uid,
+      disciplinaId: disciplinaId,
+      updates: {
+        status: newState,
+      },
+    };
+
+    const userRequest = {
+      uid: this.uid,
+      updates: {
+        status: newState ? disciplinaId : '',
+      },
+    }
+
+    this.http.post('http://localhost:3000/updateTutor', tutorRequest).subscribe({
+      next: (response) => {
+        console.log('Estado de tutoria atualizado!', response);
+      },
+      error: (error) => { 
+        console.error('Erro ao atualizar estado de tutoria:', error);
+      }
+    });
+
+    this.http.post('http://localhost:3000/updateUser', userRequest).subscribe({
+      next: (response) => {
+        console.log('Estado de monitoria atualizado!', response);
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar estado de monitoria:', error);
+      }
+    });
+
+    // Ativa a selecionada (ou desativa se já estava ativa)
+    this.isTutoring[disciplinaId] = newState;
+  }
+
+  /**
    * Salva a disponibilidade de uma disciplina
    * @param disciplinaId ID da disciplina
    */
@@ -256,7 +305,6 @@ export class TutorProfileComponent implements OnInit {
 
     const request = {
       uid: this.uid,
-      disciplinaId: disciplinaId,
       updates: {
         horarioDisponivel: horarioDisponivel,
       },
