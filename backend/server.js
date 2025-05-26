@@ -200,12 +200,10 @@ app.post("/updateUser", async (req, res) => {
       user
     );
     console.log("Resposta: ", response.data.payload);
-    res.json(response.data.payload );
+    res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função updateUser:", error.message);
-    res
-      .status(500)
-      .json({ error: "Erro ao atualizar o aluno externamente" });
+    res.status(500).json({ error: "Erro ao atualizar o aluno externamente" });
   }
 });
 
@@ -239,9 +237,7 @@ app.post("/updateTutor", async (req, res) => {
     res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função updateTutor:", error.message);
-    res
-      .status(500)
-      .json({ error: "Erro ao atualizar o monitor externamente" });
+    res.status(500).json({ error: "Erro ao atualizar o monitor externamente" });
   }
 });
 
@@ -620,7 +616,9 @@ app.post("/getComments", async (req, res) => {
     res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função getComments:", error.message);
-    res.status(500).json({ error: "Erro ao obter os comentários externamente" });
+    res
+      .status(500)
+      .json({ error: "Erro ao obter os comentários externamente" });
   }
 });
 
@@ -662,7 +660,9 @@ app.post("/deleteComment", async (req, res) => {
     res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função deletePost:", error.message);
-    res.status(500).json({ error: "Erro ao deletar o comentário externamente" });
+    res
+      .status(500)
+      .json({ error: "Erro ao deletar o comentário externamente" });
   }
 });
 

@@ -3,7 +3,7 @@
     <img class="monitor-photo" [src]="tutor.foto" alt="Foto do monitor">
   </span>
   <span>{{ tutor.nome }}</span>
-  <span>{{ tutor.horarioDisponivel }}</span>
+  <span>{{ nextAvailableTime() }}</span>
   <span>{{ tutor.local }}</span>
   <span>{{ tutor.sala }}</span>
   <span>{{ tutor.status ? "Disponível" : "Indisponível" }}</span>

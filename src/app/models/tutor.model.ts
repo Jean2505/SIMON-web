@@ -17,81 +17,100 @@
  * @property {string} uid - UID (ID único) do monitor.
  * @property {string} email - E-mail para contato do monitor.
  */
-export interface Tutor {
-    /**
-     * Status de aprovação do monitor.
-     * @type {number}
-     * @description 0: em análise, 1: aprovado, 2: reprovado
-     */
-    aprovacao: number;
-    /**
-     * Carga horária do monitor.
-     * @type {string}
-     */
-    cargaHoraria: string;
-    /**
-     * Disciplina monitorada.
-     * @type {string}
-     */
-    disciplina: string;
-    /**
-     * ID da disciplina do monitor.
-     * @type {string}
-     */
-    disciplinaId: string;
-    /**
-     * URL da foto do monitor.
-     * @type {string}
-     */
-    foto: string;
-    /**
-     * Horário disponível do monitor.
-     * @type {string}
-     */
-    horarioDisponivel: string;
-    /**
-     * Local onde o monitor está aplicando a monitoria.
-     * @type {string}
-     */
-    local: string;
-    /**
-     * Mensagem de justificativa do aluno.
-     * @type {string}
-     */
-    mensagem: string;
-    /**
-     * Nome do monitor.
-     * @type {string}
-     */
-    nome: string;
-    /**
-     * RA (Registro Acadêmico) do monitor.
-     * @type {string}
-     */
-    ra: string;
-    /**
-     * Remuneração do monitor.
-     * @type {boolean}
-     */
-    remuneracao: boolean;
-    /**
-     * Sala onde o monitor está aplicando a monitoria.
-     * @type {string}
-     */
-    sala: string;
-    /**
-     * Status do monitor.
-     * @type {boolean}
-     */
-    status: boolean;
-    /**
-     * UID (ID único) do monitor.
-     * @type {string}
-     */
-    uid: string;
-    /**
-     * E-mail para contato do monitor.
-     * @type {string}
-     */
-    email: string;
+export class Tutor {
+  /**
+   * Status de aprovação do monitor.
+   * @type {number}
+   * @description 0: em análise, 1: aprovado, 2: reprovado
+   */
+  aprovacao!: number;
+  /**
+   * Carga horária do monitor.
+   * @type {string}
+   */
+  cargaHoraria!: string;
+  /**
+   * Disciplina monitorada.
+   * @type {string}
+   */
+  disciplina!: string;
+  /**
+   * ID da disciplina do monitor.
+   * @type {string}
+   */
+  disciplinaId!: string;
+  /**
+   * URL da foto do monitor.
+   * @type {string}
+   */
+  foto!: string;
+  /**
+   * Horário disponível do monitor.
+   * @type {AvailableTime[]}
+   */
+  horarioDisponivel!: AvailableTime[];
+  /**
+   * Local onde o monitor está aplicando a monitoria.
+   * @type {string}
+   */
+  local!: string;
+  /**
+   * Mensagem de justificativa do aluno.
+   * @type {string}
+   */
+  mensagem!: string;
+  /**
+   * Nome do monitor.
+   * @type {string}
+   */
+  nome!: string;
+  /**
+   * RA (Registro Acadêmico) do monitor.
+   * @type {string}
+   */
+  ra!: string;
+  /**
+   * Remuneração do monitor.
+   * @type {boolean}
+   */
+  remuneracao!: boolean;
+  /**
+   * Sala onde o monitor está aplicando a monitoria.
+   * @type {string}
+   */
+  sala!: string;
+  /**
+   * Status do monitor.
+   * @type {boolean}
+   */
+  status!: boolean;
+  /**
+   * UID (ID único) do monitor.
+   * @type {string}
+   */
+  uid!: string;
+  /**
+   * E-mail para contato do monitor.
+   * @type {string}
+   */
+  email!: string;
+}
+
+/**
+ * Modelo de dados para horários disponíveis do monitor.
+ * @interface AvailableTime
+ * @property {string} day - Dia da semana.
+ * @property {number[]} time - Horário disponível, representado como um array de números.
+ */
+export class AvailableTime {
+  /**
+   * Dia da semana.
+   * @type {string}
+   */
+  day!: string;
+  /**
+   * Horário disponível, representado como um array de números.
+   * @type {number[]}
+   */
+  time!: number[];
 }

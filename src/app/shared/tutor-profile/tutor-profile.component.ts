@@ -4,12 +4,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { type Tutor } from '../../models/tutor.model';
-import { type Student } from '../../models/student.model';
 
 import { HttpClient } from '@angular/common/http';
 import { SessionStorageService } from '../../core/services/session-storage.service';
@@ -38,14 +37,18 @@ export class TutorProfileComponent implements OnInit {
   /** Lista de matérias monitoradas */
   subjects: Tutor[] = [];
 
-  /** Dados do usuário logado */
+  /** Nome do usuário logado */
   userName!: string;
+  /** Email do usuário logado */
   userEmail!: string;
+  /** Foto do usuário logado */
   userPhoto: string = '/gosling.jpg';
+  /** ID do usuário logado */
   uid!: string;
 
-  /** Controle de edição */
+  /** Controle de edição do perfil */
   isEditingProfile = false;
+  /** Controle de edição de matéria */
   isEditingSubject = false;
 
   /** Disponibilidade do tutor */
@@ -53,27 +56,24 @@ export class TutorProfileComponent implements OnInit {
 
   /** Dias da semana e horários */
   days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-  displayedColumns: string[] = ['time', ...this.days];
+
+  /** Colunas da tabela */
+  displayedColumns: string[] = [...this.days];
 
   /** Horários de 08:00 até 22:00 */
-  times: string[] = Array.from({ length: 15 }).map((_, i) => {
-    const hour = 8 + i;
-    return `${hour.toString().padStart(2, '0')}:00`;
-  });
+  times: number[] = Array.from({ length: 15 }, (_, i) => 8 + i);
 
-  /** Registro de seleção */
-  selection: Record<number, Record<string, boolean>> = {};
+  /** Registro de seleção por disciplina */
+  selection: Record<string, Record<number, Record<number, boolean>>> = {};
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private sessionStorage: SessionStorageService,
+    private sessionStorage: SessionStorageService
   ) {}
 
   /** Inicializa o componente */
   async ngOnInit(): Promise<void> {
-    this.inicializarSelecao();
-
     if (this.route.snapshot.url[0]?.path === 'tutor-profile') {
       this.isTutor = true;
       this.managingProfile();
@@ -86,6 +86,16 @@ export class TutorProfileComponent implements OnInit {
     this.http.post('http://localhost:3000/getTutorCourses', request).subscribe({
       next: (response: any) => {
         this.subjects = JSON.parse(response);
+
+        this.subjects.forEach((subject) => {
+          this.inicializarSelecao(subject.disciplinaId);
+          if (subject.horarioDisponivel) {
+            this.preencherSelecao(
+              subject.disciplinaId,
+              subject.horarioDisponivel
+            );
+          }
+        });
       },
       error: (error) => {
         console.error('Erro ao carregar perfil:', error);
@@ -93,11 +103,37 @@ export class TutorProfileComponent implements OnInit {
     });
   }
 
-  /** Inicializa a matriz de seleção */
-  inicializarSelecao(): void {
+  /** Inicializa a matriz de seleção de uma disciplina */
+  inicializarSelecao(disciplinaId: string): void {
+    this.selection[disciplinaId] = {};
     this.days.forEach((_, dayIdx) => {
-      this.selection[dayIdx] = {};
-      this.times.forEach((t) => (this.selection[dayIdx][t] = false));
+      this.selection[disciplinaId][dayIdx] = {};
+      this.times.forEach((t) => {
+        this.selection[disciplinaId][dayIdx][t] = false;
+      });
+    });
+  }
+
+  /**
+   * Preenche a seleção da disciplina com os dados do backend
+   * @param disciplinaId ID da disciplina
+   * @param disponibilidade Array no formato [{ day: string, time: number[] }]
+   */
+  preencherSelecao(
+    disciplinaId: string,
+    disponibilidade: { day: string; time: number[] }[]
+  ): void {
+    if (!this.selection[disciplinaId]) {
+      this.inicializarSelecao(disciplinaId);
+    }
+
+    disponibilidade.forEach((item) => {
+      const dayIndex = this.days.indexOf(item.day);
+      if (dayIndex !== -1) {
+        item.time.forEach((hora) => {
+          this.selection[disciplinaId][dayIndex][hora] = true;
+        });
+      }
     });
   }
 
@@ -115,7 +151,6 @@ export class TutorProfileComponent implements OnInit {
     this.uid = this.route.snapshot.params['id'];
     const uid = this.uid;
     this.isTutor = false;
-    console.log('ID do aluno:', this.uid);
 
     this.http.post('http://localhost:3000/getStudent', { uid }).subscribe({
       next: (response: any) => {
@@ -131,39 +166,36 @@ export class TutorProfileComponent implements OnInit {
   }
 
   /** Alterna o estado de um slot */
-  toggleSlot(dayIdx: number, time: string) {
-    this.selection[dayIdx][time] = !this.selection[dayIdx][time];
+  toggleSlot(disciplinaId: string, dayIdx: number, time: number) {
+    this.selection[disciplinaId][dayIdx][time] =
+      !this.selection[disciplinaId][dayIdx][time];
   }
 
   /**
-   * Obtém os slots selecionados
-   * @returns Lista de dias e horários selecionados
+   * Retorna a disponibilidade agrupada por dia de uma disciplina.
+   * @param disciplinaId ID da disciplina
+   * @returns Array de objetos no formato { day: string, time: number[] }
    */
-  getSelected(): { day: string; time: string }[] {
-    const result: { day: string; time: string }[] = [];
+  getSelected(disciplinaId: string): { day: string; time: number[] }[] {
+    const grouped: { [key: string]: number[] } = {};
+
     this.days.forEach((day, d) => {
       this.times.forEach((t) => {
-        if (this.selection[d][t]) {
-          result.push({ day, time: t });
+        if (this.selection[disciplinaId][d][t]) {
+          if (!grouped[day]) {
+            grouped[day] = [];
+          }
+          grouped[day].push(t);
         }
       });
     });
+
+    const result = Object.keys(grouped).map((day) => ({
+      day,
+      time: grouped[day],
+    }));
+
     return result;
-  }
-
-  /**
-   * Verifica se há algum horário marcado em um dia
-   * @param dayIndex Índice do dia
-   * @returns boolean
-   */
-  hasCheckedSlot(dayIndex: number): boolean {
-    const daySelection = this.selection[dayIndex];
-    return Object.values(daySelection || {}).some((val) => val);
-  }
-
-  /** Alterna disponibilidade */
-  onToggle(toggle: boolean) {
-    this.isTutoring = !toggle;
   }
 
   /** Alterna modo de edição do perfil */
@@ -174,18 +206,23 @@ export class TutorProfileComponent implements OnInit {
   /** Salva dados do perfil */
   onSaveProfile() {
     this.isEditingProfile = false;
+    const oldUserName = this.userName;
+    const oldUserEmail = this.userEmail;
+    const oldUserPhoto = this.userPhoto;
     let update = {};
-    if (this.userName) update = { ...update, nome: this.userName };
-    if (this.userEmail) update = { ...update, email: this.userEmail };
-    if (this.userPhoto) update = { ...update, foto: this.userPhoto };
+    if (oldUserName != this.userName)
+      update = { ...update, nome: this.userName };
+    if (oldUserEmail != this.userEmail)
+      update = { ...update, email: this.userEmail };
+    if (oldUserPhoto != this.userPhoto)
+      update = { ...update, foto: this.userPhoto };
     const request = {
       uid: this.uid,
       update: update,
     };
 
-    this.http
-      .post('http://localhost:3000/updateUser', request)
-      .subscribe({
+    if (Object.keys(update).length > 0) {
+      this.http.post('http://localhost:3000/updateUser', request).subscribe({
         next: (response) => {
           console.log('Dados do perfil atualizados!', response);
         },
@@ -194,14 +231,14 @@ export class TutorProfileComponent implements OnInit {
         },
       });
 
-    // Atualizar sessionStorage local
-    this.sessionStorage.setData('user', {
-      ...this.sessionStorage.getAllData('user'),
-      uid: this.uid,
-      ...update,
-    });
+      // Atualizar sessionStorage local
+      this.sessionStorage.setData('user', {
+        ...this.sessionStorage.getAllData('user'),
+        ...update,
+      });
 
-    window.location.reload();
+      window.location.reload();
+    }
   }
 
   /** Alterna modo de edição de matéria */
@@ -211,29 +248,53 @@ export class TutorProfileComponent implements OnInit {
 
   /**
    * Salva a disponibilidade de uma disciplina
-   * @param disciplineId ID da disciplina
+   * @param disciplinaId ID da disciplina
    */
-  onSaveSubject(disciplineId: string) {
-    const disponibilidade = this.getSelected();
+  onSaveSubject(disciplinaId: string) {
+    this.isEditingSubject = false;
+    const horarioDisponivel = this.getSelected(disciplinaId);
 
     const request = {
       uid: this.uid,
-      disciplinaId: disciplineId,
+      disciplinaId: disciplinaId,
       updates: {
-        disponibilidade: disponibilidade,
+        horarioDisponivel: horarioDisponivel,
       },
     };
 
-    this.http
-      .post('http://localhost:3000/saveDisponibilidade', request)
-      .subscribe({
-        next: (response) => {
-          console.log('Disponibilidade salva!', response);
-          this.isEditingSubject = false;
-        },
-        error: (error) => {
-          console.error('Erro ao salvar disponibilidade:', error);
-        },
-      });
+    console.log('Requisição:', request);
+
+    this.http.post('http://localhost:3000/updateTutor', request).subscribe({
+      next: (response) => {
+        console.log('Disponibilidade salva!', response);
+        this.isEditingSubject = false;
+      },
+      error: (error) => {
+        console.error('Erro ao salvar disponibilidade:', error);
+      },
+    });
+  }
+
+  /**
+   * Formata o horário para exibição
+   * @param hour Hora a ser formatada
+   * @returns String formatada no formato HH:MM
+   */
+  formatTime(hour: number): string {
+    return `${hour.toString().padStart(2, '0')}:00`;
+  }
+
+  /**
+   * Verifica se há algum slot marcado para um dia específico e uma disciplina
+   * @param dayIndex Índice do dia (0: Seg, 1: Ter, ..., 5: Sáb)
+   * @param subject ID da disciplina
+   * @returns Verdadeiro se houver pelo menos um slot marcado, falso caso contrário
+   */
+  hasCheckedSlot(dayIndex: number, subject: string): boolean {
+    const daySelection = this.selection[subject]?.[dayIndex];
+
+    if (!daySelection) return false;
+
+    return Object.values(daySelection).some((isChecked) => isChecked);
   }
 }
