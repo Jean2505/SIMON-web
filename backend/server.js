@@ -157,6 +157,22 @@ app.get("/loadCourses", (req, res) => {
   );
 });
 
+app.post("/insertCourses", async (req, res) => {
+  try {
+    const courses = {courses: req.body};
+    console.log("Requisição: ", courses);
+    const response = await axios.post(
+      "https://createcourses-bz6uecg2pq-rj.a.run.app",
+      courses
+    );
+    console.log("Resposta: ", response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao chamar função createcourses:", error.message);
+    res.status(500).json({ error: "Erro ao inserir cursos externamente" });
+  }
+});
+
 app.post("/createStudent", async (req, res) => {
   try {
     const student = req.body;

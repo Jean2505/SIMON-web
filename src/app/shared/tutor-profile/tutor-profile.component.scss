@@ -337,8 +337,8 @@ button {
   filter: brightness(0.95);
 }
 
-::ng-deep .mdc-switch__handle {
-  top: 4px; /* Ajusta a posição vertical da bolinha */
+.mdc-switch__handle {
+  top: 4px!important; /* Ajusta a posição vertical da bolinha */
 }
 
 .day-active {
