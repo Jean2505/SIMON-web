@@ -40,7 +40,7 @@ describe('TutorProfileComponent', () => {
       const u = { uid: 'U1', nome: 'João', email: 'joao@x.com', foto: '/joao.png' };
       return (u as any)[field];
     });
-    sessionSpy.getAllData.and.returnValue({
+    sessionSpy.getAllDataFromKey.and.returnValue({
       uid: 'U1', nome: 'João', email: 'joao@x.com', foto: '/joao.png'
     });
   });

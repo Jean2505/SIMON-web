@@ -97,7 +97,7 @@ export class StudentEnlistComponent implements OnInit {
    * Obtém parâmetro de rota e carrega dados do aluno.
    */
   ngOnInit(): void {
-    this.user = this.sessionService.getAllData('user');
+    this.user = this.sessionService.getAllDataFromKey('user');
     this.student = {
       nome: this.user!.nome || 'carregando...',
       uid: this.user!.uid || 'carregando...',

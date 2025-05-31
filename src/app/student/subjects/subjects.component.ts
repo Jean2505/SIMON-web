@@ -67,29 +67,30 @@ export class StudentSubjectsComponent implements OnInit {
       .post('http://localhost:3000/getExternalCourses', payload)
       .subscribe({
         next: (response: any) => {
-          const user = this.sessionStorage.getAllData('user');
+          const user = this.sessionStorage.getAllDataFromKey('user');
           console.log('Usuário logado:', user);
           const result = JSON.parse(response);
           console.log('Matérias recebidas:', result);
           const subjects = result.map((discipline: any) => {
             if (
-              discipline.term === this.sessionStorage.getAllData('user').periodo
+              discipline.term === this.sessionStorage.getAllDataFromKey('user').periodo
             ) {
               return { ...discipline };
             }
           });
           console.log('Matérias filtradas:', subjects);
-          this.subjects = subjects.filter(
+          let finalSubjects = subjects.filter(
             (discipline: Discipline) => discipline !== undefined
           );
+          this.subjects = finalSubjects;
+          this.loadingDisciplinas = false;
+          this.loadingSync = false;
         },
         error: (error) => {
           console.error('Erro ao carregar matérias:', error);
         },
       });
     console.log('Carregamento de matérias concluído.');
-    this.loadingDisciplinas = false;
-    this.loadingSync = false;
   }
 
   /**

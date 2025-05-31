@@ -234,7 +234,7 @@ export class TutorProfileComponent implements OnInit {
 
       // Atualizar sessionStorage local
       this.sessionStorage.setData('user', {
-        ...this.sessionStorage.getAllData('user'),
+        ...this.sessionStorage.getAllDataFromKey('user'),
         ...update,
       });
 

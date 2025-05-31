@@ -8,6 +8,9 @@ import { HttpClient } from '@angular/common/http';
 import { type Discipline } from '../../models/discipline.model';
 
 import { SideBarComponent } from './side-bar/side-bar.component';
+import { SessionStorageService } from '../../core/services/session-storage.service';
+import { HeaderComponent } from '../header/header.component';
+import { HeaderService } from '../../core/services/header.service';
 
 @Component({
   selector: 'app-subject',
@@ -45,16 +48,17 @@ export class SubjectComponent implements OnInit {
    * @param route - serviço do Angular para obter dados da rota atual
    */
   constructor(
-    /** Referência ao serviço de autenticação do Firebase */
-    private auth: Auth,
-    /** Referência ao backend */
-    private http: HttpClient,
-    /** Referência ao serviço de rota atual do Angular */
-    private route: ActivatedRoute
+    /** Referência ao serviço de armazenamento em sessão @type {SessionStorageService} */
+    private sessionStorage: SessionStorageService,
+    /** Referência ao serviço de cabeçalho para manipulação do título @type {HeaderService} */
+    private headerService: HeaderService,
   ) { } // Injeta o ActivatedRoute para acessar parâmetros de rota
 
   /** Método chamado quando o componente é inicializado */
   ngOnInit(): void {
-    // Obtém monitores da matéria
+    // obtém matéria a partir da SessionStorage
+    this.subject = this.sessionStorage.getAllDataFromKey('selectedDiscipline') || this.subject;
+    console.log('Matéria selecionada:', this.subject);
+    //this.headerService.setHeaderTitle(this.subject.name); // Define o título do header com o nome da matéria
   }
 }

@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import { Auth, signOut } from '@angular/fire/auth';
 import { SessionStorageService } from '../../core/services/session-storage.service';
+import { HeaderService } from '../../core/services/header.service';
 
 @Component({
   selector: 'app-inst-header', // Nome do seletor HTML para usar este componente
@@ -15,7 +16,7 @@ import { SessionStorageService } from '../../core/services/session-storage.servi
   templateUrl: './header.component.html', // Caminho para o template HTML
   styleUrls: ['./header.component.scss'], // Caminho para o(s) stylesheet(s)
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   /**
    * Variável para armazenar o usuário logado.
    * @type {any}
@@ -28,9 +29,17 @@ export class HeaderComponent {
   role!: string;
 
   /**
+   * Título do componente, usado para exibir o nome da instituição ou outra informação relevante.
+   * @type {string}
+   */
+  title?: string;
+
+  /**
    * Construtor do componente.
-   * @param router - Injeção do serviço de roteamento do Angular para navegação programática.
-   * @param auth   - Injeção do serviço de autenticação do Firebase.
+   * @param router          - Injeção do serviço de roteamento do Angular para navegação programática.
+   * @param auth            - Injeção do serviço de autenticação do Firebase.
+   * @param route           - Referência ao serviço de rota ativa do Angular, usado para acessar informações da rota atual.
+   * @param sessionStorage  - Referência ao serviço de armazenamento de sessão, usado para gerenciar dados temporários do usuário.
    */
   constructor(
     /** Injeção do serviço de roteamento do Angular @type {Router} */
@@ -40,12 +49,21 @@ export class HeaderComponent {
     /** Referência ao serviço de rota ativa @type {ActivatedRoute} */
     private route: ActivatedRoute,
     /** Referência ao serviço de armazenamento de sessão @type {SessionStorageService} */
-    private sessionStorage: SessionStorageService
+    private sessionStorage: SessionStorageService,
+    /** Referência ao serviço de cabeçalho para manipulação do título @type {HeaderService} */
+    private headerService: HeaderService,
   ) {
-    this.user = this.sessionStorage.getAllData('user');
+    this.user = this.sessionStorage.getAllDataFromKey('user');
     this.role = this.sessionStorage.getData('role', 'role');
     console.log('Usuário:', this.user);
     console.log('Role:', this.role);
+  }
+
+  ngOnInit(): void {
+    // Inscreve-se nas mudanças do título do cabeçalho
+    this.headerService.headerTitle$.subscribe((title) => {
+      this.title = title;
+    });
   }
 
   /**
