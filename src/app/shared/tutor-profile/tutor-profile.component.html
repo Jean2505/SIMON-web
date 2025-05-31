@@ -61,6 +61,20 @@
             }
           </div>
           }
+          <div class="subject-place">
+            <input
+              type="text"
+              class="building"
+              [placeholder]="'H15'"
+              [disabled]="!isTutor || !isEditingSubject"
+            />
+            <input
+              type="text"
+              class="room"
+              [placeholder]="'Sala 101'"
+              [disabled]="!isTutor || !isEditingSubject"
+            />
+          </div>
           <table mat-table [dataSource]="times" class="schedule-table">
             <!-- Colunas dos dias -->
             @for (day of days; track $index) {
@@ -80,6 +94,7 @@
                 [ngClass]="{
                   'checked-cell': selection[subject.disciplinaId][$index][time]
                 }"
+                
               >
                 @if (isTutor) {
                 <mat-checkbox
@@ -87,7 +102,7 @@
                   [name]="
                     'slot-' + subject.disciplinaId + '-' + $index + '-' + time
                   "
-                  [disabled]="!isTutor"
+                  [disabled]="!isTutor || !isEditingSubject"
                 >
                   {{ formatTime(time) }}
                 </mat-checkbox>
