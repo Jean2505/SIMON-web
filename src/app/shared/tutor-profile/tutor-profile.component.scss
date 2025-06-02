@@ -349,3 +349,250 @@ button {
 .materia-panel {
   margin-bottom: 2rem !important;
 }
+
+.disciplina-container {
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      mat-slide-toggle {
+        transform: scale(1.2);
+      }
+
+      button {
+        padding: 8px 16px;
+        font-size: 0.875rem;
+        border-radius: 4px;
+        &.mat-raised-button {
+          background-color: #1976d2;
+          color: white;
+        }
+        &.mat-stroked-button {
+          border: 1px solid #1976d2;
+          color: #1976d2;
+          background-color: white;
+        }
+      }
+    }
+  }
+
+  .inputs {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+
+    input {
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 4px 8px;
+      width: 100px;
+
+      &:nth-child(2) {
+        width: 120px;
+      }
+    }
+  }
+
+  .dias-semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+
+    div {
+      text-align: center;
+      font-weight: 500;
+      padding: 8px 0;
+      border-radius: 4px;
+
+      &.ativo {
+        background-color: #03a9f4;
+        color: white;
+      }
+
+      &.inativo {
+        background-color: #e0e0e0;
+        color: #333;
+      }
+    }
+  }
+}
+/* Estilo para o mat-slide-toggle */
+mat-slide-toggle {
+  margin-right: 16px;
+
+  &.mat-checked .mat-slide-toggle-bar {
+    background-color: #1976d2; // Azul primário
+  }
+
+  &.mat-checked .mat-slide-toggle-thumb {
+    background-color: #1976d2;
+  }
+}
+
+/* Estilo para o botão "Editar" */
+button[mat-button] {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #1976d2;
+  color: #1976d2;
+  background-color: transparent;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(25, 118, 210, 0.1);
+  }
+}
+
+/* Estilo para o botão "Salvar" */
+button[mat-raised-button] {
+  padding: 6px 16px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #1976d2;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #1565c0;
+  }
+}
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  margin-top: 15px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+
+  input:checked + .slider {
+    background-color: #1976d2;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+}
+
+/* Se desejar, também podemos ajustar o tamanho do toggle-switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+
+  input:checked + .slider {
+    background-color: #1976d2;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(22px);
+  }
+}
+
+.action-buttons.discipline-actions {
+  display: flex;
+  align-items: center;       // Alinha verticalmente toggle e botão
+  gap: 12px;                 // Espaço entre toggle e botão
+}
+
+.subject-place {
+  display: flex;
+  gap: 1rem; /* Espaço entre os inputs */
+  flex-wrap: wrap; /* Permite que eles se ajustem em telas pequenas */
+  align-items: center;
+
+  input {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    width: 140px; /* Define largura para cada input */
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: #00b0ff; /* azul do botão */
+      outline: none;
+    }
+
+    &:disabled {
+      background-color: #f5f5f5; /* fundo claro para inputs desabilitados */
+      cursor: not-allowed;
+      color: black;
+    }
+  }
+}

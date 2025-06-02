@@ -43,11 +43,14 @@
         <div class="panel-content">
           @if (isTutor) {
           <div class="action-buttons discipline-actions">
-            <mat-slide-toggle
-              [checked]="isTutoring[subject.disciplinaId]"
-              (change)="onToggleTutoring(subject.disciplinaId)"
-            >
-            </mat-slide-toggle>
+            <label class="toggle-switch">
+              <input
+                type="checkbox"
+                [checked]="isTutoring[subject.disciplinaId]"
+                (change)="onToggleTutoring(subject.disciplinaId)"
+              />
+              <span class="slider"></span>
+            </label>
             @if (!isEditingSubject) {
             <button mat-button (click)="onEditSubject()">Editar</button>
             } @else {
