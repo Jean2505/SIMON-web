@@ -69,12 +69,14 @@
               type="text"
               class="building"
               [placeholder]="'H15'"
+              [textContent]="subject.local"
               [disabled]="!isTutor || !isEditingSubject"
             />
             <input
               type="text"
               class="room"
               [placeholder]="'Sala 101'"
+              [textContent]="subject.sala"
               [disabled]="!isTutor || !isEditingSubject"
             />
           </div>

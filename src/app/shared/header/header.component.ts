@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  input,
+  OnChanges,
+  OnInit,
+} from '@angular/core';
 import {
   ActivatedRoute,
   Router,
@@ -16,7 +23,7 @@ import { HeaderService } from '../../core/services/header.service';
   templateUrl: './header.component.html', // Caminho para o template HTML
   styleUrls: ['./header.component.scss'], // Caminho para o(s) stylesheet(s)
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   /**
    * Variável para armazenar o usuário logado.
    * @type {any}
@@ -30,9 +37,10 @@ export class HeaderComponent implements OnInit {
 
   /**
    * Título do componente, usado para exibir o nome da instituição ou outra informação relevante.
+   * Ele deve ser alterado dinamicamente conforme a navegação, enviado pelo serviço de cabeçalho.
    * @type {string}
    */
-  title?: string;
+  headerTitle!: string;
 
   /**
    * Construtor do componente.
@@ -50,8 +58,10 @@ export class HeaderComponent implements OnInit {
     private route: ActivatedRoute,
     /** Referência ao serviço de armazenamento de sessão @type {SessionStorageService} */
     private sessionStorage: SessionStorageService,
+    /** Referência ao ChangeDetectorRef para detectar mudanças no componente @type {ChangeDetectorRef} */
+    private cdr: ChangeDetectorRef,
     /** Referência ao serviço de cabeçalho para manipulação do título @type {HeaderService} */
-    private headerService: HeaderService,
+    private headerService: HeaderService
   ) {
     this.user = this.sessionStorage.getAllDataFromKey('user');
     this.role = this.sessionStorage.getData('role', 'role');
@@ -59,11 +69,10 @@ export class HeaderComponent implements OnInit {
     console.log('Role:', this.role);
   }
 
-  ngOnInit(): void {
-    // Inscreve-se nas mudanças do título do cabeçalho
-    this.headerService.headerTitle$.subscribe((title) => {
-      this.title = title;
-    });
+  setHeaderTitle(title: string): void {
+    this.cdr.detectChanges();
+    // Inscreve-se no serviço de cabeçalho para receber atualizações do título
+    this.headerTitle = title;
   }
 
   /**

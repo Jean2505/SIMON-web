@@ -84,6 +84,11 @@ export class SubjectBoardComponent implements OnInit {
     });
   }
 
+  /**
+   * Obtém os dados do usuário e verifica se é professor ou tutor.
+   * @param disciplineId - ID da disciplina.
+   * @param idTokenResult - Resultado do token de autenticação do usuário.
+   */
   getUserData(disciplineId: string, idTokenResult: IdTokenResult): void {
 
     // pega o campo "role" dos claims
@@ -110,6 +115,11 @@ export class SubjectBoardComponent implements OnInit {
     }
   }
 
+  /**
+   * Retorna o número de posts para rastreamento.
+   * @param posts - Lista de posts.
+   * @returns Número de posts.
+   */
   trackPosts(posts: any[] | null): number {
     if (posts) return posts.length;
     return 0;
