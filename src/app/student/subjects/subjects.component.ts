@@ -5,21 +5,23 @@ import { HttpClient } from '@angular/common/http';
 
 import { DisciplineComponent } from './discipline/discipline.component';
 import { Discipline } from '../../models/discipline.model';
+import { SessionStorageService } from '../../core/services/session-storage.service';
 
 /**
  * Componente para exibir as disciplinas de um curso para o estudante.
  * Busca disciplinas sincronizadas do Firebase via backend.
  */
 @Component({
-  selector: 'app-student-subjects',        // Seletor HTML para usar este componente
-  standalone: true,                        // Componente standalone sem NgModule externo
-  imports: [                               // Dependências necessárias no template
+  selector: 'app-student-subjects', // Seletor HTML para usar este componente
+  standalone: true, // Componente standalone sem NgModule externo
+  imports: [
+    // Dependências necessárias no template
     CommonModule,
     MatSelectModule,
-    DisciplineComponent
+    DisciplineComponent,
   ],
-  templateUrl: './subjects.component.html',// Caminho para o template HTML
-  styleUrls: ['./subjects.component.scss'] // Caminho para estilos SCSS
+  templateUrl: './subjects.component.html', // Caminho para o template HTML
+  styleUrls: ['./subjects.component.scss'], // Caminho para estilos SCSS
 })
 export class StudentSubjectsComponent implements OnInit {
   /** ID do curso selecionado. */
@@ -36,9 +38,15 @@ export class StudentSubjectsComponent implements OnInit {
 
   /**
    * Construtor do componente.
-   * @param http - HttpClient para requisições HTTP.
+   * @param {HttpClient} http - HttpClient para requisições HTTP.
+   * @param {SessionStorageService} sessionStorage - Serviço para gerenciar dados na sessão.
    */
-  constructor(private http: HttpClient) { }
+  constructor(
+    /** Cliente HTTP para comunicação com o backend @type {HttpClient} */
+    private http: HttpClient,
+    /** Serviço para gerenciar dados na sessão @type {SessionStorageService} */
+    private sessionStorage: SessionStorageService
+  ) {}
 
   /**
    * Hook de ciclo de vida Angular.
@@ -55,19 +63,34 @@ export class StudentSubjectsComponent implements OnInit {
   loadSubjects(course: string): void {
     const payload = { course };
     console.log('Payload:', payload);
-    this.http.post('http://localhost:3000/getExternalCourses', payload)
+    this.http
+      .post('http://localhost:3000/getExternalCourses', payload)
       .subscribe({
         next: (response: any) => {
-          console.log('Matérias recebidas:', JSON.stringify(response));
-          this.subjects = JSON.parse(response);
+          const user = this.sessionStorage.getAllDataFromKey('user');
+          console.log('Usuário logado:', user);
+          const result = JSON.parse(response);
+          console.log('Matérias recebidas:', result);
+          const subjects = result.map((discipline: any) => {
+            if (
+              discipline.term === this.sessionStorage.getAllDataFromKey('user').periodo
+            ) {
+              return { ...discipline };
+            }
+          });
+          console.log('Matérias filtradas:', subjects);
+          let finalSubjects = subjects.filter(
+            (discipline: Discipline) => discipline !== undefined
+          );
+          this.subjects = finalSubjects;
+          this.loadingDisciplinas = false;
+          this.loadingSync = false;
         },
         error: (error) => {
           console.error('Erro ao carregar matérias:', error);
-        }
+        },
       });
-      console.log('Carregamento de matérias concluído.');
-      this.loadingDisciplinas = false;
-      this.loadingSync = false;
+    console.log('Carregamento de matérias concluído.');
   }
 
   /**

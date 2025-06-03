@@ -10,26 +10,27 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { type Student } from '../../models/student.model';
 import { type Discipline } from '../../models/discipline.model';
+import { SessionStorageService } from '../../core/services/session-storage.service';
 
 /**
  * Componente de candidatura à monitoria do estudante.
  * Permite ao aluno enviar uma proposta de monitoria para uma disciplina.
  */
 @Component({
-  selector: 'app-student-enlist',               // Seletor HTML para este componente
-  standalone: true,                            // Componente standalone sem NgModule externo
-  imports: [                                   // Módulos necessários para template
+  selector: 'app-student-enlist', // Seletor HTML para este componente
+  standalone: true, // Componente standalone sem NgModule externo
+  imports: [
+    // Módulos necessários para template
     CommonModule,
     FormsModule,
     MatSlideToggleModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
   ],
-  templateUrl: './enlist.component.html',       // Caminho para template HTML
-  styleUrls: ['./enlist.component.scss']        // Caminho para estilos SCSS
+  templateUrl: './enlist.component.html', // Caminho para template HTML
+  styleUrls: ['./enlist.component.scss'], // Caminho para estilos SCSS
 })
 export class StudentEnlistComponent implements OnInit {
-
   /** Nome da disciplina exibido ao carregar. */
   discipline: string = 'carregando...';
 
@@ -47,8 +48,11 @@ export class StudentEnlistComponent implements OnInit {
     ra: 'carregando...',
     curso: 'carregando...',
     term: 0,
-    foto: ''
+    foto: '',
   };
+
+  /** Usuário autenticado (não utilizado inicialmente). */
+  user: any;
 
   /** Mensagem de justificativa do aluno. */
   message: string = '';
@@ -78,43 +82,31 @@ export class StudentEnlistComponent implements OnInit {
    * @param route - ActivatedRoute para parâmetros de rota.
    */
   constructor(
+    /** Cliente HTTP para comunicação com o backend @type {HttpClient} */
     private http: HttpClient,
+    /** Serviço de autenticação do Firebase @type {Auth} */
     private auth: Auth,
-    private router: Router
-  ) { }
+    /** Roteador Angular para navegação entre páginas @type {Router} */
+    private router: Router,
+    /** Serviço de aquisição de dados armazenados na sessão @type {SessionStorageService} */
+    private sessionService: SessionStorageService
+  ) {}
 
   /**
    * Hook de ciclo de vida Angular.
    * Obtém parâmetro de rota e carrega dados do aluno.
    */
   ngOnInit(): void {
-    this.getStudent();
-  }
-
-  /**
-   * Obtém dados do estudante autenticado no backend.
-   * Atualiza `student` e chama `loadSubjects`.
-   */
-  getStudent(): void {
-    const uid = this.auth.currentUser?.uid;
-    console.log('UID do aluno:', uid);
-    this.http.post('http://localhost:3000/getStudent', { uid })
-      .subscribe({
-        next: (response: any) => {
-          const result = JSON.parse(response.payload);
-          console.log('Aluno recebido:', result);
-          this.student = {
-            nome: result.nome,
-            uid: result.uid,
-            ra: result.ra,
-            curso: result.curso,
-            foto: result.photo,
-            term: result.term,
-          };
-          this.loadSubjects();
-        },
-        error: err => console.error('Erro em getStudent:', err)
-      });
+    this.user = this.sessionService.getAllDataFromKey('user');
+    this.student = {
+      nome: this.user!.nome || 'carregando...',
+      uid: this.user!.uid || 'carregando...',
+      ra: this.user!.ra || 'carregando...',
+      curso: this.user!.curso || 'carregando...',
+      term: this.user!.periodo || 0,
+      foto: this.user!.foto || '',
+    };
+    this.loadSubjects();
   }
 
   /**
@@ -122,13 +114,26 @@ export class StudentEnlistComponent implements OnInit {
    */
   loadSubjects(): void {
     console.log('curso:', this.student.curso);
-    this.http.post('http://localhost:3000/getExternalCourses', { course: this.student.curso })
+    this.http
+      .post('http://localhost:3000/getExternalCourses', {
+        course: this.student.curso,
+      })
       .subscribe({
         next: (resp: any) => {
-          this.subjectsOptions = JSON.parse(resp);
-          console.log('Matérias recebidas:', this.subjectsOptions);
+          const subjects = JSON.parse(resp);
+          console.log('Matérias recebidas:', subjects);
+          subjects.forEach((discipline: any) => {
+            const firstOrSecondSemester = this.student.term % 2;
+            if (
+              discipline.term < this.student.term &&
+              discipline.term % 2 === firstOrSecondSemester
+            ) {
+              this.subjectsOptions.push({ ...discipline });
+            }
+          });
+          console.log('Matérias filtradas:', this.subjectsOptions);
         },
-        error: err => console.error('Erro em getExternalCourses:', err)
+        error: (err) => console.error('Erro em getExternalCourses:', err),
       });
   }
 
@@ -155,26 +160,26 @@ export class StudentEnlistComponent implements OnInit {
       remuneracao: this.isSwitchOn,
       sala: '',
       status: false,
-      uid: this.student.uid
+      uid: this.student.uid,
     };
 
-    this.http.post('http://localhost:3000/enlist', payload)
-      .subscribe({
-        next: res => {
-          console.log('Candidatura enviada com sucesso:', res);
-          alert('Candidatura enviada com sucesso!');
+    this.http.post('http://localhost:3000/enlist', payload).subscribe({
+      next: (res) => {
+        console.log('Candidatura enviada com sucesso:', res);
+        alert('Candidatura enviada com sucesso!');
 
-          this.router.navigate(['/student/home'])
-            .then(success => {
-              console.log('Navegação realizada:', success);
-              console.clear();
-            })
-            .catch(error => console.error('Erro na navegação:', error));
-        },
-        error: err => {
-          console.error('Erro ao enviar candidatura:', err);
-          alert('Erro ao enviar candidatura. Tente novamente mais tarde.');
-        }
-      });
+        this.router
+          .navigate(['/student/home'])
+          .then((success) => {
+            console.log('Navegação realizada:', success);
+            console.clear();
+          })
+          .catch((error) => console.error('Erro na navegação:', error));
+      },
+      error: (err) => {
+        console.error('Erro ao enviar candidatura:', err);
+        alert('Erro ao enviar candidatura. Tente novamente mais tarde.');
+      },
+    });
   }
 }

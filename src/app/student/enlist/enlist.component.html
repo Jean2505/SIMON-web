@@ -10,7 +10,10 @@
           <label>Matéria:</label>
           <mat-select panelClass="custom-select-panel value" [(ngModel)]="selectedSubject" name="subjects" class="dropdown" required>
             <mat-option *ngFor="let subject of subjectsOptions" [value]="subject">
-              {{ subject.name }}
+              <div style="display: flex; flex-direction: column;">
+                <div>{{ subject.name }}</div>
+                <div>{{ subject.term }}</div>
+              </div>
             </mat-option>
           </mat-select>
         </div>

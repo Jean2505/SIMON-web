@@ -63,7 +63,8 @@
 }
 
 /* 5. Hover e ativo */
-.container ul li a:hover {
+.container ul li a:hover,
+.container ul li a.active {
   background-color: rgba(0, 0, 0, 0.3);
 }
 

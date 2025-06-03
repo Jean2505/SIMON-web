@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  input,
+  OnChanges,
+  OnInit,
+} from '@angular/core';
 import {
   ActivatedRoute,
   Router,
@@ -7,6 +14,7 @@ import {
 } from '@angular/router';
 import { Auth, signOut } from '@angular/fire/auth';
 import { SessionStorageService } from '../../core/services/session-storage.service';
+import { HeaderService } from '../../core/services/header.service';
 
 @Component({
   selector: 'app-inst-header', // Nome do seletor HTML para usar este componente
@@ -28,9 +36,18 @@ export class HeaderComponent {
   role!: string;
 
   /**
+   * Título do componente, usado para exibir o nome da instituição ou outra informação relevante.
+   * Ele deve ser alterado dinamicamente conforme a navegação, enviado pelo serviço de cabeçalho.
+   * @type {string}
+   */
+  headerTitle!: string;
+
+  /**
    * Construtor do componente.
-   * @param router - Injeção do serviço de roteamento do Angular para navegação programática.
-   * @param auth   - Injeção do serviço de autenticação do Firebase.
+   * @param router          - Injeção do serviço de roteamento do Angular para navegação programática.
+   * @param auth            - Injeção do serviço de autenticação do Firebase.
+   * @param route           - Referência ao serviço de rota ativa do Angular, usado para acessar informações da rota atual.
+   * @param sessionStorage  - Referência ao serviço de armazenamento de sessão, usado para gerenciar dados temporários do usuário.
    */
   constructor(
     /** Injeção do serviço de roteamento do Angular @type {Router} */
@@ -40,12 +57,22 @@ export class HeaderComponent {
     /** Referência ao serviço de rota ativa @type {ActivatedRoute} */
     private route: ActivatedRoute,
     /** Referência ao serviço de armazenamento de sessão @type {SessionStorageService} */
-    private sessionStorage: SessionStorageService
+    private sessionStorage: SessionStorageService,
+    /** Referência ao ChangeDetectorRef para detectar mudanças no componente @type {ChangeDetectorRef} */
+    private cdr: ChangeDetectorRef,
+    /** Referência ao serviço de cabeçalho para manipulação do título @type {HeaderService} */
+    private headerService: HeaderService
   ) {
-    this.user = this.sessionStorage.getAllData('user');
+    this.user = this.sessionStorage.getAllDataFromKey('user');
     this.role = this.sessionStorage.getData('role', 'role');
     console.log('Usuário:', this.user);
     console.log('Role:', this.role);
+  }
+
+  setHeaderTitle(title: string): void {
+    this.cdr.detectChanges();
+    // Inscreve-se no serviço de cabeçalho para receber atualizações do título
+    this.headerTitle = title;
   }
 
   /**

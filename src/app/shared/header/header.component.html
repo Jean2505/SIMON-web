@@ -3,8 +3,11 @@
     <div class="logo">
         <img src="/simonlogo.png" alt="logo do app" (click)="goHome()" />
     </div>
+    <div class="title">
+        <h1>{{ headerTitle }}</h1>
+    </div>
     <div class="logout">
-        <div class="name" (click)="goManageProfile()">{{ user.nome }}</div>
+        <div class="name" (click)="goManageProfile()">{{ user ? user.nome : 'PUC CAMPINAS' }}</div>
         <div class="text" (click)="logout()">
             Sair da conta
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">

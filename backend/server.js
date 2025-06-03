@@ -157,6 +157,22 @@ app.get("/loadCourses", (req, res) => {
   );
 });
 
+app.post("/insertCourses", async (req, res) => {
+  try {
+    const courses = {courses: req.body};
+    console.log("Requisição: ", courses);
+    const response = await axios.post(
+      "https://createcourses-bz6uecg2pq-rj.a.run.app",
+      courses
+    );
+    console.log("Resposta: ", response.data);
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao chamar função createcourses:", error.message);
+    res.status(500).json({ error: "Erro ao inserir cursos externamente" });
+  }
+});
+
 app.post("/createStudent", async (req, res) => {
   try {
     const student = req.body;
@@ -191,6 +207,22 @@ app.post("/getStudent", async (req, res) => {
   }
 });
 
+app.post("/updateUser", async (req, res) => {
+  try {
+    const user = req.body;
+    console.log("Requisição: ", user);
+    const response = await axios.post(
+      "https://updateuser-bz6uecg2pq-rj.a.run.app",
+      user
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função updateUser:", error.message);
+    res.status(500).json({ error: "Erro ao atualizar o aluno externamente" });
+  }
+});
+
 app.post("/getTutor", async (req, res) => {
   try {
     const tutorId = req.body;
@@ -206,6 +238,22 @@ app.post("/getTutor", async (req, res) => {
     res
       .status(500)
       .json({ error: "Erro ao obter dados do monitor externamente" });
+  }
+});
+
+app.post("/updateTutor", async (req, res) => {
+  try {
+    const tutor = req.body;
+    console.log("Requisição: ", tutor);
+    const response = await axios.post(
+      "https://updatemonitor-bz6uecg2pq-rj.a.run.app",
+      tutor
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função updateTutor:", error.message);
+    res.status(500).json({ error: "Erro ao atualizar o monitor externamente" });
   }
 });
 
@@ -584,7 +632,9 @@ app.post("/getComments", async (req, res) => {
     res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função getComments:", error.message);
-    res.status(500).json({ error: "Erro ao obter os comentários externamente" });
+    res
+      .status(500)
+      .json({ error: "Erro ao obter os comentários externamente" });
   }
 });
 
@@ -626,7 +676,9 @@ app.post("/deleteComment", async (req, res) => {
     res.json(response.data.payload);
   } catch (error) {
     console.error("Erro ao chamar função deletePost:", error.message);
-    res.status(500).json({ error: "Erro ao deletar o comentário externamente" });
+    res
+      .status(500)
+      .json({ error: "Erro ao deletar o comentário externamente" });
   }
 });
 

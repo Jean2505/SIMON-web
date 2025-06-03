@@ -12,18 +12,18 @@ import { Auth } from '@angular/fire/auth';
  * Busca disciplinas sincronizadas do Firebase via backend.
  */
 @Component({
-  selector: 'app-student-subjects',        // Seletor HTML para usar este componente
-  standalone: true,                        // Componente standalone sem NgModule externo
-  imports: [                               // Dependências necessárias no template
+  selector: 'app-student-subjects', // Seletor HTML para usar este componente
+  standalone: true, // Componente standalone sem NgModule externo
+  imports: [
+    // Dependências necessárias no template
     CommonModule,
     MatSelectModule,
-    DisciplineComponent
+    DisciplineComponent,
   ],
-  templateUrl: './subjects.component.html',// Caminho para o template HTML
-  styleUrls: ['./subjects.component.scss'] // Caminho para estilos SCSS
+  templateUrl: './subjects.component.html', // Caminho para o template HTML
+  styleUrls: ['./subjects.component.scss'], // Caminho para estilos SCSS
 })
 export class TutorSubjectsComponent implements OnInit {
-
   /**
    * Lista de disciplinas carregadas do Firebase (após sincronização).
    * @type {Discipline[]}
@@ -49,7 +49,7 @@ export class TutorSubjectsComponent implements OnInit {
    * @param http - HttpClient para requisições HTTP.
    * @param auth - Serviço de autenticação para obter o ID do usuário.
    */
-  constructor(private http: HttpClient, private auth: Auth) { }
+  constructor(private http: HttpClient, private auth: Auth) {}
 
   /**
    * Hook de ciclo de vida Angular.
@@ -66,39 +66,40 @@ export class TutorSubjectsComponent implements OnInit {
     const uid = this.auth.currentUser!.uid;
     const payload = { uid: uid };
     console.log('Payload:', payload);
-    this.http.post('http://localhost:3000/getTutorCourses', payload)
-      .subscribe({
-        next: (tutorCourses: any) => {
-          const result = JSON.parse(tutorCourses);
-          console.log('Matérias recebidas:', result);
-          result.forEach((course: any) => {
-            if (course.aprovacao == 1) {
-              this.list.push(course.disciplinaId);
-            }
-          })
-          console.log('Lista de cursos:', this.list);
-          if (this.list.length === 0) {
-            console.log('Nenhuma disciplina encontrada.');
-            this.loadingDisciplinas = false;
-            this.loadingSync = false;
-            return;
+    this.http.post('http://localhost:3000/getTutorCourses', payload).subscribe({
+      next: (tutorCourses: any) => {
+        const result = JSON.parse(tutorCourses);
+        console.log('Matérias recebidas:', result);
+        result.forEach((course: any) => {
+          if (course.aprovacao == 1) {
+            this.list.push(course.disciplinaId);
           }
-          this.http.post('http://localhost:3000/getCourseList', { courses: this.list })
-            .subscribe({
-              next: (CourseList: any) => {
-                this.subjects = JSON.parse(CourseList);
-                console.log('Disciplinas recebidas:', this.subjects);
-              },
-              error: (error) => {
-                console.error('Erro ao carregar disciplinas:', error);
-              }
-            });
-        },
-        error: (error) => {
-          console.error('Erro ao carregar matérias:', error);
+        });
+        console.log('Lista de cursos:', this.list);
+        if (this.list.length === 0) {
+          console.log('Nenhuma disciplina encontrada.');
+          this.loadingDisciplinas = false;
+          this.loadingSync = false;
+          return;
         }
-      });
-    console.log('Carregamento de matérias concluído.');
+        this.http
+          .post('http://localhost:3000/getCourseList', { courses: this.list })
+          .subscribe({
+            next: (CourseList: any) => {
+              this.subjects = JSON.parse(CourseList);
+              console.log('Disciplinas recebidas:', this.subjects);
+              this.loadingDisciplinas = false;
+              this.loadingSync = false;
+            },
+            error: (error) => {
+              console.error('Erro ao carregar disciplinas:', error);
+            },
+          });
+      },
+      error: (error) => {
+        console.error('Erro ao carregar matérias:', error);
+      },
+    });
     this.loadingDisciplinas = false;
     this.loadingSync = false;
   }
