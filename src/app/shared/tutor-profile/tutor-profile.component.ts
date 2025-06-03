@@ -7,12 +7,13 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
 
 import { type Tutor } from '../../models/tutor.model';
 
-import { HttpClient } from '@angular/common/http';
 import { SessionStorageService } from '../../core/services/session-storage.service';
-import { ActivatedRoute } from '@angular/router';
+import { TutorSubjectComponent } from './subject/subject.component';
 
 // --------------------------- COMPONENTE ---------------------------
 
@@ -26,24 +27,25 @@ import { ActivatedRoute } from '@angular/router';
     MatTableModule,
     MatCheckboxModule,
     FormsModule,
+    TutorSubjectComponent
   ],
   templateUrl: './tutor-profile.component.html',
   styleUrl: './tutor-profile.component.scss',
 })
 export class TutorProfileComponent implements OnInit {
-  /** Se é tutor ou não */
+  /** Se é monitor ou não */
   isTutor: boolean = false;
 
   /** Lista de matérias monitoradas */
   subjects: Tutor[] = [];
 
-  /** Nome do usuário logado */
+  /** Nome do monitor da matéria */
   userName!: string;
-  /** Email do usuário logado */
+  /** Email do monitor da matéria */
   userEmail!: string;
-  /** Foto do usuário logado */
+  /** Foto do monitor da matéria */
   userPhoto: string = '/gosling.jpg';
-  /** ID do usuário logado */
+  /** ID do monitor da matéria */
   uid!: string;
 
   /** Controle de edição do perfil */
@@ -51,8 +53,8 @@ export class TutorProfileComponent implements OnInit {
   /** Controle de edição de matéria */
   isEditingSubject = false;
 
-  /** Controle de tutoria por disciplina */
-  isTutoring: Record<string, boolean> = {};
+  /** Controle de tutoria da disciplina */
+  isTutoring!: string;
 
   /** Dias da semana e horários */
   days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -89,7 +91,7 @@ export class TutorProfileComponent implements OnInit {
 
         this.subjects.forEach((subject) => {
           this.inicializarSelecao(subject.disciplinaId);
-          this.isTutoring[subject.disciplinaId] = subject.status;
+          if (subject.status) this.isTutoring = subject.disciplinaId;
           if (subject.horarioDisponivel) {
             this.preencherSelecao(
               subject.disciplinaId,
@@ -166,39 +168,6 @@ export class TutorProfileComponent implements OnInit {
     });
   }
 
-  /** Alterna o estado de um slot */
-  toggleSlot(disciplinaId: string, dayIdx: number, time: number) {
-    this.selection[disciplinaId][dayIdx][time] =
-      !this.selection[disciplinaId][dayIdx][time];
-  }
-
-  /**
-   * Retorna a disponibilidade agrupada por dia de uma disciplina.
-   * @param disciplinaId ID da disciplina
-   * @returns Array de objetos no formato { day: string, time: number[] }
-   */
-  getSelected(disciplinaId: string): { day: string; time: number[] }[] {
-    const grouped: { [key: string]: number[] } = {};
-
-    this.days.forEach((day, d) => {
-      this.times.forEach((t) => {
-        if (this.selection[disciplinaId][d][t]) {
-          if (!grouped[day]) {
-            grouped[day] = [];
-          }
-          grouped[day].push(t);
-        }
-      });
-    });
-
-    const result = Object.keys(grouped).map((day) => ({
-      day,
-      time: grouped[day],
-    }));
-
-    return result;
-  }
-
   /** Alterna modo de edição do perfil */
   onEditProfile() {
     this.isEditingProfile = !this.isEditingProfile;
@@ -219,7 +188,7 @@ export class TutorProfileComponent implements OnInit {
       update = { ...update, foto: this.userPhoto };
     const request = {
       uid: this.uid,
-      update: update,
+      updates: update,
     };
 
     if (Object.keys(update).length > 0) {
@@ -242,107 +211,40 @@ export class TutorProfileComponent implements OnInit {
     }
   }
 
-  /** Alterna modo de edição de matéria */
-  onEditSubject() {
-    this.isEditingSubject = !this.isEditingSubject;
-  }
-
-  /**
-   * Altera o estado de tutoria, e tira o estado de monitoria das outras disciplinas
-   * @param disciplinaId ID da disciplina
-   */
-  onToggleTutoring(disciplinaId: string) {
-    const newState = !this.isTutoring[disciplinaId];
-    // Desativa todas
-    Object.keys(this.isTutoring).forEach((key) => {
-      this.isTutoring[key] = false;
-    });
-
-    const tutorRequest = {
-      uid: this.uid,
-      disciplinaId: disciplinaId,
-      updates: {
-        status: newState,
-      },
-    };
-
-    const userRequest = {
-      uid: this.uid,
-      updates: {
-        status: newState ? disciplinaId : '',
-      },
-    }
-
-    this.http.post('http://localhost:3000/updateTutor', tutorRequest).subscribe({
-      next: (response) => {
-        console.log('Estado de tutoria atualizado!', response);
-      },
-      error: (error) => { 
-        console.error('Erro ao atualizar estado de tutoria:', error);
-      }
-    });
-
-    this.http.post('http://localhost:3000/updateUser', userRequest).subscribe({
-      next: (response) => {
-        console.log('Estado de monitoria atualizado!', response);
-      },
-      error: (error) => {
-        console.error('Erro ao atualizar estado de monitoria:', error);
-      }
-    });
-
-    // Ativa a selecionada (ou desativa se já estava ativa)
-    this.isTutoring[disciplinaId] = newState;
-  }
-
-  /**
-   * Salva a disponibilidade de uma disciplina
-   * @param disciplinaId ID da disciplina
-   */
-  onSaveSubject(disciplinaId: string) {
-    this.isEditingSubject = false;
-    const horarioDisponivel = this.getSelected(disciplinaId);
-
-    const request = {
-      uid: this.uid,
-      updates: {
-        horarioDisponivel: horarioDisponivel,
-      },
-    };
-
-    console.log('Requisição:', request);
-
+  private updateTutor(request: any): void {
     this.http.post('http://localhost:3000/updateTutor', request).subscribe({
       next: (response) => {
-        console.log('Disponibilidade salva!', response);
-        this.isEditingSubject = false;
+        console.log('Dados do tutor atualizados!', response);
       },
       error: (error) => {
-        console.error('Erro ao salvar disponibilidade:', error);
+        console.error('Erro ao atualizar dados do tutor:', error);
       },
     });
   }
 
-  /**
-   * Formata o horário para exibição
-   * @param hour Hora a ser formatada
-   * @returns String formatada no formato HH:MM
-   */
-  formatTime(hour: number): string {
-    return `${hour.toString().padStart(2, '0')}:00`;
-  }
+  onUpdateTutoring(disciplinaId: string): void {
 
-  /**
-   * Verifica se há algum slot marcado para um dia específico e uma disciplina
-   * @param dayIndex Índice do dia (0: Seg, 1: Ter, ..., 5: Sáb)
-   * @param subject ID da disciplina
-   * @returns Verdadeiro se houver pelo menos um slot marcado, falso caso contrário
-   */
-  hasCheckedSlot(dayIndex: number, subject: string): boolean {
-    const daySelection = this.selection[subject]?.[dayIndex];
+    let request: any;
 
-    if (!daySelection) return false;
+    const oldDisciplinaId = this.isTutoring;
+    if (oldDisciplinaId === disciplinaId) {
+      this.isTutoring = '';
+      request = {
+        uid: this.uid,
+        updates: {
+          disciplinaId: '',
+        },
+      };
+    } else {
+      this.isTutoring = disciplinaId;
+      request = {
+        uid: this.uid,
+        updates: {
+          disciplinaId: disciplinaId,
+        },
+      };
+    }
 
-    return Object.values(daySelection).some((isChecked) => isChecked);
+    this.updateTutor(request);
   }
 }

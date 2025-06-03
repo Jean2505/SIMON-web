@@ -338,7 +338,7 @@ button {
 }
 
 .mdc-switch__handle {
-  top: 4px!important; /* Ajusta a posição vertical da bolinha */
+  top: 4px !important; /* Ajusta a posição vertical da bolinha */
 }
 
 .day-active {
@@ -537,7 +537,10 @@ button[mat-raised-button] {
   .slider {
     position: absolute;
     cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: #ccc;
     transition: 0.4s;
     border-radius: 34px;
@@ -564,10 +567,22 @@ button[mat-raised-button] {
   }
 }
 
-.action-buttons.discipline-actions {
+.subject-info {
   display: flex;
-  align-items: center;       // Alinha verticalmente toggle e botão
-  gap: 12px;                 // Espaço entre toggle e botão
+  justify-content: space-between;
+}
+
+.action-buttons {
+  &.discipline-actions {
+    right: 0;
+    button {
+      margin-top: 0;
+    }
+    position: relative;
+    display: flex;
+    align-items: center; // Alinha verticalmente toggle e botão
+    gap: 12px; // Espaço entre toggle e botão
+  }
 }
 
 .subject-place {

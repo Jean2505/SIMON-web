@@ -1,0 +1,84 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ subject.disciplina }}</mat-panel-title>
+      @if (isTutor) {
+      <label class="toggle-switch">
+        <input
+          type="checkbox"
+          [checked]="isTutoring"
+          (change)="onToggleTutoring()"
+        />
+        <span class="slider"></span>
+      </label>
+      }
+    </mat-expansion-panel-header>
+
+    <div class="panel-content">
+      <div class="subject-info">
+        <div class="subject-place">
+          @if (isEditingSubject) {
+          <p>
+            <strong>Prédio: </strong>
+            <input class="building" [(ngModel)]="subject.local" />
+          </p>
+          <p>
+            <strong>Sala: </strong>
+            <input class="room" [(ngModel)]="subject.sala" />
+          </p>
+          } @else {
+          <p><strong>Prédio:</strong> {{ subject.local }}</p>
+          <p><strong>Sala:</strong> {{ subject.sala }}</p>
+          }
+        </div>
+        @if (isTutor) {
+        <div class="action-buttons discipline-actions">
+          @if (!isEditingSubject) {
+          <button mat-button (click)="onEditSubject()">Editar</button>
+          } @else {
+          <button mat-raised-button color="primary" (click)="onSaveSubject()">
+            Salvar
+          </button>
+          }
+        </div>
+        }
+      </div>
+      <table mat-table [dataSource]="times" class="schedule-table">
+        <!-- Colunas dos dias -->
+        @for (day of days; track $index) {
+        <ng-container [matColumnDef]="day">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            [ngClass]="{ 'day-active': hasCheckedSlot($index) }"
+          >
+            {{ day }}
+          </th>
+          <td
+            mat-cell
+            *matCellDef="let time"
+            [ngClass]="{ 'checked-cell': selection[$index][time] }"
+          >
+            @if (isTutor) {
+            <mat-checkbox
+              [(ngModel)]="selection[$index][time]"
+              [name]="
+                'slot-' + subject.disciplinaId + '-' + $index + '-' + time
+              "
+              [disabled]="!isTutor || !isEditingSubject"
+            >
+              {{ formatTime(time) }}
+            </mat-checkbox>
+            } @else {
+            <span>{{ formatTime(time) }}</span>
+            }
+          </td>
+        </ng-container>
+        }
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
