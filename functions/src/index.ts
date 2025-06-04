@@ -275,6 +275,32 @@ export const getMuralPosts = onRequest({region: "southamerica-east1"}, async (re
     res.status(200).send(result);
 });
 
+export const deleteMuralPost = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+
+    const snapshot = await db.collection("MuralPosts").where("content", "==", req.body.content).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    snapshot.docs[0].ref.delete().then(() => {
+        result = {
+            status: "OK",
+            message: "Post deleted successfully",
+            payload: "Post deleted successfully"
+        };
+        res.status(200).send(result);
+    });
+});
+
 export const createStudent = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
     logger.debug(req.body)

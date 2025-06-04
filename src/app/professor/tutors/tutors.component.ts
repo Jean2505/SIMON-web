@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 
 interface TutorAssignment {
   school: string;
@@ -34,8 +35,9 @@ interface School {
     CommonModule,
     MatSelectModule,
     MatIconModule,
-    MatCardModule
-  ],
+    MatCardModule,
+    BackButtonComponent
+],
   templateUrl: './tutors.component.html',
   styleUrls: ['./tutors.component.scss']
 })

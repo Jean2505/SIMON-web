@@ -8,19 +8,19 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
 import {
   Storage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from '@angular/fire/storage';
+import { ActivatedRoute } from '@angular/router';
 import { ViewChild, ElementRef } from '@angular/core';
 
 import { type Tutor } from '../../models/tutor.model';
 
 import { SessionStorageService } from '../../core/services/session-storage.service';
-
+import { BackButtonComponent } from '../buttons/back-button/back-button.component';
 import { TutorSubjectComponent } from './subject/subject.component';
 
 // --------------------------- COMPONENTE ---------------------------
@@ -35,6 +35,7 @@ import { TutorSubjectComponent } from './subject/subject.component';
     MatTableModule,
     MatCheckboxModule,
     FormsModule,
+    BackButtonComponent,
     TutorSubjectComponent,
   ],
   templateUrl: './tutor-profile.component.html',

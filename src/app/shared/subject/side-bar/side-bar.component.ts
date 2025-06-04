@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { BackButtonComponent } from "../../buttons/back-button/back-button.component";
 
 @Component({
   selector: 'app-side-bar',
   imports: [
-    CommonModule
-  ],
+    CommonModule,
+    BackButtonComponent
+],
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.scss']
 })
