@@ -596,3 +596,10 @@ button[mat-raised-button] {
     }
   }
 }
+
+app-back-button{
+  position: absolute;
+  top: 14vh;
+  left: 5vw;
+  z-index: 13;
+}

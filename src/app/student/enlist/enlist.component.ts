@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { type Student } from '../../models/student.model';
 import { type Discipline } from '../../models/discipline.model';
 import { SessionStorageService } from '../../core/services/session-storage.service';
+import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 
 /**
  * Componente de candidatura à monitoria do estudante.
@@ -26,7 +27,8 @@ import { SessionStorageService } from '../../core/services/session-storage.servi
     MatSlideToggleModule,
     MatFormFieldModule,
     MatSelectModule,
-  ],
+    BackButtonComponent
+],
   templateUrl: './enlist.component.html', // Caminho para template HTML
   styleUrls: ['./enlist.component.scss'], // Caminho para estilos SCSS
 })

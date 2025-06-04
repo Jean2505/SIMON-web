@@ -13,6 +13,7 @@ import { type Tutor } from '../../models/tutor.model';
 import { HttpClient } from '@angular/common/http';
 import { SessionStorageService } from '../../core/services/session-storage.service';
 import { ActivatedRoute } from '@angular/router';
+import { BackButtonComponent } from "../buttons/back-button/back-button.component";
 
 // --------------------------- COMPONENTE ---------------------------
 
@@ -26,7 +27,8 @@ import { ActivatedRoute } from '@angular/router';
     MatTableModule,
     MatCheckboxModule,
     FormsModule,
-  ],
+    BackButtonComponent
+],
   templateUrl: './tutor-profile.component.html',
   styleUrl: './tutor-profile.component.scss',
 })

@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { DisciplineComponent } from './discipline/discipline.component';
 import { Discipline } from '../../models/discipline.model';
 import { SessionStorageService } from '../../core/services/session-storage.service';
+import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 
 /**
  * Componente para exibir as disciplinas de um curso para o estudante.
@@ -19,7 +20,8 @@ import { SessionStorageService } from '../../core/services/session-storage.servi
     CommonModule,
     MatSelectModule,
     DisciplineComponent,
-  ],
+    BackButtonComponent
+],
   templateUrl: './subjects.component.html', // Caminho para o template HTML
   styleUrls: ['./subjects.component.scss'], // Caminho para estilos SCSS
 })

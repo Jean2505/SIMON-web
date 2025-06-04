@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { DisciplineComponent } from './discipline/discipline.component';
 import { Discipline } from '../../models/discipline.model';
+import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 
 /**
  * Representa uma escola no sistema.
@@ -35,15 +36,16 @@ interface Course {
 @Component({
   selector: 'app-institution-manage-subjects',    // Seletor HTML para usar este componente
   standalone: true,                               // Componente standalone sem NgModule externo
-  imports: [                                      // Dependências necessárias no template
+  imports: [
     CommonModule,
     FormsModule,
     MatFormFieldModule,
     MatSelectModule,
     MatIconModule,
     MatCardModule,
-    DisciplineComponent
-  ],
+    DisciplineComponent,
+    BackButtonComponent
+],
   templateUrl: './manage-subjects.component.html',  // Caminho para o template HTML
   styleUrls: ['./manage-subjects.component.scss']    // Caminho para estilos SCSS
 })

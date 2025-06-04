@@ -7,6 +7,7 @@ import { Discipline } from '../../models/discipline.model';
 import { DisciplineComponent } from './discipline/discipline.component';
 import { ActivatedRoute } from '@angular/router';
 import { Auth, User } from '@angular/fire/auth';
+import { BackButtonComponent } from "../buttons/back-button/back-button.component";
 
 /**
  * Componente para exibir as disciplinas de um curso para o estudante.
@@ -15,11 +16,12 @@ import { Auth, User } from '@angular/fire/auth';
 @Component({
   selector: 'app-student-subjects',        // Seletor HTML para usar este componente
   standalone: true,                        // Componente standalone sem NgModule externo
-  imports: [                               // Dependências necessárias no template
+  imports: [
     CommonModule,
     MatSelectModule,
-    DisciplineComponent
-  ],
+    DisciplineComponent,
+    BackButtonComponent
+],
   templateUrl: './list-subjects.component.html',// Caminho para o template HTML
   styleUrls: ['./list-subjects.component.scss'] // Caminho para estilos SCSS
 })
