@@ -3,7 +3,20 @@
   <header class="profile-banner">
     <div class="banner-bg"></div>
     <div class="profile-img-wrapper">
-      <img [src]="userPhoto" alt="Foto do monitor" class="profile-img" />
+      <img
+        [src]="userPhoto"
+        alt="Foto do monitor"
+        class="profile-img"
+        (click)="fileInput.click()"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        #fileInput
+        [hidden]="true"
+        (change)="onChangePhoto($event)"
+        class="file-input"
+      />
     </div>
   </header>
 
@@ -38,7 +51,7 @@
       [subject]="subject"
       [isTutor]="isTutor"
       [uid]="uid"
-      ></app-tutor-subject>
+    ></app-tutor-subject>
     }
   </div>
 </div>

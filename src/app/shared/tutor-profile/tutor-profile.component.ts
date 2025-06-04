@@ -9,10 +9,18 @@ import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@angular/fire/storage';
+import { ViewChild, ElementRef } from '@angular/core';
 
 import { type Tutor } from '../../models/tutor.model';
 
 import { SessionStorageService } from '../../core/services/session-storage.service';
+
 import { TutorSubjectComponent } from './subject/subject.component';
 
 // --------------------------- COMPONENTE ---------------------------
@@ -27,12 +35,14 @@ import { TutorSubjectComponent } from './subject/subject.component';
     MatTableModule,
     MatCheckboxModule,
     FormsModule,
-    TutorSubjectComponent
+    TutorSubjectComponent,
   ],
   templateUrl: './tutor-profile.component.html',
   styleUrl: './tutor-profile.component.scss',
 })
 export class TutorProfileComponent implements OnInit {
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
+
   /** Se é monitor ou não */
   isTutor: boolean = false;
 
@@ -69,12 +79,21 @@ export class TutorProfileComponent implements OnInit {
   selection: Record<string, Record<number, Record<number, boolean>>> = {};
 
   constructor(
+    /** Referência ao serviço de armazenamento do Firebase @type {Storage} */
+    private storage: Storage,
+    /** Referência ao serviço de requisições HTTP @type {HttpClient} */
     private http: HttpClient,
+    /** Referência ao serviço de rotas @type {ActivatedRoute} */
     private route: ActivatedRoute,
+    /** Referência ao serviço de armazenamento de sessão @type {SessionStorageService} */
     private sessionStorage: SessionStorageService
   ) {}
 
-  /** Inicializa o componente */
+  /**
+   * Inicializa o componente
+   * Carrega o perfil do usuário, verifica se é tutor ou aluno, e busca as disciplinas monitoradas.
+   * @returns {Promise<void>} Promise que indica a conclusão da inicialização
+   */
   async ngOnInit(): Promise<void> {
     if (this.route.snapshot.url[0]?.path === 'tutor-profile') {
       this.isTutor = true;
@@ -106,7 +125,11 @@ export class TutorProfileComponent implements OnInit {
     });
   }
 
-  /** Inicializa a matriz de seleção de uma disciplina */
+  /**
+   * Inicializa a matriz de seleção de uma disciplina
+   * @param disciplinaId ID da disciplina
+   * @returns {void}
+   */
   inicializarSelecao(disciplinaId: string): void {
     this.selection[disciplinaId] = {};
     this.days.forEach((_, dayIdx) => {
@@ -121,6 +144,7 @@ export class TutorProfileComponent implements OnInit {
    * Preenche a seleção da disciplina com os dados do backend
    * @param disciplinaId ID da disciplina
    * @param disponibilidade Array no formato [{ day: string, time: number[] }]
+   * @returns {void}
    */
   preencherSelecao(
     disciplinaId: string,
@@ -140,7 +164,10 @@ export class TutorProfileComponent implements OnInit {
     });
   }
 
-  /** Carrega os dados do usuário autenticado */
+  /**
+   * Carrega os dados do usuário autenticado
+   * @returns {void}
+   */
   managingProfile(): void {
     this.uid = this.sessionStorage.getData('user', 'uid');
     this.userEmail = this.sessionStorage.getData('user', 'email');
@@ -149,7 +176,10 @@ export class TutorProfileComponent implements OnInit {
       this.sessionStorage.getData('user', 'foto') || '/gosling.jpg';
   }
 
-  /** Visualiza o perfil de outro usuário (aluno) */
+  /**
+   * Visualiza o perfil de outro usuário (aluno)
+   * @returns {void}
+   */
   viewingProfile(): void {
     this.uid = this.route.snapshot.params['id'];
     const uid = this.uid;
@@ -160,12 +190,69 @@ export class TutorProfileComponent implements OnInit {
         const student = JSON.parse(response.payload);
         this.userName = student.nome;
         this.userEmail = student.email!;
-        this.userPhoto = student.foto || '/gosling.jpg';
+        this.userPhoto = student.foto || '/simons.jpg';
       },
       error: (error) => {
         console.error('Erro ao carregar perfil:', error);
       },
     });
+  }
+
+  /**
+   * Ação ao selecionar uma imagem para o perfil
+   * @param event Evento de input do tipo file
+   */
+  onChangePhoto(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+
+    // Preview imediato da imagem
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.userPhoto = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+
+    // Caminho de upload no Firebase
+    const path = `avatars/${this.uid}_${Date.now()}_${file.name}`;
+    const storageRef = ref(this.storage, path);
+    const task = uploadBytesResumable(storageRef, file);
+
+    task.on(
+      'state_changed',
+      (snapshot) => {
+        // Aqui você pode exibir progresso se quiser
+      },
+      (error) => {
+        console.error('Erro no upload da imagem:', error);
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(storageRef);
+
+          // Atualizar imagem no backend
+          const request = {
+            uid: this.uid,
+            updates: { foto: downloadURL },
+          };
+
+          this.updateUser(request);
+
+          // Atualizar visualmente e localmente
+          this.userPhoto = downloadURL;
+          this.sessionStorage.setData('user', {
+            ...this.sessionStorage.getAllDataFromKey('user'),
+            foto: downloadURL,
+          });
+
+          console.log('Foto atualizada com sucesso!');
+        } catch (err) {
+          console.error('Erro ao obter URL da imagem:', err);
+        }
+      }
+    );
   }
 
   /** Alterna modo de edição do perfil */
@@ -176,41 +263,45 @@ export class TutorProfileComponent implements OnInit {
   /** Salva dados do perfil */
   onSaveProfile() {
     this.isEditingProfile = false;
-    const oldUserName = this.userName;
-    const oldUserEmail = this.userEmail;
-    const oldUserPhoto = this.userPhoto;
-    let update = {};
-    if (oldUserName != this.userName)
-      update = { ...update, nome: this.userName };
-    if (oldUserEmail != this.userEmail)
-      update = { ...update, email: this.userEmail };
-    if (oldUserPhoto != this.userPhoto)
-      update = { ...update, foto: this.userPhoto };
+
     const request = {
       uid: this.uid,
-      updates: update,
+      updates: {
+        nome: this.userName,
+        email: this.userEmail,
+      },
     };
 
-    if (Object.keys(update).length > 0) {
-      this.http.post('http://localhost:3000/updateUser', request).subscribe({
-        next: (response) => {
-          console.log('Dados do perfil atualizados!', response);
-        },
-        error: (error) => {
-          console.error('Erro ao atualizar perfil:', error);
-        },
-      });
-
-      // Atualizar sessionStorage local
-      this.sessionStorage.setData('user', {
-        ...this.sessionStorage.getAllDataFromKey('user'),
-        ...update,
-      });
-
-      window.location.reload();
-    }
+    this.updateUser(request);
   }
 
+  /**
+   * Atualiza os dados do usuário
+   * @param request Objeto de requisição para atualizar os dados do usuário
+   */
+  private updateUser(request: any): void {
+    this.http.post('http://localhost:3000/updateUser', request).subscribe({
+      next: (response) => {
+        console.log('Dados do perfil atualizados!', response);
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar perfil:', error);
+      },
+    });
+
+    // Atualizar sessionStorage local
+    this.sessionStorage.setData('user', {
+      ...this.sessionStorage.getAllDataFromKey('user'),
+      ...request.updates,
+    });
+
+    window.location.reload();
+  }
+
+  /**
+   * Atualiza os dados do monitor
+   * @param request Objeto de requisição para atualizar os dados do monitor
+   */
   private updateTutor(request: any): void {
     this.http.post('http://localhost:3000/updateTutor', request).subscribe({
       next: (response) => {
@@ -222,8 +313,12 @@ export class TutorProfileComponent implements OnInit {
     });
   }
 
+  /**
+   * Atualiza a disponibilidade de horários do tutor
+   * @param disciplinaId ID da disciplina
+   * @returns {void}
+   */
   onUpdateTutoring(disciplinaId: string): void {
-
     let request: any;
 
     const oldDisciplinaId = this.isTutoring;
