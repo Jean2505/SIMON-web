@@ -29,3 +29,10 @@ h1 {
 h3 {
     margin-top: 3px;
 }
+
+app-back-button{
+    position: absolute;
+    top: 10vh;
+    left: 10vw;
+    z-index: 20;
+}

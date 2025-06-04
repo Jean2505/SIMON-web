@@ -1,9 +1,23 @@
 <div class="container">
+  <app-back-button></app-back-button>
   <!-- Banner do perfil -->
   <header class="profile-banner">
     <div class="banner-bg"></div>
     <div class="profile-img-wrapper">
-      <img [src]="userPhoto" alt="Foto do monitor" class="profile-img" />
+      <img
+        [src]="userPhoto"
+        alt="Foto do monitor"
+        class="profile-img"
+        (click)="fileInput.click()"
+      />
+      <input
+        type="file"
+        accept="image/*"
+        #fileInput
+        [hidden]="true"
+        (change)="onChangePhoto($event)"
+        class="file-input"
+      />
     </div>
   </header>
 
@@ -34,96 +48,11 @@
   <!-- Matérias Monitoradas -->
   <div class="materias-monitoradas">
     @for (subject of subjects; track subject.disciplinaId) {
-    <mat-accordion>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>{{ subject.disciplina }}</mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="panel-content">
-          @if (isTutor) {
-          <div class="action-buttons discipline-actions">
-            <label class="toggle-switch">
-              <input
-                type="checkbox"
-                [checked]="isTutoring[subject.disciplinaId]"
-                (change)="onToggleTutoring(subject.disciplinaId)"
-              />
-              <span class="slider"></span>
-            </label>
-            @if (!isEditingSubject) {
-            <button mat-button (click)="onEditSubject()">Editar</button>
-            } @else {
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="onSaveSubject(subject.disciplinaId)"
-            >
-              Salvar
-            </button>
-            }
-          </div>
-          }
-          <div class="subject-place">
-            <input
-              type="text"
-              class="building"
-              [placeholder]="'H15'"
-              [textContent]="subject.local"
-              [disabled]="!isTutor || !isEditingSubject"
-            />
-            <input
-              type="text"
-              class="room"
-              [placeholder]="'Sala 101'"
-              [textContent]="subject.sala"
-              [disabled]="!isTutor || !isEditingSubject"
-            />
-          </div>
-          <table mat-table [dataSource]="times" class="schedule-table">
-            <!-- Colunas dos dias -->
-            @for (day of days; track $index) {
-            <ng-container [matColumnDef]="day">
-              <th
-                mat-header-cell
-                *matHeaderCellDef
-                [ngClass]="{
-                  'day-active': hasCheckedSlot($index, subject.disciplinaId)
-                }"
-              >
-                {{ day }}
-              </th>
-              <td
-                mat-cell
-                *matCellDef="let time"
-                [ngClass]="{
-                  'checked-cell': selection[subject.disciplinaId][$index][time]
-                }"
-                
-              >
-                @if (isTutor) {
-                <mat-checkbox
-                  [(ngModel)]="selection[subject.disciplinaId][$index][time]"
-                  [name]="
-                    'slot-' + subject.disciplinaId + '-' + $index + '-' + time
-                  "
-                  [disabled]="!isTutor || !isEditingSubject"
-                >
-                  {{ formatTime(time) }}
-                </mat-checkbox>
-                } @else {
-                <span>{{ formatTime(time) }}</span>
-                }
-              </td>
-            </ng-container>
-            }
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
+    <app-tutor-subject
+      [subject]="subject"
+      [isTutor]="isTutor"
+      [uid]="uid"
+    ></app-tutor-subject>
     }
   </div>
 </div>

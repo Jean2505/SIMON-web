@@ -21,7 +21,7 @@
     padding: 2.8vh;
     display: flex;
     .name {
-      cursor: default;
+      cursor: pointer;
     }
     .text {
       margin-left: 10px;
@@ -81,5 +81,10 @@ svg {
   height: 8vh;
   margin: auto;
   margin-top: 5px;
+  cursor: pointer;
+}
+
+.name{
+  margin-right: 10px;
   cursor: pointer;
 }

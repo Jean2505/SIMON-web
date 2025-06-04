@@ -118,4 +118,8 @@ export class HeaderComponent {
         console.error('Erro ao fazer logout:', error);
       });
   }
+
+  getFirstName(name: String){
+    return name.split(' ')[0];
+  }
 }

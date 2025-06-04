@@ -14,9 +14,7 @@ export class BackButtonComponent {
     private location: Location
   ) { }
 
-  /**
-   * Método para navegar de volta à página anterior
-   */
+  /** Método para navegar de volta à página anterior */
   goBack(): void {
     this.location.back();
   }
