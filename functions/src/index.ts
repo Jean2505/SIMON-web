@@ -354,7 +354,9 @@ export const updateRequisition = onRequest({region: "southamerica-east1"}, async
     logger.debug(req.body)
 
     try {
-        const snapshot = await db.collection("Monitores").where("uid", "==", req.body.uid).get();
+        const snapshot = await db.collection("Monitores").where("uid", "==", req.body.uid)
+        .where("disciplinaId", "==", req.body.disciplinaId)
+        .get();
 
         if (snapshot.empty) {
             logger.debug("No matching documents.");
