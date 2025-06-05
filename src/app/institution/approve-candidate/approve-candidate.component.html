@@ -39,8 +39,18 @@
       </div>
 
       <mat-action-row class="action-buttons">
-        <button (click)="sendResult(2, tutor.uid)" class="reject-btn">Reprovar</button>
-        <button (click)="sendResult(1, tutor.uid)" class="approve-btn">Aprovar</button>
+        <button
+          (click)="sendResult(2, tutor.uid, tutor.disciplinaId)"
+          class="reject-btn"
+        >
+          Reprovar
+        </button>
+        <button
+          (click)="sendResult(1, tutor.uid, tutor.disciplinaId)"
+          class="approve-btn"
+        >
+          Aprovar
+        </button>
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>

@@ -44,10 +44,17 @@ export class ApproveCandidateComponent implements OnInit {
     return Tutor.nome + Tutor.disciplina;
   }
 
-  sendResult(result: number, uid: string): void {
+  /**
+   * Send result of approval or rejection
+   * @param result Result of the approval (1 for approved, 0 for rejected)
+   * @param uid User ID of the tutor
+   * @param disciplinaId Discipline ID
+   */
+  sendResult(result: number, uid: string, disciplinaId: string): void {
     this.http.post('http://localhost:3000/updateRequisition', {
       uid: uid,
-      aprovacao: result
+      aprovacao: result,
+      disciplinaId: disciplinaId
     }).subscribe({
       next: (response) => {
         console.log('Response:', response);

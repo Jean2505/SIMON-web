@@ -28,7 +28,7 @@ export class HeaderComponent {
    * Variável para armazenar o usuário logado.
    * @type {any}
    */
-  user!: any;
+  user?: any;
   /**
    * Variável para armazenar o papel (role) do usuário logado.
    * @type {string}
@@ -119,7 +119,7 @@ export class HeaderComponent {
       });
   }
 
-  getFirstName(name: String){
+  getFirstName(name: String) {
     return name.split(' ')[0];
   }
 }

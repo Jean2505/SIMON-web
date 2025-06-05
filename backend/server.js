@@ -159,7 +159,7 @@ app.get("/loadCourses", (req, res) => {
 
 app.post("/insertCourses", async (req, res) => {
   try {
-    const courses = {courses: req.body};
+    const courses = { courses: req.body };
     console.log("Requisição: ", courses);
     const response = await axios.post(
       "https://createcourses-bz6uecg2pq-rj.a.run.app",
@@ -503,7 +503,13 @@ app.post("/getMuralPosts", async (req, res) => {
     // Retorna a resposta da função externa ao front-end
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: "Erro ao obter os posts externamente" });
+    const emptyResponse = {
+      payload: {
+        posts: [],
+      },
+    };
+    console.log("Erro ao chamar função getMuralPosts:", JSON.parse(emptyResponse));
+    res.json(emptyResponse);
   }
 });
 

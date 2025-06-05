@@ -102,8 +102,6 @@ export class TutorSubjectsComponent implements OnInit {
         console.error('Erro ao carregar matérias:', error);
       },
     });
-    this.loadingDisciplinas = false;
-    this.loadingSync = false;
   }
 
   /**

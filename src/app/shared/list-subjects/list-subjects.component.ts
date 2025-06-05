@@ -7,26 +7,25 @@ import { Discipline } from '../../models/discipline.model';
 import { DisciplineComponent } from './discipline/discipline.component';
 import { ActivatedRoute } from '@angular/router';
 import { Auth, User } from '@angular/fire/auth';
-import { BackButtonComponent } from "../buttons/back-button/back-button.component";
+import { BackButtonComponent } from '../buttons/back-button/back-button.component';
 
 /**
  * Componente para exibir as disciplinas de um curso para o estudante.
  * Busca disciplinas sincronizadas do Firebase via backend.
  */
 @Component({
-  selector: 'app-student-subjects',        // Seletor HTML para usar este componente
-  standalone: true,                        // Componente standalone sem NgModule externo
+  selector: 'app-student-subjects', // Seletor HTML para usar este componente
+  standalone: true, // Componente standalone sem NgModule externo
   imports: [
     CommonModule,
     MatSelectModule,
     DisciplineComponent,
-    BackButtonComponent
-],
-  templateUrl: './list-subjects.component.html',// Caminho para o template HTML
-  styleUrls: ['./list-subjects.component.scss'] // Caminho para estilos SCSS
+    BackButtonComponent,
+  ],
+  templateUrl: './list-subjects.component.html', // Caminho para o template HTML
+  styleUrls: ['./list-subjects.component.scss'], // Caminho para estilos SCSS
 })
 export class ListSubjectsComponent implements OnInit {
-
   /** Usuário */
   user!: User;
 
@@ -49,13 +48,18 @@ export class ListSubjectsComponent implements OnInit {
 
   /**
    * Construtor do componente.
+   * @param auth - Serviço de autenticação do Firebase.
    * @param http - HttpClient para requisições HTTP.
+   * @param route - ActivatedRoute para acessar parâmetros da rota.
    */
   constructor(
+    /** Serviço de autenticação do Firebase @type {Auth} */
     private auth: Auth,
+    /** Serviço HttpClient para requisições HTTP @type {HttpClient} */
     private http: HttpClient,
-    private route: ActivatedRoute,
-  ) { }
+    /** ActivatedRoute para acessar parâmetros da rota @type {ActivatedRoute} */
+    private route: ActivatedRoute
+  ) {}
 
   /**
    * Hook de ciclo de vida Angular.
@@ -76,10 +80,6 @@ export class ListSubjectsComponent implements OnInit {
   loadSubjects(role: string): void {
     if (role === 'PROFESSOR') this.getProfessorSubjects();
     else this.getStudentSubjects();
-
-    console.log('Carregamento de matérias concluído.');
-    this.loadingDisciplinas = false;
-    this.loadingSync = false;
   }
 
   /**
@@ -97,33 +97,39 @@ export class ListSubjectsComponent implements OnInit {
    * Faz uma requisição ao backend para obter as disciplinas do estudante.
    */
   getStudentSubjects(): void {
-    this.http.post('http://localhost:300/getUser', { userId: this.user.uid })
+    this.http
+      .post('http://localhost:300/getUser', { userId: this.user.uid })
       .subscribe({
         next: (response: any) => {
           const result = JSON.parse(response.payload);
           this.courseId = result.curso;
           console.log('Curso:', this.courseId);
-          this.http.post('http://localhost:3000/getDisciplinas', { curso: this.courseId })
+          this.http
+            .post('http://localhost:3000/getDisciplinas', {
+              curso: this.courseId,
+            })
             .subscribe({
               next: (response: any) => {
                 const result = JSON.parse(response.payload);
                 this.subjects = result.map((subject: any) => {
                   return {
                     id: subject.id,
-                    cursoId: subject.cursoId,
+                    course: subject.course,
                     name: subject.name,
                     professor: subject.professor,
                     term: subject.term,
-                    monitorAmnt: subject.monitorAmnt
+                    monitorAmnt: subject.monitors,
                   };
                 });
+                this.loadingDisciplinas = false;
+                this.loadingSync = false;
                 console.log('Matérias:', this.subjects);
               },
               error: (error) => {
                 console.error('Erro ao carregar matérias:', error);
-              }
+              },
             });
-        }
+        },
       });
   }
 
@@ -132,7 +138,10 @@ export class ListSubjectsComponent implements OnInit {
    * Faz uma requisição ao backend para obter as disciplinas do professor.
    */
   getProfessorSubjects(): void {
-    this.http.post('http://localhost:3000/getProfessorDisciplines', { uid: this.user.uid })
+    this.http
+      .post('http://localhost:3000/getProfessorDisciplines', {
+        uid: this.user.uid,
+      })
       .subscribe({
         next: (response: any) => {
           const result = JSON.parse(response);
@@ -140,14 +149,17 @@ export class ListSubjectsComponent implements OnInit {
           this.subjects = result.map((subject: any) => {
             return {
               id: subject.id,
-              cursoId: subject.cursoId,
+              course: subject.course,
               name: subject.name,
               professor: subject.professor,
               term: subject.term,
-              monitorAmnt: subject.monitorAmnt
+              monitorAmnt: subject.monitors,
             };
           });
-        }
-      })
+          this.loadingDisciplinas = false;
+          this.loadingSync = false;
+          console.log('Matérias do professor:', this.subjects);
+        },
+      });
   }
 }

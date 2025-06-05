@@ -55,7 +55,7 @@ export class TutorProfileComponent implements OnInit {
   /** Email do monitor da matéria */
   userEmail!: string;
   /** Foto do monitor da matéria */
-  userPhoto: string = '/gosling.jpg';
+  userPhoto: string = '/simons.png';
   /** ID do monitor da matéria */
   uid!: string;
 

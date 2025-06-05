@@ -1,11 +1,11 @@
-*{
+* {
   font-family: "Poppins", sans-serif;
 }
 
-h1{
+h1 {
   z-index: 3;
-    text-align: center;
-    display: inline-block;
+  text-align: center;
+  display: inline-block;
   vertical-align: middle;
   margin-top: 14px;
 }
@@ -22,6 +22,7 @@ h1{
   overflow: hidden;
   display: flex;
   justify-content: space-between;
+  cursor: default;
   .logout {
     position: relative;
     // width: 20vw;
@@ -96,11 +97,11 @@ svg {
   cursor: pointer;
 }
 
-.name{
+.name {
   margin-right: 10px;
   cursor: pointer;
 }
 
-.title{
+.title {
   z-index: 3;
 }
