@@ -157,6 +157,22 @@ app.get("/loadCourses", (req, res) => {
   );
 });
 
+app.post("/getSchoolCourses", async (req, res) => {
+  try {
+    const school = req.body;
+    console.log("Requisição: ", school);
+    const response = await axios.post(
+      "https://getschoolcourses-bz6uecg2pq-rj.a.run.app",
+      school
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao obter cursos da escola:", error.message);
+    res.status(500).json({ error: "Erro ao obter cursos da escola" });
+  }
+});
+
 app.post("/insertCourses", async (req, res) => {
   try {
     const courses = { courses: req.body };
