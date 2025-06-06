@@ -1,5 +1,4 @@
 import { ActivatedRoute } from '@angular/router';
-import { Auth } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -9,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { type Tutor } from '../../models/tutor.model';
+
 import { TutorComponent } from './tutor/tutor.component';
 
 @Component({
@@ -39,13 +39,16 @@ export class SubjectTutorsComponent implements OnInit {
   loadingTutors = true;
 
   constructor(
+    /** Serviço de requisições HTTP @type {HttpClient} */
     private http: HttpClient,
+    /** Serviço de rota ativa para acessar parâmetros da rota @type {ActivatedRoute} */
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.getMonitors();
   }
+  
   /**
    * Obtém informações da disciplina e de seus monitores via backend.
    * Atualiza `discipline` e popula `monitors`.
@@ -65,6 +68,8 @@ export class SubjectTutorsComponent implements OnInit {
           },
           error: error => {
             console.error('Erro ao buscar disciplina:', error);
+            this.loadingTutors = false; // Atualiza o estado de carregamento após a resposta
+            return;
           }
         });
 
@@ -89,12 +94,13 @@ export class SubjectTutorsComponent implements OnInit {
               status: monitor.status,
               uid: monitor.uid,
             }));
+            this.loadingTutors = false; // Atualiza o estado de carregamento após a resposta
           },
           error: error => {
             console.error('Erro ao buscar monitores:', error);
+            this.loadingTutors = false; // Atualiza o estado de carregamento após a resposta
           },
         });
-      this.loadingTutors = false; // Atualiza o estado de carregamento após a resposta
     })
   }
 }

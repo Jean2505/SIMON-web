@@ -6,6 +6,7 @@
       <label class="toggle-switch">
         <input
           type="checkbox"
+          [id]="'tutoring-toggle-' + subject.disciplinaId"
           [checked]="isTutoring"
           (change)="onToggleTutoring()"
         />

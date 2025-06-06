@@ -111,7 +111,6 @@ export class TutorProfileComponent implements OnInit {
 
         this.subjects.forEach((subject) => {
           this.inicializarSelecao(subject.disciplinaId);
-          if (subject.status) this.isTutoring = subject.disciplinaId;
           if (subject.horarioDisponivel) {
             this.preencherSelecao(
               subject.disciplinaId,
@@ -123,6 +122,13 @@ export class TutorProfileComponent implements OnInit {
       error: (error) => {
         console.error('Erro ao carregar perfil:', error);
       },
+    });
+  }
+
+  updateSubjects(): void {
+    this.subjects.map((subject) => {
+      subject.status = this.isTutoring === subject.disciplinaId;
+      return subject;
     });
   }
 
@@ -174,7 +180,8 @@ export class TutorProfileComponent implements OnInit {
     this.userEmail = this.sessionStorage.getData('user', 'email');
     this.userName = this.sessionStorage.getData('user', 'nome');
     this.userPhoto =
-      this.sessionStorage.getData('user', 'foto') || '/gosling.jpg';
+      this.sessionStorage.getData('user', 'foto') || '/simons.png';
+    this.isTutoring = this.sessionStorage.getData('user', 'status') || '';
   }
 
   /**
@@ -189,6 +196,8 @@ export class TutorProfileComponent implements OnInit {
     this.http.post('http://localhost:3000/getStudent', { uid }).subscribe({
       next: (response: any) => {
         const student = JSON.parse(response.payload);
+        console.log(student.status);
+        this.isTutoring = student.status;
         this.userName = student.nome;
         this.userEmail = student.email!;
         this.userPhoto = student.foto || '/simons.jpg';
@@ -306,10 +315,10 @@ export class TutorProfileComponent implements OnInit {
   private updateTutor(request: any): void {
     this.http.post('http://localhost:3000/updateTutor', request).subscribe({
       next: (response) => {
-        console.log('Dados do tutor atualizados!', response);
+        console.log('Dados do monitor atualizados!', response);
       },
       error: (error) => {
-        console.error('Erro ao atualizar dados do tutor:', error);
+        console.error('Erro ao atualizar dados do monitor:', error);
       },
     });
   }

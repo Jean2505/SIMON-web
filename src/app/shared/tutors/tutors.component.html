@@ -1,37 +1,33 @@
 <div class="container">
+  <!-- Exibição das disciplinas, se houver um curso selecionado -->
+  <div class="list-monitor">
+    <h3>Monitores</h3>
+    <hr />
 
-    <!-- Exibição das disciplinas, se houver um curso selecionado -->
-    <div class="list-monitor">
-      <h3>Monitores</h3>
-      <hr />
-  
-      <!-- Cabeçalho da tabela -->
-      <div class="monitors-header">
-        <span>Foto</span>
-        <span>Nome</span>
-        <span>Horario</span>
-        <span>Prédio</span>
-        <span>Sala</span>
-        <span>Status</span>
-        <span>Ação</span>
-      </div>
-  
-      <!-- Lista de cards estilizados -->
-      <ul class="monitors">
-        @if (loadingTutors) {
-        <li class="loading">Carregando monitores...</li>
-        } @else if (tutors.length > 0) {
-          @for (tutor of tutors; track tutor.ra) {
-          <li>
-            <app-tutor [tutor]="tutor"></app-tutor>
-          </li>
-          }
-        } @else {
-        <li class="no-monitors">
-          <p>Não há monitores disponíveis para esta disciplina.</p>
-        </li>
-        }
-      </ul>
+    <!-- Cabeçalho da tabela -->
+    <div class="monitors-header">
+      <span>Foto</span>
+      <span>Nome</span>
+      <span>Horario</span>
+      <span>Prédio</span>
+      <span>Sala</span>
+      <span>Status</span>
+      <span>Ação</span>
     </div>
-  
+
+    <!-- Lista de cards estilizados -->
+    <ul class="monitors">
+      @if (loadingTutors) {
+      <li class="loading">Carregando monitores...</li>
+      } @else if (tutors.length > 0) { @for (tutor of tutors; track tutor.ra) {
+      <li>
+        <app-tutor [tutor]="tutor" [disciplineId]="disciplineId"></app-tutor>
+      </li>
+      } } @else {
+      <li class="no-monitors">
+        <p>Não há monitores disponíveis para esta disciplina.</p>
+      </li>
+      }
+    </ul>
   </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -8,6 +8,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HttpClient } from '@angular/common/http';
 
 import { type Tutor } from '../../../models/tutor.model';
+
+import { SessionStorageService } from '../../../core/services/session-storage.service';
+import { TutorProfileComponent } from '../tutor-profile.component';
 
 @Component({
   selector: 'app-tutor-subject',
@@ -68,7 +71,7 @@ export class TutorSubjectComponent implements OnInit {
    * @type {boolean}
    * @default false
    */
-  isTutoring: boolean = false;
+  @Input() isTutoring!: boolean;
 
   /**
    * Registro de seleção por disciplina
@@ -78,7 +81,11 @@ export class TutorSubjectComponent implements OnInit {
 
   constructor(
     /** HttpClient para requisições HTTP @type {HttpClient} */
-    private http: HttpClient
+    private http: HttpClient,
+    /** Serviço de armazenamento de sessão @type {SessionStorageService} */
+    private sessionStorage: SessionStorageService,
+    /** Componente pai de perfil de tutor @type {TutorProfileComponent} */
+    private tutorProfileComponent: TutorProfileComponent
   ) {}
 
   /** Alterna modo de edição de matéria */
@@ -88,10 +95,10 @@ export class TutorSubjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.inicializarSelecao();
-    this.isTutoring = this.subject.status;
     if (this.subject.horarioDisponivel) {
       this.preencherSelecao(this.subject.horarioDisponivel);
     }
+    console.log(this.subject.disciplinaId, '-', this.isTutoring);
   }
 
   /**
@@ -224,37 +231,49 @@ export class TutorSubjectComponent implements OnInit {
   onToggleTutoring() {
     const newState = !this.isTutoring;
 
-    const tutorRequest = {
-      uid: this.uid,
-      disciplinaId: this.subject.disciplinaId,
-      updates: {
-        status: newState,
-      },
-    };
+    // const tutorRequest = {
+    //   uid: this.uid,
+    //   disciplinaId: this.subject.disciplinaId,
+    //   updates: {
+    //     status: newState,
+    //   },
+    // };
 
     const userRequest = {
       uid: this.uid,
       updates: {
         status: newState ? this.subject.disciplinaId : '',
       },
-    }
+    };
 
-    this.http.post('http://localhost:3000/updateTutor', tutorRequest).subscribe({
-      next: (response) => {
-        console.log('Estado de tutoria atualizado!', response);
-      },
-      error: (error) => { 
-        console.error('Erro ao atualizar estado de tutoria:', error);
-      }
-    });
+    // this.http.post('http://localhost:3000/updateTutor', tutorRequest).subscribe({
+    //   next: (response) => {
+    //     console.log('Estado de tutoria atualizado!', response);
+    //   },
+    //   error: (error) => {
+    //     console.error('Erro ao atualizar estado de tutoria:', error);
+    //   }
+    // });
 
     this.http.post('http://localhost:3000/updateUser', userRequest).subscribe({
       next: (response) => {
         console.log('Estado de monitoria atualizado!', response);
+        // Atualiza o usuário da sessão
+        this.sessionStorage.setData('user', {
+          ...this.sessionStorage.getAllDataFromKey('user'),
+          status: newState ? this.subject.disciplinaId : '',
+        });
+        console.log(
+          'Atualizando usuário na sessão:',
+          this.sessionStorage.getAllData()
+        );
+        
+        // Atualiza o estado de monitoria no componente pai
+        window.location.reload();
       },
       error: (error) => {
         console.error('Erro ao atualizar estado de monitoria:', error);
-      }
+      },
     });
 
     // Ativa a selecionada (ou desativa se já estava ativa)
