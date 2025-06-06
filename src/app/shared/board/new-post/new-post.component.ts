@@ -157,13 +157,13 @@ export class NewPostComponent implements OnInit {
           console.log('Post sem anexos enviado com sucesso');
           this.resetState();
           this.close.emit();
+          window.location.reload();
         },
         error: err => {
           console.error('Erro ao enviar post sem anexos:', err);
           this.isSending = false;
         }
       });
-      window.location.reload();
       return;
     }
 
