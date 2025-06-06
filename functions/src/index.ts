@@ -724,3 +724,28 @@ export const updateUser = onRequest({region: "southamerica-east1"}, async (req, 
     res.status(200).send(result);
     });
 });
+
+export const getSchoolCourses = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("Majors").where("school", "==", req.body.school).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "Courses found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
