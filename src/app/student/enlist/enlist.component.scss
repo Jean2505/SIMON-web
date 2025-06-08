@@ -48,7 +48,7 @@
         rgba(77, 160, 255, 0.3) 62%,
         rgba(1, 52, 110, 0.5) 100%
       );
-      padding: 10px;
+      padding: 10px 0px;
       border-radius: 8px !important;
       color: black;
       border: 1px solid #4da0ff52;
@@ -197,23 +197,16 @@ mat-select {
   border-radius: 0px !important;
 }
 
-.cdk-overlay-pane .mat-mdc-select-panel {
-  padding: 0 !important;
-  border-radius: 0px !important;
-  background: none !important;
-}
-
 mat-option {
   background-color: #c4dcf9 !important;
   z-index: 3;
-  padding: 0 !important;
   margin-top: 3px;
   border-radius: 25px !important;
-  padding-left: 20px !important;
-  padding-right: 20px !important;
+  padding: 8px 20px !important; // padding vertical e horizontal equilibrado
   color: black;
   border: 1px #016eea solid;
 }
+
 
 mat-option:hover {
   background-color: #819bb8 !important;
