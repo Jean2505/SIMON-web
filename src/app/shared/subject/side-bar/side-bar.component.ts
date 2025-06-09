@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackButtonComponent } from "../../buttons/back-button/back-button.component";
 
@@ -12,9 +12,9 @@ import { BackButtonComponent } from "../../buttons/back-button/back-button.compo
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.scss']
 })
-export class SideBarComponent {
+export class SideBarComponent implements OnInit{
 
-  /** Nome da tela atual. @type {string} */
+  /** Nome da tela atual @type {string} */
   activatedScreen: string = 'board'; // Tela ativa padrão
 
   /**
@@ -34,6 +34,11 @@ export class SideBarComponent {
      */
     private route: ActivatedRoute
   ) { }
+
+  ngOnInit(): void {
+    // if (this.router.url)
+    this.activatedScreen = this.router.url.includes('/board') ? 'board' : this.router.url.includes('/tutors') ? 'tutors' : 'forum';
+  }
 
   /** Navega para o mural da matéria (`board`) */
   goMural(): void {

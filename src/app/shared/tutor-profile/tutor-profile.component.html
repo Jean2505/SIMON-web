@@ -47,6 +47,7 @@
 
   <!-- Matérias Monitoradas -->
   <div class="materias-monitoradas">
+    <h2>Matérias Monitoradas</h2>
     @for (subject of subjects; track subject.disciplinaId) {
     <app-tutor-subject
       [subject]="subject"
@@ -56,4 +57,18 @@
     ></app-tutor-subject>
     }
   </div>
+  @if (isTutor) {
+  <hr />
+  <div class="materias-pendentes">
+    <h2>Matérias Pendentes</h2>
+    @for (subject of pendingSubjects; track subject.disciplinaId) {
+    <app-tutor-subject
+      [subject]="subject"
+      [isTutor]="false"
+      [uid]="uid"
+      [isTutoring]="isTutoring == subject.disciplinaId"
+    ></app-tutor-subject>
+    }
+  </div>
+  }
 </div>

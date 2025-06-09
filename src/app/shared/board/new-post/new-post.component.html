@@ -1,5 +1,8 @@
 <div class="backdrop" (click)="confirmCancel()"></div>
 <dialog open>
+  @if (isSending) {
+    <app-loading class="loading"></app-loading>
+  }
   <form (ngSubmit)="onPost()">
     <p>
       <label for="title">Título do post</label>

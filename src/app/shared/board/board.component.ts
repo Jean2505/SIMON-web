@@ -7,7 +7,7 @@ import { type MuralPost } from '../../models/mural-post.model';
 
 import { CardComponent } from './card/card.component';
 import { NewPostComponent } from './new-post/new-post.component';
-import { ProgressWithGifComponent } from "../loading/loading.component";
+import { ProgressWithGifComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'app-board',
@@ -28,9 +28,8 @@ export class SubjectBoardComponent implements OnInit {
     /** Referência ao backend */
     private http: HttpClient,
     /** Referência ao serviço de rota atual do Angular */
-    private route: ActivatedRoute /** Referência ao serviço de armazenamento do Firebase */
-  ) //private storage: Storage
-  {}
+    private route: ActivatedRoute /** Referência ao serviço de armazenamento do Firebase */ //private storage: Storage
+  ) {}
 
   /** ID da disciplina */
   subjectId = '';
@@ -89,6 +88,7 @@ export class SubjectBoardComponent implements OnInit {
           error: (error) => {
             if (error.status === 500) {
               console.log('Nenhum post encontrado.');
+              this.posts = [];
               this.getUserData(this.subjectId, idTokenResult);
               this.loading = false;
             } else console.error('Erro ao carregar posts:', error);

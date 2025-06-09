@@ -4,9 +4,11 @@
 <app-new-post [subjectId]="this.subjectId" (close)="onCloseCreatePost()" />
 }
 <div class="card-grid">
-  @for (post of posts; track post.createdAt) {
+  @if (posts.length === 0) {
+  <p class="no-posts">Ainda não há posts no mural dessa matéria!</p>
+  } @else { @for (post of posts; track post.createdAt) {
   <app-card [post]="post" />
-  }
+  } }
 </div>
 @if (isTutor || isProfessor) {
 <button type="button" (click)="onStartCreatePost()">+</button>

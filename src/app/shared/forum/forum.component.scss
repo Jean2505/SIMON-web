@@ -12,6 +12,13 @@
   z-index: 1000;
 }
 
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .card-list {
     max-width: 1000px;
     margin: 0 auto;

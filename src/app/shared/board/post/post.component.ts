@@ -11,17 +11,16 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-post',
   imports: [MatIconModule, MatListModule, CommonModule],
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.scss']
+  styleUrls: ['./post.component.scss'],
 })
 export class PostComponent implements OnInit {
-
   @Input() post!: MuralPost;
-  
+
   @Output() close = new EventEmitter<void>();
 
   zoomedImageSrc: string | null = null;
   currentImageIndex: number = 0;
-  
+
   /** Lista de itens de arquivo com nome, URL e ícone */
   fileItems: { name: string; url: string; icon: string }[] = [];
 
@@ -30,7 +29,7 @@ export class PostComponent implements OnInit {
     private http: HttpClient,
     /** Inicializa o sanitizer @type {DomSanitizer} */
     private sanitizer: DomSanitizer
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const EXT_ICON_MAP: Record<string, string> = {
@@ -48,7 +47,7 @@ export class PostComponent implements OnInit {
       mp3: 'audiotrack',
       exe: 'memory',
     };
-    this.fileItems = this.post.files.map(url => {
+    this.fileItems = this.post.files.map((url) => {
       const clean = url.split('?')[0];
       const raw = decodeURIComponent(clean.split('/').pop()!);
       const ext = raw.split('.').pop()?.toLowerCase() || '';
@@ -63,20 +62,20 @@ export class PostComponent implements OnInit {
    * @param {string} url - A URL a ser sanitizada
    * @returns {SafeResourceUrl} - A URL sanitizada
    */
-sanitizeUrl(url: string): SafeResourceUrl {
-  // Extrai o ID do vídeo a partir de diferentes formatos
-  const videoIdMatch = url.match(/(?:v=|\/embed\/|\.be\/)([a-zA-Z0-9_-]{11})/);
-  const videoId = videoIdMatch ? videoIdMatch[1] : null;
+  sanitizeUrl(url: string): SafeResourceUrl {
+    // Extrai o ID do vídeo a partir de diferentes formatos
+    const videoIdMatch = url.match(
+      /(?:v=|\/embed\/|\.be\/)([a-zA-Z0-9_-]{11})/
+    );
+    const videoId = videoIdMatch ? videoIdMatch[1] : null;
 
-  if (videoId) {
-    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    if (videoId) {
+      const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+    }
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl('');
   }
-
-  return this.sanitizer.bypassSecurityTrustResourceUrl('');
-}
-
-
 
   /** Fecha o modal de post */
   onClose() {
@@ -139,7 +138,9 @@ sanitizeUrl(url: string): SafeResourceUrl {
    */
   previousImage(event: Event): void {
     event.stopPropagation(); // Impede que o modal feche ao clicar nas setas
-    this.currentImageIndex = (this.currentImageIndex - 1 + this.post.images.length) % this.post.images.length;
+    this.currentImageIndex =
+      (this.currentImageIndex - 1 + this.post.images.length) %
+      this.post.images.length;
     this.zoomedImageSrc = this.post.images[this.currentImageIndex];
   }
 
@@ -149,7 +150,8 @@ sanitizeUrl(url: string): SafeResourceUrl {
    */
   nextImage(event: Event): void {
     event.stopPropagation(); // Impede que o modal feche ao clicar nas setas
-    this.currentImageIndex = (this.currentImageIndex + 1) % this.post.images.length;
+    this.currentImageIndex =
+      (this.currentImageIndex + 1) % this.post.images.length;
     this.zoomedImageSrc = this.post.images[this.currentImageIndex];
   }
 
@@ -158,28 +160,27 @@ sanitizeUrl(url: string): SafeResourceUrl {
    * @param postContent - Conteúdo do post a ser deletado
    */
   onDeletePost(postContent: string): void {
-    this.http.post('http://localhost:3000/deleteMuralPost', { postContent })
+    this.http
+      .post('http://localhost:3000/deleteMuralPost', { postContent })
       .subscribe({
         next: () => {
           console.log('Post deletado com sucesso');
-         window.location.reload(); // Recarrega a página para refletir a exclusão
+          window.location.reload(); // Recarrega a página para refletir a exclusão
         },
         error: (error) => {
           console.error('Erro ao deletar post:', error);
-        }
+        },
       });
   }
 
-
   formatDate(dateString: Date | string): string {
-  const date = new Date(dateString);
-  const dia = String(date.getDate()).padStart(2, '0');
-  const mes = String(date.getMonth() + 1).padStart(2, '0'); // meses começam em 0
-  const ano = date.getFullYear();
-  const horas = String(date.getHours()).padStart(2, '0');
-  const minutos = String(date.getMinutes()).padStart(2, '0');
+    const date = new Date(dateString);
+    const dia = String(date.getDate()).padStart(2, '0');
+    const mes = String(date.getMonth() + 1).padStart(2, '0'); // meses começam em 0
+    const ano = date.getFullYear();
+    const horas = String(date.getHours()).padStart(2, '0');
+    const minutos = String(date.getMinutes()).padStart(2, '0');
 
-  return `${dia}/${mes}/${ano} - ${horas}:${minutos}`;
-}
-
+    return `${dia}/${mes}/${ano} - ${horas}:${minutos}`;
+  }
 }

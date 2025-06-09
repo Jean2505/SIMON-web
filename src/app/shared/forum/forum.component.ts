@@ -7,10 +7,11 @@ import { ForumPost } from '../../models/forum-post.model';
 import { NewPostComponent } from './new-post/new-post.component';
 import { Auth, User } from '@angular/fire/auth';
 import { ActivatedRoute } from '@angular/router';
+import { ProgressWithGifComponent } from "../loading/loading.component";
 
 @Component({
   selector: 'app-forum',
-  imports: [CardComponent, NewPostComponent],
+  imports: [CardComponent, NewPostComponent, ProgressWithGifComponent],
   templateUrl: './forum.component.html',
   styleUrl: './forum.component.scss',
 })
@@ -20,10 +21,11 @@ export class SubjectForumComponent implements OnInit {
 
   user!: User;
 
+  /** Indica se o usuário está criando um novo post */
   isCreatingPost = false;
 
   /** Indica se os posts do fórum estão sendo carregados */
-  loadingPosts = true;
+  loadingPosts = false;
 
   /**
    * Lista de posts do fórum.
@@ -56,6 +58,7 @@ export class SubjectForumComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.loadingPosts = true;
     this.user = this.auth.currentUser!;
     this.route.parent!.paramMap.subscribe(async (params) => {
       this.subjectId = params.get('id') ?? '';

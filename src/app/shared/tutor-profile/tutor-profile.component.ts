@@ -22,6 +22,7 @@ import { type Tutor } from '../../models/tutor.model';
 import { SessionStorageService } from '../../core/services/session-storage.service';
 import { BackButtonComponent } from '../buttons/back-button/back-button.component';
 import { TutorSubjectComponent } from './subject/subject.component';
+import { waitForPendingWrites } from 'firebase/firestore';
 
 // --------------------------- COMPONENTE ---------------------------
 
@@ -49,6 +50,8 @@ export class TutorProfileComponent implements OnInit {
 
   /** Lista de matérias monitoradas */
   subjects: Tutor[] = [];
+  /** Lista de matérias pendentes */
+  pendingSubjects: Tutor[] = [];
 
   /** Nome do monitor da matéria */
   userName!: string;
@@ -107,9 +110,18 @@ export class TutorProfileComponent implements OnInit {
     const request = { uid: this.uid };
     this.http.post('http://localhost:3000/getTutorCourses', request).subscribe({
       next: (response: any) => {
-        this.subjects = JSON.parse(response);
+        const result = JSON.parse(response);
 
-        this.subjects.forEach((subject) => {
+        const approvedSubjects = result.filter(
+          (subject: Tutor) => subject.aprovacao === 1
+        );
+        const pendingSubjects = result.filter(
+          (subject: Tutor) => subject.aprovacao === 0
+        );
+        console.log('Disciplinas aprovadas:', approvedSubjects);
+        console.log('Disciplinas pendentes:', pendingSubjects);
+
+        this.subjects = approvedSubjects.map((subject: Tutor) => {
           this.inicializarSelecao(subject.disciplinaId);
           if (subject.horarioDisponivel) {
             this.preencherSelecao(
@@ -117,7 +129,11 @@ export class TutorProfileComponent implements OnInit {
               subject.horarioDisponivel
             );
           }
+          return {
+            ...subject,
+          };
         });
+        this.pendingSubjects = pendingSubjects;
       },
       error: (error) => {
         console.error('Erro ao carregar perfil:', error);

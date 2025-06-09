@@ -64,7 +64,8 @@
   flex: 1;
 }
 
-.materias-monitoradas {
+.materias-monitoradas,
+.materias-pendentes {
   margin-top: 2rem;
 }
 
@@ -76,7 +77,8 @@ mat-expansion-panel {
   margin-bottom: 1rem;
 }
 
-.materias-monitoradas {
+.materias-monitoradas,
+.materias-pendentes {
   margin-top: 2rem;
   display: flex;
   flex-direction: column;

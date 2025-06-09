@@ -9,10 +9,11 @@ import {
   deleteObject
 } from '@angular/fire/storage';
 import { AuthService } from '../../../core/services/auth.service';
+import { ProgressWithGifComponent } from "../../loading/loading.component";
 
 @Component({
   selector: 'app-new-post',
-  imports: [FormsModule],
+  imports: [FormsModule, ProgressWithGifComponent],
   templateUrl: './new-post.component.html',
   styleUrls: ['./new-post.component.scss']
 })

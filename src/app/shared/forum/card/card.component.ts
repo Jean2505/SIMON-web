@@ -9,11 +9,14 @@ import { type ForumPost } from '../../../models/forum-post.model';
   selector: 'app-forum-card',
   imports: [CommonModule, DatePipe],
   templateUrl: './card.component.html',
-  styleUrl: './card.component.scss'
+  styleUrl: './card.component.scss',
 })
 export class CardComponent implements OnInit {
-  
+  /** Indicador de curtida do post */
   isLiked = false;
+
+  /** Controlador de estado de curtida */
+  isLiking = false;
 
   @Input() post!: ForumPost;
 
@@ -30,7 +33,7 @@ export class CardComponent implements OnInit {
     private route: ActivatedRoute,
     /** Referência ao serviço de roteamento @type {Router} */
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     console.log(this.post);
@@ -38,35 +41,41 @@ export class CardComponent implements OnInit {
   }
 
   likePost(postId: string | undefined): void {
+    if (this.isLiking) return;
+    this.isLiking = true;
+    this.isLiked = !this.isLiked;
+    this.post.likes = this.isLiked ? this.post.likes + 1 : this.post.likes - 1;
     // Implementar lógica para curtir o post
-    this.http.post('http://localhost:3000/likePost', { postId, like: !this.isLiked }).subscribe({
-      next: (response: any) => {
-        console.log('Post curtido com sucesso:', response);
-        // Atualiza o estado da curtida
-        this.post.likes = this.isLiked ? (this.post.likes - 1) : (this.post.likes + 1);
-        this.isLiked = !this.isLiked;
-      },
-      error: (error) => {
-        console.error('Erro ao curtir o post:', error);
-      }
-    });
+    this.http
+      .post('http://localhost:3000/likePost', { postId, like: this.isLiked })
+      .subscribe({
+        next: (response: any) => {
+          console.log('Post curtido com sucesso:', response);
+          this.isLiking = false; // Reseta o estado de curtida
+        },
+        error: (error) => {
+          console.error('Erro ao curtir o post:', error);
+          this.isLiked = !this.isLiked;
+          this.post.likes = this.isLiked
+            ? this.post.likes + 1
+            : this.post.likes - 1;
+          this.isLiking = false; // Reseta o estado de curtida em caso de erro
+        },
+      });
     console.log('Curtindo o post:', postId);
   }
 
   goPost(event: MouseEvent): void {
-    const element = event.target as HTMLElement
-    console.log(element)
+    const element = event.target as HTMLElement;
+    console.log(element);
     // Implementar lógica para navegar para o post
-    this.router.navigate(
-      [this.post.docId],
-      {
-        relativeTo: this.route,
-        state: {
-          post: this.post,
-          isLiked: this.isLiked,
-        }
-      });
+    this.router.navigate([this.post.docId], {
+      relativeTo: this.route,
+      state: {
+        post: this.post,
+        isLiked: this.isLiked,
+      },
+    });
     console.log('Navegando para o post:', this.post.docId);
   }
-
 }
