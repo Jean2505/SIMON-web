@@ -17,6 +17,13 @@ button {
   transition: ease 0.5s;
 }
 
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 button:hover {
   background: #399199; // cor base
   color: white;

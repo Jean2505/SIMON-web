@@ -10,6 +10,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { type Tutor } from '../../models/tutor.model';
 
 import { TutorComponent } from './tutor/tutor.component';
+import { ProgressWithGifComponent } from "../loading/loading.component";
 
 @Component({
   selector: 'app-tutors',
@@ -20,8 +21,9 @@ import { TutorComponent } from './tutor/tutor.component';
     MatSelectModule,
     MatIconModule,
     MatCardModule,
-    TutorComponent
-  ],
+    TutorComponent,
+    ProgressWithGifComponent
+],
   templateUrl: './tutors.component.html',
   styleUrl: './tutors.component.scss'
 })

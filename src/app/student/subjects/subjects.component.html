@@ -17,7 +17,7 @@
     <!-- Lista de cards estilizados -->
     <ul class="disciplines">
       @if (loadingDisciplinas) {
-      <li class="loading">Carregando disciplinas...</li>
+      <app-loading class="loading"></app-loading>
       } @else {
       <li *ngFor="let disciplina of subjects; trackBy: trackBySubject">
         <app-discipline

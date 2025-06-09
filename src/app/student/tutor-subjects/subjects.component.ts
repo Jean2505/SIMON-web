@@ -7,6 +7,7 @@ import { DisciplineComponent } from './discipline/discipline.component';
 import { Discipline } from '../../models/discipline.model';
 import { Auth } from '@angular/fire/auth';
 import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
+import { ProgressWithGifComponent } from "../../shared/loading/loading.component";
 
 /**
  * Componente para exibir as disciplinas de um curso para o estudante.
@@ -20,7 +21,8 @@ import { BackButtonComponent } from "../../shared/buttons/back-button/back-butto
     CommonModule,
     MatSelectModule,
     DisciplineComponent,
-    BackButtonComponent
+    BackButtonComponent,
+    ProgressWithGifComponent
 ],
   templateUrl: './subjects.component.html', // Caminho para o template HTML
   styleUrls: ['./subjects.component.scss'], // Caminho para estilos SCSS

@@ -74,7 +74,7 @@ describe('SubjectBoardComponent', () => {
     tick(); // resolve o Promise do getIdTokenResult
 
     expect(component.posts.length).toBe(1);
-    expect(component.isLoading).toBeFalse();
+    expect(component.loading).toBeFalse();
   }));
 
   it('deve definir isProfessor como true se a role for PROFESSOR', fakeAsync(async () => {

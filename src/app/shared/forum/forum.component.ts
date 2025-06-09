@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DUMMY_FORUM_POSTS } from './dummy-forumPost';
-import { CardComponent } from "./card/card.component";
+import { CardComponent } from './card/card.component';
 import { HttpClient } from '@angular/common/http';
 
 import { ForumPost } from '../../models/forum-post.model';
@@ -12,16 +12,18 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-forum',
   imports: [CardComponent, NewPostComponent],
   templateUrl: './forum.component.html',
-  styleUrl: './forum.component.scss'
+  styleUrl: './forum.component.scss',
 })
 export class SubjectForumComponent implements OnInit {
-
   /** ID da disciplina atual. */
   subjectId = '1234567890';
 
   user!: User;
 
   isCreatingPost = false;
+
+  /** Indica se os posts do fórum estão sendo carregados */
+  loadingPosts = true;
 
   /**
    * Lista de posts do fórum.
@@ -50,30 +52,37 @@ export class SubjectForumComponent implements OnInit {
     /** Referência ao serviço de requisições HTTP @type {HttpClient} */
     private http: HttpClient,
     /** Referência ao serviço de rota atual do Angular @type {ActivatedRoute} */
-    private route: ActivatedRoute,
-  ) { }
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit(): Promise<void> {
     this.user = this.auth.currentUser!;
-    this.route.parent!.paramMap.subscribe(async params => {
+    this.route.parent!.paramMap.subscribe(async (params) => {
       this.subjectId = params.get('id') ?? '';
       console.log('ID da disciplina', this.subjectId);
-      this.http.post('http://localhost:3000/getForumPosts', { courseId: this.subjectId }).subscribe({
-        next: (response: any) => {
-          let result = JSON.parse(response);
-          this.posts = result.map((post: any) => {
-            return {
-              ...post.data,
-              docId: post.docId,
-            } as ForumPost;
-          })
-          console.log('Posts do fórum:', this.posts);
-        },
-        error: (error) => {
-          console.error('Erro ao buscar os posts do fórum:', error);
-        },
-      })
-    })
+      this.http
+        .post('http://localhost:3000/getForumPosts', {
+          courseId: this.subjectId,
+        })
+        .subscribe({
+          next: (response: any) => {
+            let result = JSON.parse(response);
+            this.posts = result.map((post: any) => {
+              return {
+                ...post.data,
+                docId: post.docId,
+              } as ForumPost;
+            });
+            this.loadingPosts = false;
+            console.log('Posts do fórum:', this.posts);
+          },
+          error: (error) => {
+            console.error('Erro ao buscar os posts do fórum:', error);
+
+            this.loadingPosts = false;
+          },
+        });
+    });
   }
 
   createPost(): void {
@@ -83,5 +92,4 @@ export class SubjectForumComponent implements OnInit {
   closePost() {
     this.isCreatingPost = false;
   }
-
 }

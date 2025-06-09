@@ -18,7 +18,7 @@
     <!-- Lista de cards estilizados -->
     <ul class="monitors">
       @if (loadingTutors) {
-      <li class="loading">Carregando monitores...</li>
+      <app-loading></app-loading>
       } @else if (tutors.length > 0) { @for (tutor of tutors; track tutor.ra) {
       <li>
         <app-tutor [tutor]="tutor" [disciplineId]="disciplineId"></app-tutor>

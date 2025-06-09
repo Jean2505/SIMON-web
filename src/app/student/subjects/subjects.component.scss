@@ -4,6 +4,13 @@
   font-family: "Poppins", sans-serif;
 }
 
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .container {
   width: 100%;
   height: 100vh;
@@ -42,6 +49,7 @@
 
 .manage-container {
   margin-top: 30px;
+  min-height: 45vh;
 }
 
 mat-select {
@@ -104,6 +112,7 @@ hr {
   }
 
   .disciplines {
+    height: 45vh;
     list-style: none;
     padding: 0;
     margin: 0;

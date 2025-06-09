@@ -7,10 +7,11 @@ import { type MuralPost } from '../../models/mural-post.model';
 
 import { CardComponent } from './card/card.component';
 import { NewPostComponent } from './new-post/new-post.component';
+import { ProgressWithGifComponent } from "../loading/loading.component";
 
 @Component({
   selector: 'app-board',
-  imports: [CardComponent, NewPostComponent],
+  imports: [CardComponent, NewPostComponent, ProgressWithGifComponent],
   templateUrl: './board.component.html',
   styleUrl: './board.component.scss',
 })
@@ -31,17 +32,24 @@ export class SubjectBoardComponent implements OnInit {
   ) //private storage: Storage
   {}
 
+  /** ID da disciplina */
   subjectId = '';
 
   user!: User;
 
+  /** Variável para verificar se o usuário é professor */
   isProfessor = false;
+  /** Variável para verificar se o usuário é tutor */
   isTutor = false;
 
+  /** Lista de posts do mural */
   posts!: MuralPost[];
+
+  /** Lista de monitores da disciplina */
   tutors: string[] = [];
 
-  isLoading = true;
+  /** Controla o estado de carregamento dos posts */
+  loading = true;
 
   /** Controla a visibilidade do componente de criação de post */
   isCreatingPost = false;
@@ -76,13 +84,13 @@ export class SubjectBoardComponent implements OnInit {
             });
             this.getUserData(this.subjectId, idTokenResult);
             console.log(this.posts);
-            this.isLoading = false;
+            this.loading = false;
           },
           error: (error) => {
             if (error.status === 500) {
               console.log('Nenhum post encontrado.');
               this.getUserData(this.subjectId, idTokenResult);
-              this.isLoading = false;
+              this.loading = false;
             } else console.error('Erro ao carregar posts:', error);
           },
         });

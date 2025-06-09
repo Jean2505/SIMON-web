@@ -6,8 +6,7 @@
   <div class="no-tutors">
     <p>Nenhum monitor disponível para aprovação.</p>
   </div>
-  } @else {
-  @for (tutor of tutors; track tutor.ra + tutor.disciplina) {
+  } @else { @for (tutor of tutors; track tutor.ra + tutor.disciplina) {
   <mat-accordion>
     <mat-expansion-panel>
       <mat-expansion-panel-header>
@@ -50,12 +49,14 @@
         <button
           (click)="sendResult(2, tutor.uid, tutor.disciplinaId)"
           class="reject-btn"
+          [disabled]="loadingResult"
         >
           Reprovar
         </button>
         <button
           (click)="sendResult(1, tutor.uid, tutor.disciplinaId)"
           class="approve-btn"
+          [disabled]="loadingResult"
         >
           Aprovar
         </button>

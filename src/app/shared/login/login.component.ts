@@ -117,8 +117,6 @@ export class LoginComponent {
     } catch (error) {
       console.error('Erro no login:', error);
       alert('Erro ao fazer login. Verifique suas credenciais!');
-    } finally {
-      this.loading = false; // Desativa indicador de carregamento
     }
   }
 }

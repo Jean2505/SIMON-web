@@ -6,13 +6,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { HttpClient } from '@angular/common/http';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 import { DisciplineComponent } from './discipline/discipline.component';
 import { BackButtonComponent } from '../../shared/buttons/back-button/back-button.component';
+import { ProgressWithGifComponent } from "../../shared/loading/loading.component";
 
 import { type Discipline } from '../../models/discipline.model';
-import { ProgressWithGifComponent } from "../../shared/loading/loading.component";
 
 /**
  * Representa uma escola no sistema.
@@ -49,7 +48,6 @@ interface Subject {
     MatSelectModule,
     MatIconModule,
     MatCardModule,
-    MatProgressSpinner,
     DisciplineComponent,
     BackButtonComponent,
     ProgressWithGifComponent

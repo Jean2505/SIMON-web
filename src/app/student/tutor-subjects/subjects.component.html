@@ -17,7 +17,7 @@
     <!-- Lista de cards estilizados -->
     <ul class="disciplines">
       @if (loadingDisciplinas) {
-      <li class="loading">Carregando disciplinas...</li>
+      <app-loading class="loading"></app-loading>
       } @else if (list.length == 0) {
       <li class="loading">Nenhuma disciplina encontrada.</li>
       } @else { @for (subject of subjects; track subject) {

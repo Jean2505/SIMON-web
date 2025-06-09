@@ -1,4 +1,6 @@
-@if (isCreatingPost) {
+@if (loading) {
+<app-loading class="loading"></app-loading>
+} @else {@if (isCreatingPost) {
 <app-new-post [subjectId]="this.subjectId" (close)="onCloseCreatePost()" />
 }
 <div class="card-grid">
@@ -8,4 +10,4 @@
 </div>
 @if (isTutor || isProfessor) {
 <button type="button" (click)="onStartCreatePost()">+</button>
-}
+} }
