@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AuthService } from '../../core/services/auth.service';
 import { SessionStorageService } from '../../core/services/session-storage.service';
+import { ProgressWithGifComponent } from '../loading/loading.component';
 
 /**
  * Componente de login responsável por autenticar usuários e redirecioná-los conforme seu role.
@@ -13,7 +14,7 @@ import { SessionStorageService } from '../../core/services/session-storage.servi
 @Component({
   selector: 'app-login', // Seletor HTML para usar este componente
   standalone: true, // Componente standalone sem necessidade de NgModule externo
-  imports: [FormsModule], // Módulo para formulários necessários no template
+  imports: [FormsModule, ProgressWithGifComponent], // Módulo para formulários necessários no template
   templateUrl: './login.component.html', // Caminho para o template HTML
   styleUrls: ['./login.component.scss'], // Caminho para os estilos SCSS
 })
@@ -23,6 +24,9 @@ export class LoginComponent {
 
   /** Senha digitada pelo usuário. */
   enteredPassword: string = '';
+
+  /** Indicador de carregamento */
+  loading: boolean = false;
 
   /**
    * Construtor do componente.
@@ -48,6 +52,7 @@ export class LoginComponent {
    * Autentica via Firebase Auth, obtém custom claims e redireciona conforme role.
    */
   async onSubmit(): Promise<void> {
+    this.loading = true; // Ativa indicador de carregamento
     try {
       const userCredential = await signInWithEmailAndPassword(
         this.auth,
@@ -112,6 +117,8 @@ export class LoginComponent {
     } catch (error) {
       console.error('Erro no login:', error);
       alert('Erro ao fazer login. Verifique suas credenciais!');
+    } finally {
+      this.loading = false; // Desativa indicador de carregamento
     }
   }
 }

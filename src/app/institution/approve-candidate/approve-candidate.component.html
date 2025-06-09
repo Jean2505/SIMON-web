@@ -1,4 +1,12 @@
 <div class="container">
+  <app-back-button></app-back-button>
+  @if (loading) {
+  <app-loading class="loading"></app-loading>
+  } @if (tutors.length === 0) {
+  <div class="no-tutors">
+    <p>Nenhum monitor disponível para aprovação.</p>
+  </div>
+  } @else {
   @for (tutor of tutors; track tutor.ra + tutor.disciplina) {
   <mat-accordion>
     <mat-expansion-panel>
@@ -54,5 +62,5 @@
       </mat-action-row>
     </mat-expansion-panel>
   </mat-accordion>
-  }
+  } }
 </div>

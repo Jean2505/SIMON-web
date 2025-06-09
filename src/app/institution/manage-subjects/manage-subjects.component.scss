@@ -43,6 +43,13 @@
   margin-top: 30px;
 }
 
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 mat-select {
   height: 100%;
 }

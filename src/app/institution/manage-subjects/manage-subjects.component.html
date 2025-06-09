@@ -1,27 +1,40 @@
 <div class="container">
   <app-back-button></app-back-button>
+  @if (loadingSchools || loadingCourses) {
+  <app-loading class="loading"></app-loading>
+  }
   <div class="wrapper">
     <div class="dropdown-container">
       <!-- Dropdown de Escolas -->
       <mat-form-field class="dropdown" appearance="outline">
         <mat-label>Escola</mat-label>
-        <mat-select (selectionChange)="onSelectSchool($event.value)" [disabled]="loadingSchools">
+        <mat-select
+          (selectionChange)="onSelectSchool($event.value)"
+          [disabled]="loadingSchools"
+        >
           @for (school of schools; track trackBySchool($index, school)) {
-            <mat-option [value]="school.escolaId">
-              {{ school.name }}
-            </mat-option>
+          <mat-option [value]="school.escolaId">
+            {{ school.name }}
+          </mat-option>
           }
         </mat-select>
       </mat-form-field>
 
       <!-- Dropdown de Cursos (dependente da escola selecionada) -->
-      <mat-form-field class="dropdown" appearance="outline" *ngIf="majors.length > 0">
+      <mat-form-field
+        class="dropdown"
+        appearance="outline"
+        *ngIf="majors.length > 0"
+      >
         <mat-label>Curso</mat-label>
-        <mat-select (selectionChange)="onSelectCourse($event.value)" [disabled]="loadingCourses">
+        <mat-select
+          (selectionChange)="onSelectCourse($event.value)"
+          [disabled]="loadingCourses"
+        >
           @for (course of majors; track trackByCourse($index, course)) {
-            <mat-option [value]="course.name">
-              {{ course.name }}
-            </mat-option>
+          <mat-option [value]="course.name">
+            {{ course.name }}
+          </mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -32,7 +45,7 @@
   <div class="manage-container" *ngIf="selectedCourse">
     <h3>Disciplinas</h3>
     <hr />
-  
+
     <!-- Cabeçalho da tabela -->
     <div class="discipline-header">
       <span>ID</span>
@@ -42,13 +55,15 @@
       <span>Qtd Monitores</span>
       <span>Ações</span>
     </div>
-  
+
     <!-- Lista de cards estilizados -->
     <ul class="disciplines">
       <li *ngFor="let subject of subjects; trackBy: trackBySubject">
-        <app-discipline [cursoId]="selectedMajorName" [discipline]="subject"></app-discipline>
+        <app-discipline
+          [cursoId]="selectedMajorName"
+          [discipline]="subject"
+        ></app-discipline>
       </li>
     </ul>
   </div>
-  
 </div>

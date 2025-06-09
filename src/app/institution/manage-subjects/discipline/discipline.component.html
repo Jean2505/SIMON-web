@@ -1,8 +1,14 @@
 <div class="discipline-row">
-    <span>{{ discipline.id }}</span>
-    <span>{{ discipline.name }}</span>
-    <span>{{ discipline.professor }}</span>
-    <span>{{ discipline.term }}</span>
-    <input type="number" [(ngModel)]="enteredQuantity" min="0"/>
-    <button (click)="onAddDiscipline(discipline.id)">Atualizar</button>
-  </div>
+  <span>{{ discipline.id }}</span>
+  <span>{{ discipline.name }}</span>
+  <span>{{ discipline.professor }}</span>
+  <span>{{ discipline.term }}</span>
+  <input type="number" [(ngModel)]="enteredQuantity" min="0" />
+  <button
+    class="update-button"
+    (click)="onAddDiscipline(discipline.id)"
+    [disabled]="loading"
+  >
+    Atualizar
+  </button>
+</div>

@@ -24,6 +24,9 @@ export class DisciplineComponent implements OnInit {
   /** Estado local */
   enteredQuantity: Number = 0; // Quantidade de monitores informada pelo usuário
 
+  /** Indicador de estado de carregamento */
+  loading: boolean = false; // Indicador de carregamento, usado para exibir spinner enquanto aguarda resposta do backend
+
   /**
    * Construtor do componente.
    * @param http - Injeção do HttpClient para realizar requisições HTTP.
@@ -45,6 +48,7 @@ export class DisciplineComponent implements OnInit {
    * @param disciplineId - ID da disciplina a ser atualizada.
    */
   onAddDiscipline(disciplineId: string): void {
+    this.loading = true; // Ativa indicador de carregamento
     console.log('Discipline ID:', disciplineId);
     console.log('Monitor Amount:', this.enteredQuantity);
 
@@ -55,9 +59,11 @@ export class DisciplineComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Response from server:', response);
+          this.loading = false; // Desativa indicador de carregamento
         },
         error: (error) => {
           console.error('Error sending data:', error);
+          this.loading = false; // Desativa indicador de carregamento em caso de erro
         },
       });
   }
