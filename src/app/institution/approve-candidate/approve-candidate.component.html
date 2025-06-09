@@ -1,5 +1,8 @@
 <div class="container">
-  <app-back-button></app-back-button>
+  <div class="manage-container">
+    <app-back-button></app-back-button>
+    <h3>Candidatos</h3>
+    <hr />
   @if (loading) {
   <app-loading class="loading"></app-loading>
   } @if (tutors.length === 0) {
@@ -64,4 +67,5 @@
     </mat-expansion-panel>
   </mat-accordion>
   } }
+</div>
 </div>
