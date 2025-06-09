@@ -1,6 +1,14 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 import { InstitutionManageSubjectsComponent } from './manage-subjects.component';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('InstitutionManageSubjectsComponent', () => {
@@ -11,7 +19,7 @@ describe('InstitutionManageSubjectsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, InstitutionManageSubjectsComponent],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA] // ignora componentes como <app-discipline>
+      schemas: [CUSTOM_ELEMENTS_SCHEMA], // ignora componentes como <app-discipline>
     }).compileComponents();
 
     fixture = TestBed.createComponent(InstitutionManageSubjectsComponent);
@@ -41,7 +49,7 @@ describe('InstitutionManageSubjectsComponent', () => {
   }));
 
   it('deve carregar cursos ao selecionar uma escola', fakeAsync(() => {
-    const mockCourses = [{ cursoId: '101', escolaId: '1', name: 'Curso X' }];
+    const mockCourses = [{ school: '1', name: 'Curso X' }];
     component.onSelectSchool('1');
 
     const req = httpMock.expectOne('http://localhost:3000/courses?school=1');
@@ -50,15 +58,25 @@ describe('InstitutionManageSubjectsComponent', () => {
 
     tick();
     expect(component.selectedSchoolId).toBe('1');
-    expect(component.courses).toEqual(mockCourses);
+    expect(component.majors).toEqual(mockCourses);
     expect(component.loadingCourses).toBeFalse();
   }));
 
   it('deve carregar disciplinas ao selecionar um curso', fakeAsync(() => {
-    const mockSubjects = [{ id: 'subj1', course: 'Curso X', name: 'Matemática', professor: 'Prof. Fulano', term: '1', monitors: [], school: '1' }] as any;
-    const mockCourse = { cursoId: '101', escolaId: '1', name: 'Curso X' };
+    const mockSubjects = [
+      {
+        id: 'subj1',
+        course: 'Curso X',
+        name: 'Matemática',
+        professor: 'Prof. Fulano',
+        term: '1',
+        monitors: [],
+        school: '1',
+      },
+    ] as any;
+    const mockCourse = { school: '1', name: 'Curso X' };
 
-    component.courses = [mockCourse];
+    component.majors = [mockCourse];
     component.onSelectCourse('101');
 
     const req = httpMock.expectOne('http://localhost:3000/getExternalCourses');
@@ -74,7 +92,7 @@ describe('InstitutionManageSubjectsComponent', () => {
 
   it('deve exibir erro se curso não for encontrado ao selecionar', () => {
     spyOn(console, 'error');
-    component.courses = [];
+    component.majors = [];
     component.onSelectCourse('inexistente');
     expect(console.error).toHaveBeenCalledWith('Curso não encontrado');
   });

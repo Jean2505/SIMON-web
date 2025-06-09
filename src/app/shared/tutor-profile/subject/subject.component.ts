@@ -184,6 +184,8 @@ export class TutorSubjectComponent implements OnInit {
       uid: this.uid,
       disciplinaId: this.subject.disciplinaId,
       updates: {
+        local: this.subject.local,
+        sala: this.subject.sala,
         horarioDisponivel: horarioDisponivel,
       },
     };

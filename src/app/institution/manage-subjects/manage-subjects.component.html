@@ -6,19 +6,23 @@
       <mat-form-field class="dropdown" appearance="outline">
         <mat-label>Escola</mat-label>
         <mat-select (selectionChange)="onSelectSchool($event.value)" [disabled]="loadingSchools">
-          <mat-option *ngFor="let school of schools; trackBy: trackBySchool" [value]="school.escolaId">
-            {{ school.name }}
-          </mat-option>
+          @for (school of schools; track trackBySchool($index, school)) {
+            <mat-option [value]="school.escolaId">
+              {{ school.name }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
 
       <!-- Dropdown de Cursos (dependente da escola selecionada) -->
-      <mat-form-field class="dropdown" appearance="outline" *ngIf="courses.length > 0">
+      <mat-form-field class="dropdown" appearance="outline" *ngIf="majors.length > 0">
         <mat-label>Curso</mat-label>
         <mat-select (selectionChange)="onSelectCourse($event.value)" [disabled]="loadingCourses">
-          <mat-option *ngFor="let course of courses; trackBy: trackByCourse" [value]="course.cursoId">
-            {{ course.name }}
-          </mat-option>
+          @for (course of majors; track trackByCourse($index, course)) {
+            <mat-option [value]="course.name">
+              {{ course.name }}
+            </mat-option>
+          }
         </mat-select>
       </mat-form-field>
     </div>
@@ -42,7 +46,7 @@
     <!-- Lista de cards estilizados -->
     <ul class="disciplines">
       <li *ngFor="let subject of subjects; trackBy: trackBySubject">
-        <app-discipline [cursoId]="selectedCourseId" [discipline]="subject"></app-discipline>
+        <app-discipline [cursoId]="selectedMajorName" [discipline]="subject"></app-discipline>
       </li>
     </ul>
   </div>

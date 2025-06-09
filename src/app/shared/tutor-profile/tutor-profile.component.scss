@@ -35,6 +35,7 @@
   z-index: 1;
   width: 120px;
   height: 120px;
+  cursor: pointer;
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid white;
@@ -613,7 +614,7 @@ button[mat-raised-button] {
   }
 }
 
-app-back-button{
+app-back-button {
   position: absolute;
   top: 14vh;
   left: 5vw;

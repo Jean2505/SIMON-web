@@ -128,7 +128,8 @@ export class StudentEnlistComponent implements OnInit {
             const firstOrSecondSemester = this.student.term % 2;
             if (
               discipline.term < this.student.term &&
-              discipline.term % 2 === firstOrSecondSemester
+              discipline.term % 2 === firstOrSecondSemester &&
+              discipline.monitors - discipline.currentMonitors > 0
             ) {
               this.subjectsOptions.push({ ...discipline });
             }

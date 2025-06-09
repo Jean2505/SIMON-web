@@ -10,8 +10,8 @@
         <div class="form-group">
           <label>Matéria:</label>
           <mat-select panelClass="custom-select-panel value" [(ngModel)]="selectedSubject" name="subjects" class="dropdown" required>
-            <mat-option *ngFor="let subject of subjectsOptions" [value]="subject">
-              <div style="display: flex; flex-direction: column;">
+            <mat-option *ngFor="let subject of subjectsOptions" [value]="subject" style="margin: 0">
+              <div style="display: flex; flex-direction: row; align-items: center;">
                 <div>{{ subject.name }}</div>
                 <div>{{ subject.term }}</div>
               </div>

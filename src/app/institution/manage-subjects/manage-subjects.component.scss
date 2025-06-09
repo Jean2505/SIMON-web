@@ -133,13 +133,15 @@ hr {
   }
 
   .disciplines {
+    height: 50vh;
+    overflow: auto;
     list-style: none;
     padding: 0;
     margin: 0;
   }
 }
 
-app-back-button{
+app-back-button {
   position: absolute;
   top: 14vh;
   left: 5vw;

@@ -484,6 +484,26 @@ app.post("/updateCourse", async (req, res) => {
   }
 });
 
+app.post("/approveTutor", async (req, res) => {
+  try {
+    const payload = req.body;
+
+    console.log("Requisição: ", payload);
+    // Chama a Cloud Function usando axios
+    const response = await axios.post(
+      "https://approvemonitor-bz6uecg2pq-rj.a.run.app",
+      payload
+    );
+
+    console.log("approveTutor: ", response);
+    // Retorna a resposta da função externa ao front-end
+    res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao chamar função externa:", error.message);
+    res.status(500).json({ error: "Erro ao aprovar o tutor externamente" });
+  }
+});
+
 // Endpoint para se candidatar a uma vaga de monitoria
 app.post("/enlist", async (req, res) => {
   try {
@@ -524,7 +544,10 @@ app.post("/getMuralPosts", async (req, res) => {
         posts: [],
       },
     };
-    console.log("Erro ao chamar função getMuralPosts:", JSON.parse(emptyResponse));
+    console.log(
+      "Erro ao chamar função getMuralPosts:",
+      JSON.parse(emptyResponse)
+    );
     res.json(emptyResponse);
   }
 });

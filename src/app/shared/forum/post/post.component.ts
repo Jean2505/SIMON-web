@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { type PostComment, type ForumPost } from '../../../models/forum-post.model';
 import { CommentsComponent } from "../comments/comments.component";
 import { AuthService } from '../../../core/services/auth.service';
+import { Auth } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-forum-post',
@@ -26,8 +27,8 @@ export class ForumPostComponent implements OnInit {
   comments?: PostComment[];
 
   constructor(
-    /** Referência ao serviço de autenticação @type {AuthService} */
-    private authService: AuthService,
+    /**  */
+    private auth: Auth,
     /** Referência ao serviço de requisições HTTP @type {HttpClient} */
     private http: HttpClient,
     /** Referência ao serviço de localização @type {Location} */
@@ -36,7 +37,7 @@ export class ForumPostComponent implements OnInit {
 
   post!: ForumPost;
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const state = this.location.getState() as { post?: ForumPost, isLiked?: boolean };
     if (state.post) this.post = state.post;
     if (state.isLiked) this.isLiked = state.isLiked;
@@ -53,13 +54,15 @@ export class ForumPostComponent implements OnInit {
   }
 
   async onAddComment(): Promise<void> {
+    const user = this.auth.currentUser!;
+    const idTokenResult = await user.getIdTokenResult(true);
     const comment: PostComment = {
       content: this.enteredComment,
       createdAt: new Date(),
       postId: this.post.docId!,
-      userId: await this.authService.getUserId() || '',
-      userName: await this.authService.getUserName() || '',
-      userRole: await this.authService.getUserRole(),
+      userId: user.uid,
+      userName: user.displayName!,
+      userRole: idTokenResult.claims['role'] as string || '',
     };
 
     console.log('Dados do comentário:', comment);

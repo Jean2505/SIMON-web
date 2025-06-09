@@ -3,9 +3,6 @@
     <span>{{ discipline.name }}</span>
     <span>{{ discipline.professor }}</span>
     <span>{{ discipline.term }}</span>
-  
-    <input type="number" [(ngModel)]="enteredQuantity" min="0" />
-  
+    <input type="number" [(ngModel)]="enteredQuantity" min="0"/>
     <button (click)="onAddDiscipline(discipline.id)">Atualizar</button>
   </div>
-  

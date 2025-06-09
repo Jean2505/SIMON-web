@@ -8,8 +8,9 @@ import { MatCardModule } from '@angular/material/card';
 import { HttpClient } from '@angular/common/http';
 
 import { DisciplineComponent } from './discipline/discipline.component';
-import { Discipline } from '../../models/discipline.model';
-import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
+import { BackButtonComponent } from '../../shared/buttons/back-button/back-button.component';
+
+import { type Discipline } from '../../models/discipline.model';
 
 /**
  * Representa uma escola no sistema.
@@ -23,19 +24,22 @@ interface School {
 
 /**
  * Representa um curso vinculado a uma escola.
- * @property cursoId  - Identificador único do curso.
- * @property escolaId - Identificador da escola ao qual o curso pertence.
  * @property name     - Nome do curso exibido ao usuário.
+ * @property school   - Nome da escola à qual o curso pertence.
  */
-interface Course {
-  cursoId: string;
-  escolaId: string;
+interface Major {
   name: string;
+  school: string;
+}
+
+interface Subject {
+  disciplinaId: string;
+  nome: string;
 }
 
 @Component({
-  selector: 'app-institution-manage-subjects',    // Seletor HTML para usar este componente
-  standalone: true,                               // Componente standalone sem NgModule externo
+  selector: 'app-institution-manage-subjects', // Seletor HTML para usar este componente
+  standalone: true, // Componente standalone sem NgModule externo
   imports: [
     CommonModule,
     FormsModule,
@@ -44,25 +48,46 @@ interface Course {
     MatIconModule,
     MatCardModule,
     DisciplineComponent,
-    BackButtonComponent
-],
-  templateUrl: './manage-subjects.component.html',  // Caminho para o template HTML
-  styleUrls: ['./manage-subjects.component.scss']    // Caminho para estilos SCSS
+    BackButtonComponent,
+  ],
+  templateUrl: './manage-subjects.component.html', // Caminho para o template HTML
+  styleUrls: ['./manage-subjects.component.scss'], // Caminho para estilos SCSS
 })
 export class InstitutionManageSubjectsComponent implements OnInit {
   /** ID da escola atualmente selecionada no dropdown */
   selectedSchoolId?: string;
 
-  /** ID do curso atualmente selecionado no dropdown */
-  selectedCourseId!: string;
+  /** Nome do curso atualmente selecionado no dropdown */
+  selectedMajorName!: string;
 
-  /** Lista de escolas carregadas do backend (SQLite) */
+  /**
+   * Lista de escolas carregadas do backend (SQLite)
+   * @type {School[]}
+   * @property {string} escolaId - Identificador único da escola
+   * @property {string} name     - Nome da escola exibido ao usuário
+   */
   schools: School[] = [];
 
-  /** Lista de cursos carregados do backend para a escola selecionada */
-  courses: Course[] = [];
+  /**
+   * Lista de cursos carregados do backend para a escola selecionada
+   * @type {Major[]}
+   * @property {string} cursoId  - Identificador único do curso
+   * @property {string} escolaId - Identificador da escola ao qual o curso pertence
+   * @property {string} name     - Nome do curso exibido ao usuário
+   */
+  majors: Major[] = [];
 
-  /** Lista de disciplinas carregadas do Firebase após sincronização */
+  /**
+   * Lista de disciplinas carregadas do Firebase após sincronização
+   * @type {Discipline[]}
+   * @property {string} course - ID do curso ao qual a disciplina pertence
+   * @property {string} id - ID da disciplina
+   * @property {string} [monitors] - Quantidade de monitores para a disciplina (opcional)
+   * @property {string} name - Nome da disciplina
+   * @property {string} professor - Nome do professor responsável pela disciplina
+   * @property {string} school - Nome da escola a qual o curso pertence
+   * @property {string} term - Período da disciplina
+   */
   subjects: Discipline[] = [];
 
   /** Flag indicando se as escolas estão sendo carregadas */
@@ -81,7 +106,7 @@ export class InstitutionManageSubjectsComponent implements OnInit {
    * Construtor do componente.
    * @param http - HttpClient para requisições HTTP ao backend.
    */
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Hook de ciclo de vida Angular.
@@ -97,17 +122,16 @@ export class InstitutionManageSubjectsComponent implements OnInit {
    */
   loadSchools(): void {
     this.loadingSchools = true;
-    this.http.get<School[]>('http://localhost:3000/schools')
-      .subscribe({
-        next: data => {
-          this.schools = data;
-          this.loadingSchools = false;
-        },
-        error: err => {
-          console.error('Erro ao carregar escolas:', err);
-          this.loadingSchools = false;
-        }
-      });
+    this.http.get<School[]>('http://localhost:3000/schools').subscribe({
+      next: (data) => {
+        this.schools = data;
+        this.loadingSchools = false;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar escolas:', err);
+        this.loadingSchools = false;
+      },
+    });
   }
 
   /**
@@ -117,8 +141,8 @@ export class InstitutionManageSubjectsComponent implements OnInit {
    */
   onSelectSchool(schoolId: string): void {
     this.selectedSchoolId = schoolId;
-    this.courses = [];
-    this.selectedCourseId = '';
+    this.majors = [];
+    this.selectedMajorName = '';
     this.subjects = [];
     this.loadCourses(schoolId);
   }
@@ -126,37 +150,47 @@ export class InstitutionManageSubjectsComponent implements OnInit {
   /**
    * Carrega a lista de cursos associados à escola selecionada.
    * Atualiza a flag `loadingCourses` e popula `this.courses`.
-   * @param schoolId - ID da escola para consulta dos cursos.
+   * @param school - Nome da escola para consulta dos cursos.
    */
-  loadCourses(schoolId: string): void {
+  loadCourses(school: string): void {
     this.loadingCourses = true;
-    this.http.get<Course[]>('http://localhost:3000/courses', { params: { school: schoolId } })
+    const payload = {
+      school: school,
+    };
+    console.log('Carregando cursos para a escola:', payload);
+    this.http
+      .post('http://localhost:3000/getSchoolCourses', payload)
       .subscribe({
-        next: data => {
-          this.courses = data;
+        next: (response: any) => {
+          const result = JSON.parse(response);
+          this.majors = result.map((course: any) => ({
+            school: course.school,
+            name: course.course,
+          }));
+          console.log('Cursos carregados:', this.majors);
           this.loadingCourses = false;
         },
-        error: err => {
+        error: (err) => {
           console.error('Erro ao carregar cursos:', err);
           this.loadingCourses = false;
-        }
+        },
       });
   }
 
   /**
    * Tratador de evento para seleção de curso.
    * Realiza requisição POST ao backend para obter disciplinas sincronizadas no Firebase.
-   * @param courseId - ID do curso selecionado.
+   * @param majorName - Nome do curso selecionado.
    */
-  onSelectCourse(courseId: string): void {
-    this.selectedCourseId = courseId;
+  onSelectCourse(majorName: string): void {
+    this.selectedMajorName = majorName;
     this.loadingSubjects = true;
 
     /**
      * Verifica se o curso selecionado existe na lista de cursos.
      * Se não existir, exibe mensagem de erro e retorna.
      */
-    const selectedCourse = this.courses.find(c => c.cursoId === courseId);
+    const selectedCourse = this.majors.find((c) => c.name === majorName);
     if (!selectedCourse) {
       console.error('Curso não encontrado');
       this.loadingSubjects = false;
@@ -164,17 +198,27 @@ export class InstitutionManageSubjectsComponent implements OnInit {
     }
 
     const payload = { course: selectedCourse.name };
-    this.http.post('http://localhost:3000/getExternalCourses', payload)
+    this.http
+      .post('http://localhost:3000/getExternalCourses', payload)
       .subscribe({
         next: (response: any) => {
-          const raw = response.payload;
-          this.subjects = typeof raw === 'string' ? JSON.parse(raw) : raw;
+          const result = JSON.parse(response);
+          console.log('Disciplinas carregadas:', result);
+          this.subjects = result.map((subject: any) => ({
+            course: subject.course,
+            id: subject.id,
+            monitors: subject.monitors || 0, // Define 0 se não houver monitores
+            name: subject.name,
+            professor: subject.professor,
+            school: subject.school,
+            term: subject.term,
+          }));
           this.loadingSubjects = false;
         },
-        error: err => {
+        error: (err) => {
           console.error('Erro ao obter disciplinas externamente:', err);
           this.loadingSubjects = false;
-        }
+        },
       });
   }
 
@@ -183,35 +227,38 @@ export class InstitutionManageSubjectsComponent implements OnInit {
    * Verifica pré-condições e faz GET ao endpoint de sincronização.
    */
   onLoadCourses(): void {
-    if (!this.selectedSchoolId || !this.selectedCourseId) {
+    if (!this.selectedSchoolId || !this.selectedMajorName) {
       alert('Selecione uma escola e um curso antes de carregar as matérias.');
       return;
     }
 
-    const selectedSchool = this.schools.find(e => e.escolaId === this.selectedSchoolId)!;
-    const selectedCourse = this.courses.find(c => c.cursoId === this.selectedCourseId)!;
+    const selectedSchool = this.schools.find(
+      (e) => e.escolaId === this.selectedSchoolId
+    )!;
+    const selectedCourse = this.majors.find(
+      (c) => c.name === this.selectedMajorName
+    )!;
     const params = { school: selectedSchool.name, major: selectedCourse.name };
 
     this.loadingSync = true;
-    this.http.get('http://localhost:3000/loadCourses', { params })
-      .subscribe({
-        next: resp => {
-          console.log('Sincronização concluída:', resp);
-          this.loadingSync = false;
-          this.onSelectCourse(this.selectedCourseId);
-        },
-        error: err => {
-          console.error('Erro na sincronização:', err);
-          this.loadingSync = false;
-        }
-      });
+    this.http.get('http://localhost:3000/loadCourses', { params }).subscribe({
+      next: (resp) => {
+        console.log('Sincronização concluída:', resp);
+        this.loadingSync = false;
+        this.onSelectCourse(this.selectedMajorName);
+      },
+      error: (err) => {
+        console.error('Erro na sincronização:', err);
+        this.loadingSync = false;
+      },
+    });
   }
 
   /**
    * Getter para obter o objeto do curso atualmente selecionado.
    */
-  get selectedCourse(): Course | undefined {
-    return this.courses.find(c => c.cursoId === this.selectedCourseId);
+  get selectedCourse(): Major | undefined {
+    return this.majors.find((c) => c.name === this.selectedMajorName);
   }
 
   /**
@@ -230,8 +277,8 @@ export class InstitutionManageSubjectsComponent implements OnInit {
    * @param course - Objeto Course corrente.
    * @returns ID único do curso para rastreamento.
    */
-  trackByCourse(index: number, course: Course): string {
-    return course.cursoId;
+  trackByCourse(index: number, course: Major): string {
+    return course.name;
   }
 
   /**

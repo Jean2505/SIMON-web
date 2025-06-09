@@ -9,30 +9,26 @@ import { Tutor } from '../../models/tutor.model';
   standalone: true,
   imports: [MatExpansionModule],
   templateUrl: './approve-candidate.component.html',
-  styleUrl: './approve-candidate.component.scss'
+  styleUrl: './approve-candidate.component.scss',
 })
 export class ApproveCandidateComponent implements OnInit {
-
   tutors: Tutor[] = [];
 
   /**
    * Constructor
    * @param http HttpClient
    */
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.http.get('http://localhost:3000/getRequisitions')
-      .subscribe({
-        next: (response: any) => {
-          let result = JSON.parse(response);
-          console.log(result);
-          this.tutors = result;
-        },
-        error: (error) => console.error('Error fetching requisitions:', error)
-      })
+    this.http.get('http://localhost:3000/getRequisitions').subscribe({
+      next: (response: any) => {
+        let result = JSON.parse(response);
+        console.log(result);
+        this.tutors = result;
+      },
+      error: (error) => console.error('Error fetching requisitions:', error),
+    });
   }
 
   /**
@@ -51,16 +47,30 @@ export class ApproveCandidateComponent implements OnInit {
    * @param disciplinaId Discipline ID
    */
   sendResult(result: number, uid: string, disciplinaId: string): void {
-    this.http.post('http://localhost:3000/updateRequisition', {
-      uid: uid,
-      aprovacao: result,
-      disciplinaId: disciplinaId
-    }).subscribe({
-      next: (response) => {
-        console.log('Response:', response);
-        window.location.reload();
-      },
-      error: (error) => console.error('Error:', error)
-    });
+    this.http
+      .post('http://localhost:3000/updateRequisition', {
+        uid: uid,
+        aprovacao: result,
+        disciplinaId: disciplinaId,
+      })
+      .subscribe({
+        next: (response) => {
+          console.log('Response:', response);
+          this.http
+            .post('http://localhost:3000/approveTutor', {
+              id: disciplinaId,
+            })
+            .subscribe({
+              next: (response) => {
+                console.log('Response from server:', response);
+                window.location.reload();
+              },
+              error: (error) => {
+                console.error('Error sending data:', error);
+              },
+            });
+        },
+        error: (error) => console.error('Error:', error),
+      });
   }
 }
