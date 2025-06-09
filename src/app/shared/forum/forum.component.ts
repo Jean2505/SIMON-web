@@ -7,7 +7,7 @@ import { ForumPost } from '../../models/forum-post.model';
 import { NewPostComponent } from './new-post/new-post.component';
 import { Auth, User } from '@angular/fire/auth';
 import { ActivatedRoute } from '@angular/router';
-import { ProgressWithGifComponent } from "../loading/loading.component";
+import { ProgressWithGifComponent } from '../loading/loading.component';
 
 @Component({
   selector: 'app-forum',

@@ -20,37 +20,37 @@
 }
 
 .card-list {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px 12px;
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-  }
-  
-  button {
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
-    background: #56d8e4; // cor base
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-    width: 59px;
-    height: 59px;
-    border-radius: 50px;
-    font-weight: 900;
-    font-size: 2rem;
-    transition: ease 0.5s;
-  }
-  
-  button:hover {
-    background: #399199; // cor base
-    color: white;
-    width: 62px;
-    height: 62px;
-    filter: drop-shadow(0 0 0.35rem rgb(81, 0, 128));
-  }
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 12px;
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+
+button {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: #56d8e4; // cor base
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  width: 59px;
+  height: 59px;
+  border-radius: 50px;
+  font-weight: 900;
+  font-size: 2rem;
+  transition: ease 0.5s;
+}
+
+button:hover {
+  background: #399199; // cor base
+  color: white;
+  width: 62px;
+  height: 62px;
+  filter: drop-shadow(0 0 0.35rem rgb(81, 0, 128));
+}

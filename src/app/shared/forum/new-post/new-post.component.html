@@ -9,6 +9,6 @@
     <label for="content">Conteúdo</label>
     <textarea id="content" [(ngModel)]="enteredContent" name="content" required></textarea>
 
-    <button type="submit" [disabled]="isSending">Enviar</button>
+    <button type="submit" [disabled]="isSending || !enteredTitle || !enteredContent">Enviar</button>
   </form>
 </div>

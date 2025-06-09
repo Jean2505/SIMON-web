@@ -9,7 +9,7 @@ import { type ForumPost } from '../../../models/forum-post.model';
   selector: 'app-forum-new-post',
   imports: [FormsModule],
   templateUrl: './new-post.component.html',
-  styleUrl: './new-post.component.scss'
+  styleUrl: './new-post.component.scss',
 })
 export class NewPostComponent implements OnInit {
   /** ID da matéria passado via Input para associar o post */
@@ -32,7 +32,7 @@ export class NewPostComponent implements OnInit {
     /** Referência ao serviço de autenticação do Firebase @type {Auth} */
     private auth: Auth,
     /** Referência ao serviço de requisições HTTP @type {HttpClient} */
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -53,7 +53,7 @@ export class NewPostComponent implements OnInit {
       likes: 0,
       title: this.enteredTitle,
       userId: this.auth.currentUser?.uid || '',
-      userName: this.auth.currentUser?.displayName || ''
+      userName: this.auth.currentUser?.displayName || '',
     };
 
     console.log('Dados do post:', postData);
@@ -68,11 +68,11 @@ export class NewPostComponent implements OnInit {
       },
       complete: () => {
         this.isSending = false;
-      }
+      },
     });
   }
 
-    showModal = false;
+  showModal = false;
 
   openModal() {
     this.showModal = true;
@@ -81,5 +81,4 @@ export class NewPostComponent implements OnInit {
   closeModal() {
     this.showModal = false;
   }
-
 }

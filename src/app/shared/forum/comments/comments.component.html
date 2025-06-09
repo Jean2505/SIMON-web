@@ -1,9 +1,9 @@
 <div class="comment-container">
   <div class="comment-header">
     <p>{{ comment?.userName }}</p>
-    <p>• {{ comment?.createdAt | date:'dd/MM/yyyy - HH:mm' }}</p>
+    <p>• {{ comment?.createdAt | date : "dd/MM/yyyy - HH:mm" }}</p>
     @if (comment?.userRole != "ALUNO") {
-      <p class="role">{{ comment?.userRole }}</p>
+    <p class="role">{{ comment?.userRole }}</p>
     }
   </div>
   <div class="comment-content">

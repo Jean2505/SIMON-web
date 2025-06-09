@@ -1,123 +1,123 @@
 .container {
-    max-width: 1000px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: #f6f7f8;
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-  }
-  
-  .post-container {
-    background-color: white;
-    padding: 1.2rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-bottom: 1rem;
-  }
-  
-  .post-container p:first-child {
-    color: #7c7c7c;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .post-container h2 {
-    margin: 0.5rem 0;
-    font-size: 1.3rem;
-    color: #222;
-  }
-  
-  .post-container p:last-of-type {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #333;
-    margin-bottom: 1rem;
-  }
-  
-  .like-btn {
-    background-color: transparent;
-    border: 1px solid #0079d3;
-    color: #0079d3;
-    padding: 6px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  
-    &:hover {
-      background-color: #e6f0fa;
-    }
-  
-    &.liked {
-      background-color: rgba(0, 119, 255, 0.2);
-    }
-  }
-  
-  hr {
-    border: none;
-    border-top: 1px solid #ddd;
-    margin: 1rem 0;
-  }
-  
-  input[type="text"] {
-    width: 100%;
-    padding: 0.7rem;
-    font-size: 0.95rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
-    box-sizing: border-box;
-  
-    &:focus {
-      outline: none;
-      border-color: #0079d3;
-      box-shadow: 0 0 4px rgba(0, 121, 211, 0.3);
-    }
-  }
-  
-  button[type="button"]:not(.like-btn) {
-    background-color: #0079d3;
-    color: white;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease;
-  
-    &:hover {
-      background-color: #005999;
-    }
-  }
-  
-  app-comments {
-    display: block;
-    background-color: white;
-    padding: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    margin-bottom: 0.5rem;
-  }
-  
-  .like-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background-color: rgba(0, 0, 0, 0.07);
-    border: none;
-    padding: 6px 12px;
-    border-radius: 999px;
-    color: black;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #f6f7f8;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
 
-    &:hover {
-      background-color: #0077ff33;
-    }
+.post-container {
+  background-color: white;
+  padding: 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
 
-    &.liked{
-      background-color: rgba(0, 119, 255, 0.2);
-    }
+.post-container p:first-child {
+  color: #7c7c7c;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-container h2 {
+  margin: 0.5rem 0;
+  font-size: 1.3rem;
+  color: #222;
+}
+
+.post-container p:last-of-type {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.like-btn {
+  background-color: transparent;
+  border: 1px solid #0079d3;
+  color: #0079d3;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background-color: #e6f0fa;
   }
+
+  &.liked {
+    background-color: rgba(0, 119, 255, 0.2);
+  }
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 1rem 0;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 0.7rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #0079d3;
+    box-shadow: 0 0 4px rgba(0, 121, 211, 0.3);
+  }
+}
+
+button[type="button"]:not(.like-btn) {
+  background-color: #0079d3;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #005999;
+  }
+}
+
+app-comments {
+  display: block;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  margin-bottom: 0.5rem;
+}
+
+.like-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(0, 0, 0, 0.07);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: black;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0077ff33;
+  }
+
+  &.liked {
+    background-color: rgba(0, 119, 255, 0.2);
+  }
+}
