@@ -147,6 +147,34 @@ export const updateCourse = onRequest({region: "southamerica-east1" }, async (re
     res.status(200).send('Documento atualizado com sucesso!');
 });
 
+export const approveMonitor = onRequest({region: "southamerica-east1" }, async (req, res) => {
+    let result: CallableResponse;
+    const snapshot = await db.collection("Courses").where("id", "==", req.body.id).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    await db.collection("Courses").doc(snapshot.docs[0].id).set({currentMonitors: snapshot.docs[0].data().currentMonitors + 1}, {merge: true});
+
+    // await db.collection("Courses").doc(snapshot.docs[0].id).update({
+    //     ["monitors"]: req.body.qtdMonitors
+    //   });
+    result = {
+        status: "OK",
+        message: "Monitor approved",
+        payload: "Monitor approved"
+    };
+    res.status(200).send(result);
+});
+
 export const findUser = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
 
