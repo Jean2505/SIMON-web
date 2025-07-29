@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { type AvailableTime, type Tutor } from '../../../models/tutor.model';
 import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 /**
  * Componente de exibição de informações de um monitor.
@@ -10,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-tutor',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './tutor.component.html',
   styleUrls: ['./tutor.component.scss'],
 })

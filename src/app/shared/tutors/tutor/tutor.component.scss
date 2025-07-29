@@ -89,3 +89,47 @@
   font-weight: bold;
   border-radius: 10px;
 }
+
+.time-hover-container {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  .time-popup {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  font-size: 0.85rem;
+  min-width: 150px;
+
+  // Alinha os elementos da linha
+  div {
+    display: flex;
+    align-items: baseline; // alinha pela linha de texto (evita o efeito “centralizado”)
+    gap: 4px;
+    line-height: 1.4;
+    margin: 2px 0;
+  }
+
+  strong {
+    min-width: 40px;
+  }
+
+  span {
+    display: inline-block;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+}
+
+  
+  &:hover .time-popup {
+    display: block;
+  }
+}

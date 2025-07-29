@@ -3,7 +3,19 @@
     <img class="monitor-photo" [src]="tutor.foto" alt="Foto do monitor">
   </span>
   <span>{{ tutor.nome }}</span>
-  <span>{{ nextAvailableTime() }}</span>
+  <span class="time-hover-container">{{ nextAvailableTime() }}
+
+  <div class="time-popup">
+    <div *ngFor="let horario of tutor.horarioDisponivel">
+      <strong>{{ horario.day }}:</strong>
+      <ng-container *ngFor="let hora of horario.time; let i = index">
+        <span>{{ hora.toString().padStart(2, '0') }}:00</span>
+        <span *ngIf="i === 0 && horario.time.length > 1"> Até </span>
+      </ng-container>
+    </div>
+  </div>
+
+  </span>
   <span>{{ tutor.local }}</span>
   <span>{{ tutor.sala }}</span>
   <span>{{ tutor.status ? "Disponível" : "Indisponível" }}</span>
