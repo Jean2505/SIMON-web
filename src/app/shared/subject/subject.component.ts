@@ -35,6 +35,7 @@ export class SubjectComponent implements OnInit, OnDestroy {
     name: '',
     professor: '',
     term: 0,
+    tutoringEnabled: false
   };
 
   /**
