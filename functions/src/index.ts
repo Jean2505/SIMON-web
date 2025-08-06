@@ -777,3 +777,27 @@ export const getSchoolCourses = onRequest({region: "southamerica-east1"}, async 
     };
     res.status(200).send(result);
 });
+
+export const sendMonitorRequest = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    try {
+        await db.collection("MonitorRequisitions").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Monitor request sent successfully",
+            payload: "Monitor request sent successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error sending monitor request",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+});
