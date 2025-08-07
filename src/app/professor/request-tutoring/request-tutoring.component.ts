@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Auth, User } from '@angular/fire/auth';
 import { Discipline } from '../../models/discipline.model';
-import { DisciplineComponent } from '../../shared/list-subjects/discipline/discipline.component';
+import { DisciplineComponent } from './discipline/discipline.component';
 import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 
 @Component({
@@ -21,8 +21,6 @@ import { BackButtonComponent } from "../../shared/buttons/back-button/back-butto
 export class RequestTutoringComponent implements OnInit {
 
   user!: User;
-
-  role = '';
 
   /** ID do curso */
   courseId = '';
@@ -51,9 +49,9 @@ export class RequestTutoringComponent implements OnInit {
     private route: ActivatedRoute
   ){}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.user = this.auth.currentUser!;
-    this.loadSubjects;
+    this.loadSubjects();
   }
 
   /**
@@ -82,7 +80,7 @@ export class RequestTutoringComponent implements OnInit {
       .subscribe({
         next: (response: any) => {
           const result = JSON.parse(response);
-          this.courseId = result.curso;
+          this.courseId = result.course;
           this.subjects = result.map((subject: any) => {
             return {
               id: subject.id,

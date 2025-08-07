@@ -9,7 +9,7 @@
         <span>ID</span>
         <span>Nome</span>
         <span>Curso</span>
-        <span>Período</span>
+        <span>Monitores</span>
         <span>Ações</span>
         </div>
 
@@ -22,7 +22,7 @@
             <app-discipline
             [cursoId]="courseId"
             [discipline]="disciplina"
-            [role]="role"
+            [monitorsQuantity]="disciplina.monitors"
             ></app-discipline>
         </li>
         }
