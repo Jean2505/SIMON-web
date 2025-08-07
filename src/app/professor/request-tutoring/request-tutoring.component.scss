@@ -1,0 +1,54 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.manage-container {
+  padding: 0px 6vw;
+  margin-top: 15vh;
+
+  h3 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 8px;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid #cbd5e1;
+    margin-bottom: 16px;
+  }
+
+  .disciplines {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li + li {
+      margin-top: 16px;
+    }
+  }
+
+  .discipline-header {
+    display: grid;
+    grid-template-columns: 80px 1.5fr 1.5fr 1fr 1fr;
+    padding: 12px 20px;
+    background: -webkit-linear-gradient(
+      right,
+      rgba(86, 216, 228, 0.3),
+      rgb(83, 1, 234, 0.3)
+    );
+    border-radius: 8px;
+    font-weight: bold;
+    color: #475569;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+}
