@@ -11,10 +11,10 @@ import { BackButtonComponent } from "../../shared/buttons/back-button/back-butto
 @Component({
   selector: 'app-request-tutoring',
   imports: [
-    BackButtonComponent, 
+    BackButtonComponent,
     CommonModule,
     DisciplineComponent
-  ],
+],
   templateUrl: './request-tutoring.component.html',
   styleUrl: './request-tutoring.component.scss'
 })

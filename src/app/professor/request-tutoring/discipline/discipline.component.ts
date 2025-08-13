@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { type Discipline } from '../../../models/discipline.model';
 import { SessionStorageService } from '../../../core/services/session-storage.service';
+import { RequestModalComponent } from "../request-modal/request-modal.component";
 
 /**
  * Componente de exibição e manipulação de informações de disciplina.
@@ -13,7 +14,7 @@ import { SessionStorageService } from '../../../core/services/session-storage.se
 @Component({
   selector: 'app-discipline', // Seletor HTML para usar este componente
   standalone: true, // Componente standalone sem necessidade de NgModule externo
-  imports: [FormsModule, RouterModule], // Módulos necessários para formulários e navegação
+  imports: [FormsModule, RouterModule, RequestModalComponent], // Módulos necessários para formulários e navegação
   templateUrl: './discipline.component.html', // Caminho para o template HTML
   styleUrls: ['./discipline.component.scss'], // Caminho para estilos SCSS
 })
@@ -25,6 +26,9 @@ export class DisciplineComponent {
   @Input({ required: true }) cursoId!: string; 
 
   @Input({ required: true }) monitorsQuantity!: Number | undefined;
+
+  isRequesting = false;
+  @Output() openModal = new EventEmitter<boolean>();
 
   /**
    * Construtor do componente.
@@ -57,7 +61,16 @@ export class DisciplineComponent {
       .catch((error) => console.error('Erro na navegação:', error));
   }
 
-  sendRequest(discipline: Discipline): void {
+  openRequestModal(discipline: Discipline): void {
     console.log(this.monitorsQuantity);
+    this.isRequesting = !this.isRequesting;
+  }
+
+  cancel() {
+    this.isRequesting = false;
+  }
+
+  clickCancel(event: boolean) {
+    this.isRequesting = event;
   }
 }

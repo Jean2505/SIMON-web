@@ -4,5 +4,10 @@
   <span>{{ discipline.course }}</span>
   <span>{{ monitorsQuantity }}</span>
 
-  <button (click)="sendRequest(discipline)">Enviar requisição</button>
+  <button (click)="openRequestModal(discipline)">Enviar requisição</button>
+
+  @if(isRequesting){
+    <div class="modal-backdrop" (click)="cancel()"></div>
+    <app-request-modal (cancel)="clickCancel($event)"></app-request-modal>
+  }
 </div>
