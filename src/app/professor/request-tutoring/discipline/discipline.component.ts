@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
@@ -24,8 +24,6 @@ export class DisciplineComponent {
 
   /** ID do curso ao qual a disciplina pertence. */
   @Input({ required: true }) cursoId!: string; 
-
-  @Input({ required: true }) monitorsQuantity!: Number | undefined;
 
   isRequesting = false;
   @Output() openModal = new EventEmitter<boolean>();
@@ -62,7 +60,6 @@ export class DisciplineComponent {
   }
 
   openRequestModal(discipline: Discipline): void {
-    console.log(this.monitorsQuantity);
     this.isRequesting = !this.isRequesting;
   }
 
