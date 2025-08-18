@@ -89,6 +89,7 @@ export class RequestTutoringComponent implements OnInit {
               professor: subject.professor,
               term: subject.term,
               monitors: subject.monitors,
+              currentMonitors: subject.currentMonitors
             };
           });
           this.loadingDisciplinas = false;

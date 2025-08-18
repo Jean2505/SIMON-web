@@ -2,7 +2,8 @@
  * Interface da Disciplina
  * @property {string} course - ID do curso ao qual a disciplina pertence
  * @property {string} id - ID da disciplina
- * @property {string} [monitors] - Quantidade de monitores para a disciplina (opcional)
+ * @property {string} [monitors] - Quantidade de vagas para monitoria para a disciplina (opcional)
+ * @property {string} [currentMonitors] - Quantidade de monitores para a disciplina (opcional)
  * @property {string} name - Nome da disciplina
  * @property {string} professor - Nome do professor responsável pela disciplina
  * @property {string} school - Nome da escola a qual o curso pertence
@@ -21,12 +22,19 @@ export interface Discipline {
      */
     id: string;
     /**
-     * Quantidade de monitores para a disciplina
+     * Quantidade de vagas de monitoria para a disciplina
      * @optional
      * @default 0
      * @type {Number}
      */
     monitors?: Number | 0;
+    /**
+     * Quantidade de monitores para a disciplina
+     * @optional
+     * @default 0
+     * @type {Number}
+     */
+    currentMonitors?: Number | 0;
     /**
      * Nome da disciplina
      * @type {string}

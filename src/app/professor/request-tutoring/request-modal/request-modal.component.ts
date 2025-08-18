@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Discipline } from '../../../models/discipline.model';
 
 @Component({
   selector: 'app-request-modal',
@@ -8,6 +9,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class RequestModalComponent {
 
+  /** Objeto Discipline com dados da matéria. */
+  @Input({ required: true }) discipline!: Discipline;
+  
   @Output() cancel = new EventEmitter<boolean>();
 
   cancelModal() {

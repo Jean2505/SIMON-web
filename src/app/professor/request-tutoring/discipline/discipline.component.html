@@ -8,6 +8,9 @@
 
   @if(isRequesting){
     <div class="modal-backdrop" (click)="cancel()"></div>
-    <app-request-modal (cancel)="clickCancel($event)"></app-request-modal>
+    <app-request-modal 
+    (cancel)="clickCancel($event)"
+    [discipline]="discipline"
+    ></app-request-modal>
   }
 </div>
