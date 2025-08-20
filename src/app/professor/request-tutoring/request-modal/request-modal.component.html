@@ -1,15 +1,37 @@
-<div class="modal-container">
-    <div class="info">
-        <h4>Observação de mudança de vagas. Sei lá se vira aí Marcos</h4>
+<!-- Backdrop -->
+<div class="backdrop" (click)="cancelModal()">
+  <!-- Modal -->
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Cabeçalho Roxo -->
+    <div class="modal-header">
+      <h2>Engenharia e Elicitação de Requisitos</h2>
+    </div>
 
-        <span>Quantidade de monitores atuais: {{ discipline.currentMonitors }} </span>
-        <span>Quantidade total de vagas atuais: {{ discipline.monitors }}</span>
-        
-        <label for="request-quantity">Defina quantas vagas quer requisitar: </label>
-        <input type="number" id="request-quantity" name="request-quantity" max="10" [(ngModel)]="requestQuantity">
+    <!-- Corpo -->
+    <div class="modal-body">
+      <p>
+        Quantidade de Monitores atuais:
+        <span class="value">{{ discipline.currentMonitors }}</span>
+      </p>
+      <p>
+        Quantidade total de vagas:
+        <span class="value">{{ discipline.monitors }}</span>
+      </p>
+
+      <label for="request-quantity">Quantidade de vagas a requisitar:</label>
+      <input
+        type="number"
+        id="request-quantity"
+        name="request-quantity"
+        max="10"
+        [(ngModel)]="requestQuantity"
+      />
     </div>
-    <div class="action">
-        <button class="cancel-button" (click)="cancelModal()">Cancelar</button>
-        <button class="approve-button" (click)="sendRequest()">Confirmar</button>
+
+    <!-- Ações -->
+    <div class="modal-actions">
+      <button class="cancel-button" (click)="cancelModal()">Cancelar</button>
+      <button class="approve-button" (click)="confirmAndClose()">Confirmar</button>
     </div>
+  </div>
 </div>

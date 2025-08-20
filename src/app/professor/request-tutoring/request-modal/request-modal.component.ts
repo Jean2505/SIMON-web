@@ -34,7 +34,7 @@ export class RequestModalComponent implements OnInit{
     this.cancel.emit(false);
   }
 
-  sendRequest(): void {
+  confirmAndClose(): void {
     this.http
       .post('http://localhost:3000/sendMonitorRequest', {
         id: this.discipline.id,
@@ -49,5 +49,6 @@ export class RequestModalComponent implements OnInit{
           console.log(response);
         }
       });
+      this.cancel.emit(false);
   }
 }
