@@ -1,1 +1,18 @@
-<p>manage-requests works!</p>
+<div class="container">
+    <div class="manage-container">
+        <app-back-button></app-back-button>
+        <h3>Requisições</h3>
+        <hr>
+        @if (loading) {
+            <app-loading class="loading"></app-loading>
+        } @else if (requests.length == 0) {
+        <div class="no-requests">
+            <p>Nenhuma requisição disponível</p>
+        </div>
+        } @else { @for (request of requests; track request.ra + request.disciplina) {
+        <app-request-item
+            [request]="request"
+        ></app-request-item>
+        } }
+    </div>
+</div>
