@@ -55,4 +55,8 @@ export class ProfessorHomeComponent {
       })
       .catch(error => console.error('Erro na navegação:', error));
   }
+
+  goRecomendation(): void {
+    alert('Funcionalidade em desenvolvimento');
+  }
 }
