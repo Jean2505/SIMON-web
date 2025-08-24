@@ -354,6 +354,29 @@ export const createStudent = onRequest({region: "southamerica-east1"}, async (re
 
 });
 
+export const getMonitorRequests = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    const snapshot = await db.collection("MonitorRequisitions").where("status", "==", 2).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "Requisitions found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
+
 export const getRequisitions = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
     const snapshot = await db.collection("Monitores").where("aprovacao", "==", 0).get();
