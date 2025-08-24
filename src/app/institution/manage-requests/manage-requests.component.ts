@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 import { ProgressWithGifComponent } from "../../shared/loading/loading.component";
-import { Tutor } from '../../models/tutor.model';
 import { RequestItemComponent } from "./request-item/request-item.component";
+import { ProfessorRequest } from '../../models/professor-request.model';
 
 @Component({
   selector: 'app-manage-requests',
@@ -13,7 +13,7 @@ import { RequestItemComponent } from "./request-item/request-item.component";
 })
 export class ManageRequestsComponent implements OnInit {
 
-  requests: Tutor [] = [];
+  requests: ProfessorRequest [] = [];
 
   /** Loading state */
   loading: boolean = false;
@@ -26,7 +26,7 @@ export class ManageRequestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this.http.get('http://localhost:3000/getRequisitions').subscribe({
+    this.http.get('http://localhost:3000/getMonitorRequest').subscribe({
       next: (response: any) => {
         let result = JSON.parse(response);
         console.log(result);

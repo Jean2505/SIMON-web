@@ -9,7 +9,7 @@
         <div class="no-requests">
             <p>Nenhuma requisição disponível</p>
         </div>
-        } @else { @for (request of requests; track request.ra + request.disciplina) {
+        } @else { @for (request of requests; track request.id + request.name) {
         <app-request-item
             [request]="request"
         ></app-request-item>

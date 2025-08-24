@@ -42,7 +42,9 @@ export class RequestModalComponent implements OnInit{
         course: this.discipline.course,
         professor: this.discipline.professor,
         monitors: this.discipline.monitors,
-        requestQuantity: this.requestQuantity
+        currentMonitors: this.discipline.currentMonitors,
+        requestQuantity: this.requestQuantity,
+        status: 2
       })
       .subscribe({
         next: (response: any) => {

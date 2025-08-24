@@ -3,50 +3,46 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            {{ request.disciplina }}
+            {{ request.name }}
           </mat-panel-title>
           <mat-panel-description>
-            {{ request.nome }}
+            {{ request.professor }}
           </mat-panel-description>
         </mat-expansion-panel-header>
         <div class="panel-content">
           <div class="info-section requisicao-materia">
-            <h2 class="field-label">Aluno</h2>
-            <span class="field-value">{{ request.nome }} - {{ request.ra }}</span>
+            <h2 class="field-label">Professor</h2>
+            <span class="field-value">{{ request.professor }}</span>
             <p>|</p>
             <h2 class="field-label">Matéria</h2>
             <span class="field-value">
-              {{ request.disciplina }} - Engenharia de Software
+              {{ request.name }}
             </span>
             <p>|</p>
-            <h2 class="field-label">Remuneração</h2>
-            @if(request.remuneracao){
-            <span class="field-value">Sim</span>
-            }@else {
-            <span class="field-value">Não</span>
-            }
+            <h2 class="field-label">Quantidade da requisição: </h2>
+            <span class="field-value">{{ request.requestQuantity }}</span>
             <p>|</p>
-            <h2 class="field-label">Carga-Horária (h)</h2>
-            <span class="field-value">{{ request.cargaHoraria }}</span>
+            <h2 class="field-label">Quantidade de vagas totais para monitores: </h2>
+            <span class="field-value">{{ request.monitors }}</span>
           </div>
           <div class="info-section">
-            <h2 class="field-label">Justificativa/Motivação</h2>
+            <h2 class="field-label">Quantidade de monitores: </h2>
             <p class="field-value">
-              {{ request.mensagem }}
+              {{ request.currentMonitors }}
             </p>
           </div>
         </div>
 
         <mat-action-row class="action-buttons">
           <button
-            (click)="sendResult(2, request.uid, request.disciplinaId)"
+            (click)="sendResult(0, request.id, request.requestQuantity)"
             class="reject-btn"
             [disabled]="loadingResult"
           >
             Reprovar
           </button>
           <button
-            (click)="sendResult(1, request.uid, request.disciplinaId)"
+            (click)="sendResult(1, request.id, request.requestQuantity)"
             class="approve-btn"
             [disabled]="loadingResult"
           >

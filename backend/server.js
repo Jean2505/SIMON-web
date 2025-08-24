@@ -764,7 +764,7 @@ app.post("/sendMonitorRequest", async (req, res) => {
     console.log("sendMonitorRequest: ", data);
 
     const response = await axios.post(
-      "http://sendMonitorRequest-bz6uecg2pq-rj.a.run.app",
+      "https://sendmonitorrequest-bz6uecg2pq-rj.a.run.app ",
       data
     );
 
@@ -774,6 +774,39 @@ app.post("/sendMonitorRequest", async (req, res) => {
   } catch (error) {
     console.error("Erro ao chamar a função sendMonitorRequest:", error.message);
     res.status(500).json({ error: "Erro ao enviar a requisição do monitor" });
+  }
+});
+
+app.get("/getMonitorRequest", async (req, res) => {
+  try {
+    console.log("getMonitorRequest: ", req.body);
+    const response = await axios.get(
+      "https://getmonitorrequests-bz6uecg2pq-rj.a.run.app "
+    );
+    console.log("Resposta: ", JSON.parse(response.data.payload));
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função getMonitorRequest:", error.message);
+    res.status(500).json({ error: "Erro ao obter as requisições externamente" });
+  }
+});
+
+app.post("/updateMonitorRequisition", async (req, res) => {
+  try {
+    const data = req.body;
+    console.log("updateMonitorRequisition: ", data);
+
+    const response = await axios.post(
+      "https://updatemonitorrequisition-bz6uecg2pq-rj.a.run.app",
+      data
+    );
+    
+    console.log(response.data.payload);
+
+    res.json(response.data.payload);
+  } catch (error){
+    console.error("Erro ao chamar a função updateMonitorRequisition:", error.message);
+    res.status(500).json({ error: "Erro ao aprovar/reprovar a requisição" });
   }
 })
 
