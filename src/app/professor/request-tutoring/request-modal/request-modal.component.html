@@ -1,0 +1,37 @@
+<!-- Backdrop -->
+<div class="backdrop" (click)="cancelModal()">
+  <!-- Modal -->
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Cabeçalho Roxo -->
+    <div class="modal-header">
+      <h2>Engenharia e Elicitação de Requisitos</h2>
+    </div>
+
+    <!-- Corpo -->
+    <div class="modal-body">
+      <p>
+        Quantidade de Monitores atuais:
+        <span class="value">{{ discipline.currentMonitors }}</span>
+      </p>
+      <p>
+        Quantidade total de vagas:
+        <span class="value">{{ discipline.monitors }}</span>
+      </p>
+
+      <label for="request-quantity">Quantidade de vagas a requisitar:</label>
+      <input
+        type="number"
+        id="request-quantity"
+        name="request-quantity"
+        max="10"
+        [(ngModel)]="requestQuantity"
+      />
+    </div>
+
+    <!-- Ações -->
+    <div class="modal-actions">
+      <button class="cancel-button" (click)="cancelModal()">Cancelar</button>
+      <button class="approve-button" (click)="confirmAndClose()">Confirmar</button>
+    </div>
+  </div>
+</div>

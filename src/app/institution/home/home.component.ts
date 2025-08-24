@@ -39,6 +39,8 @@ export class InstitutionHomeComponent {
   }
 
   goManageRequests(): void {
-    alert('Funcionalidade em desenvolvimento');
+    this.router.navigate(['/institution/manage-requests'])
+      .then(success => console.log('Navegação realizada:', success))
+      .catch(error => console.error('Erro na navegação:', error));
   }
 }

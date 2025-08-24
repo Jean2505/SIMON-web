@@ -1,0 +1,16 @@
+<div class="discipline-row">
+  <span>{{ discipline.id }}</span>
+  <span>{{ discipline.name }}</span>
+  <span>{{ discipline.course }}</span>
+  <span>{{ discipline.monitors }}</span>
+
+  <button (click)="openRequestModal(discipline)">Enviar requisição</button>
+
+  @if(isRequesting){
+    <div class="modal-backdrop" (click)="cancel()"></div>
+    <app-request-modal 
+    (cancel)="clickCancel($event)"
+    [discipline]="discipline"
+    ></app-request-modal>
+  }
+</div>

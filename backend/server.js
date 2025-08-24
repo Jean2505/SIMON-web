@@ -758,6 +758,25 @@ app.post("/likePost", async (req, res) => {
   }
 });
 
+app.post("/sendMonitorRequest", async (req, res) => {
+  try {
+    const data = req.body;
+    console.log("sendMonitorRequest: ", data);
+
+    const response = await axios.post(
+      "http://sendMonitorRequest-bz6uecg2pq-rj.a.run.app",
+      data
+    );
+
+    console.log(response.data.payload);
+
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar a função sendMonitorRequest:", error.message);
+    res.status(500).json({ error: "Erro ao enviar a requisição do monitor" });
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

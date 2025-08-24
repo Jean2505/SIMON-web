@@ -6,6 +6,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { InstitutionHomeComponent } from '../../institution/home/home.component';
 import { InstitutionManageSubjectsComponent } from '../../institution/manage-subjects/manage-subjects.component';
 import { ApproveCandidateComponent } from '../../institution/approve-candidate/approve-candidate.component';
+import { ManageRequestsComponent } from '../../institution/manage-requests/manage-requests.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
         path: 'subject/:id',
         loadChildren: () => import('./shared.module').then(m => m.SharedModule),
       },
+      { path: 'manage-requests', component: ManageRequestsComponent },
     ]
   }
 ];

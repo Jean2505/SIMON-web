@@ -1,0 +1,58 @@
+<div class="container">
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ request.disciplina }}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{ request.nome }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="panel-content">
+          <div class="info-section requisicao-materia">
+            <h2 class="field-label">Aluno</h2>
+            <span class="field-value">{{ request.nome }} - {{ request.ra }}</span>
+            <p>|</p>
+            <h2 class="field-label">Matéria</h2>
+            <span class="field-value">
+              {{ request.disciplina }} - Engenharia de Software
+            </span>
+            <p>|</p>
+            <h2 class="field-label">Remuneração</h2>
+            @if(request.remuneracao){
+            <span class="field-value">Sim</span>
+            }@else {
+            <span class="field-value">Não</span>
+            }
+            <p>|</p>
+            <h2 class="field-label">Carga-Horária (h)</h2>
+            <span class="field-value">{{ request.cargaHoraria }}</span>
+          </div>
+          <div class="info-section">
+            <h2 class="field-label">Justificativa/Motivação</h2>
+            <p class="field-value">
+              {{ request.mensagem }}
+            </p>
+          </div>
+        </div>
+
+        <mat-action-row class="action-buttons">
+          <button
+            (click)="sendResult(2, request.uid, request.disciplinaId)"
+            class="reject-btn"
+            [disabled]="loadingResult"
+          >
+            Reprovar
+          </button>
+          <button
+            (click)="sendResult(1, request.uid, request.disciplinaId)"
+            class="approve-btn"
+            [disabled]="loadingResult"
+          >
+            Aprovar
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+</div>

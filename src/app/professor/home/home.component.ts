@@ -45,14 +45,18 @@ export class ProfessorHomeComponent {
   }
 
   /**
-   * Navega para a página de candidatura à monitoria.
+   * Navega para a página de requisição de monitoria
    */
-  goEnlist(): void {
-    this.router.navigate(['/professor/enlist'])
+  goRequest(): void {
+    this.router.navigate(['/professor/request'])
       .then(success => {
-        console.clear(); // Limpa o console após navegação bem-sucedida
         console.log('Navegação realizada:', success);
+        console.clear(); // Limpa o console após navegação bem-sucedida
       })
       .catch(error => console.error('Erro na navegação:', error));
+  }
+
+  goRecomendation(): void {
+    alert('Funcionalidade em desenvolvimento');
   }
 }

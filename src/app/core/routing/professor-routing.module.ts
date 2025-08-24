@@ -6,6 +6,7 @@ import { ProfessorHomeComponent } from '../../professor/home/home.component';
 import { ListSubjectsComponent } from '../../shared/list-subjects/list-subjects.component';
 import { ProfessorTutorsComponent } from '../../professor/tutors/tutors.component';
 import { TutorProfileComponent } from '../../shared/tutor-profile/tutor-profile.component';
+import { RequestTutoringComponent } from '../../professor/request-tutoring/request-tutoring.component';
 
 /* Importação de telas do professor */
 
@@ -23,6 +24,7 @@ const routes: Routes = [
         path: 'subject/:id',
         loadChildren: () => import('./shared.module').then(m => m.SharedModule),
       },
+      { path: 'request', component: RequestTutoringComponent },
     ]
   }
 ];
