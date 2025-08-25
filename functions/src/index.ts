@@ -824,3 +824,49 @@ export const sendMonitorRequest = onRequest({region: "southamerica-east1"}, asyn
         res.status(500).send(result);
     }
 });
+
+export const updateMonitorRequisition = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("MonitorRequisitions").where("id", "==", req.body.disciplinaId).get();
+
+    logger.debug(snapshot.docs);
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    await db.collection("MonitorRequisitions").doc(snapshot.docs[0].id).set({status: req.body.aprovacao}, {merge: true});
+
+    if(req.body.aprovacao == 1){
+        const snapshotCourses = await db.collection("Courses").where("id", "==", req.body.disciplinaId).get();
+
+        logger.debug(snapshot.docs);
+        if (snapshot.empty) {
+            logger.debug("No matching documents.");
+            result = {
+                status: "ERROR",
+                message: "No matching documents.",
+                payload: "No matching documents."
+            };
+            res.status(404).send(result);
+            return;
+        }
+
+        await db.collection("Courses").doc(snapshotCourses.docs[0].id).set({monitors: req.body.requestQuantity}, {merge: true});
+    }
+
+    result = {
+        status: "OK",
+        message: "Requisition updated successfully",
+        payload: "Requisition updated successfully"
+    };
+    res.status(200).send(result);
+});
