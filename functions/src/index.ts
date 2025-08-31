@@ -829,7 +829,8 @@ export const updateMonitorRequisition = onRequest({region: "southamerica-east1"}
     let result: CallableResponse;
     logger.debug(req.body)
 
-    const snapshot = await db.collection("MonitorRequisitions").where("id", "==", req.body.disciplinaId).get();
+    const snapshot = await db.collection("MonitorRequisitions").where("id", "==", req.body.disciplinaId)
+    .where("status", "==", 2).get();
 
     logger.debug(snapshot.docs);
     if (snapshot.empty) {
@@ -869,4 +870,53 @@ export const updateMonitorRequisition = onRequest({region: "southamerica-east1"}
         payload: "Requisition updated successfully"
     };
     res.status(200).send(result);
+});
+
+export const getStudents = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+    const snapshot = await db.collection("Alunos").where("curso", "==", req.body.course)
+    .where("periodo", ">", req.body.term).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching students.",
+            payload: "No matching students."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    result = {
+        status: "OK",
+        message: "Students found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
+
+export const sendMonitorRecommendation = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    try {
+        await db.collection("MonitorRecommendations").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Monitor recommendation sent successfully",
+            payload: "Monitor recommendation sent successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error sending monitor recommendation",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
 });
