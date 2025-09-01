@@ -11,6 +11,9 @@ import { type Tutor } from '../../models/tutor.model';
 
 import { TutorComponent } from './tutor/tutor.component';
 import { ProgressWithGifComponent } from "../loading/loading.component";
+import { SessionStorageService } from '../../core/services/session-storage.service';
+import { RecomendationModalComponent } from "./recomendation-modal/recomendation-modal.component";
+import { Discipline } from '../../models/discipline.model';
 
 @Component({
   selector: 'app-tutors',
@@ -22,7 +25,8 @@ import { ProgressWithGifComponent } from "../loading/loading.component";
     MatIconModule,
     MatCardModule,
     TutorComponent,
-    ProgressWithGifComponent
+    ProgressWithGifComponent,
+    RecomendationModalComponent
 ],
   templateUrl: './tutors.component.html',
   styleUrl: './tutors.component.scss'
@@ -35,17 +39,29 @@ export class SubjectTutorsComponent implements OnInit {
   disciplineId!: string;
 
   /** Nome da disciplina exibido no topo. */
-  discipline: string = 'carregando...';
+  disciplineName?: string;
+
+  disciplineTerm!: number;
+
+  disciplineCourse!: string;
 
   /** Indica se as disciplinas estão sendo carregadas. */
   loadingTutors = true;
+
+  userRole: any;
+
+  isModalOpen = false;
 
   constructor(
     /** Serviço de requisições HTTP @type {HttpClient} */
     private http: HttpClient,
     /** Serviço de rota ativa para acessar parâmetros da rota @type {ActivatedRoute} */
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute, 
+    /** Serviço para gerenciar dados na sessão @type {SessionStorageService} */
+    private sessionStorage: SessionStorageService
+  ) {
+    this.userRole = this.sessionStorage.getData('role', 'role');
+  }
 
   ngOnInit(): void {
     this.getMonitors();
@@ -64,9 +80,9 @@ export class SubjectTutorsComponent implements OnInit {
       this.http.get('http://localhost:3000/discipline', { params: { disciplineId: this.disciplineId } })
         .subscribe({
           next: (response: any) => {
-            console.log('Resposta do servidor:', response[0]);
-            this.discipline = response[0].nome_Disciplina;
-            console.log('Nome da disciplina:', this.discipline);
+            this.disciplineName = response[0].nome_Disciplina;
+            this.disciplineTerm = response[0].periodo_Disciplina;
+            this.disciplineCourse = response[0].curso_Disciplina;
           },
           error: error => {
             console.error('Erro ao buscar disciplina:', error);
@@ -75,14 +91,11 @@ export class SubjectTutorsComponent implements OnInit {
           }
         });
 
-      console.log('ID da disciplina:', this.disciplineId);
-
       // Solicita lista de monitores disponíveis
       this.http.post('http://localhost:3000/getCourseTutors', { courseId: this.disciplineId })
         .subscribe({
           next: (response: any) => {
             result = JSON.parse(response);
-            console.log('Resposta do servidor:', result);
             this.tutors = result.map((monitor: any) => ({
               aprovacao: monitor.aprovacao,
               discipline: monitor.disciplina,
@@ -104,5 +117,13 @@ export class SubjectTutorsComponent implements OnInit {
           },
         });
     })
+  }
+
+  openRecomendationModal() {
+    this.isModalOpen = !this.isModalOpen;
+  }
+
+  clickCancel(event: boolean) {
+    this.isModalOpen = event;
   }
 }

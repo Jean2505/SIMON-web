@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^19.2.7",
     "@angular/router": "^19.2.7",
     "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
+    "@ng-select/ng-select": "^14.9.0",
     "firebase": "^11.6.0",
     "firebase-functions": "^6.3.2",
     "functions": "^1.0.9",

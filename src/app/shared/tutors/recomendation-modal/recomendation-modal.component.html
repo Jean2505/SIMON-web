@@ -1,0 +1,33 @@
+<!-- Backdrop -->
+<div class="backdrop" (click)="cancelModal()">
+  <!-- Modal -->
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Cabeçalho Roxo -->
+    <div class="modal-header">
+      <h2>Recomendar monitor</h2>
+    </div>
+
+    <!-- Corpo -->
+    <div class="modal-body">
+        <p>
+            Selecione o aluno
+        </p>
+        <!-- <ng-select class="select" [(ngModel)]="selectedStudent">
+            @for (student of students; track student.uid) {
+                <ng-option [value]="student.uid">{{student.nome}}</ng-option>
+            }
+        </ng-select> -->
+        <ng-select [(ngModel)]="selectedStudent" [items]="students" bindLabel="nome" bindValue="uid"></ng-select>
+        <p>
+            RA do aluno selecionado:
+            <span class="value">{{ selectedStudent?.ra }}</span>
+        </p>
+    </div>
+
+    <!-- Ações -->
+    <div class="modal-actions">
+      <button class="cancel-button" (click)="cancelModal()">Cancelar</button>
+      <button class="approve-button" (click)="confirmAndClose()">Confirmar</button>
+    </div>
+  </div>
+</div>

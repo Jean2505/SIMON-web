@@ -2,6 +2,16 @@
   <!-- Exibição das disciplinas, se houver um curso selecionado -->
   <div class="list-monitor">
     <h3>Monitores</h3>
+    @if (userRole === 'PROFESSOR') {
+      <button class="rec-btn" (click)="openRecomendationModal()">Recomendar Monitoria</button>
+      @if (isModalOpen) {
+        <app-recomendation-modal
+        (cancel)="clickCancel($event)"
+        [disciplineId]="disciplineId"
+        [disciplineTerm]="disciplineTerm"
+        [disciplineCourse]="disciplineCourse"></app-recomendation-modal>
+      }
+    }
     <hr />
 
     <!-- Cabeçalho da tabela -->
