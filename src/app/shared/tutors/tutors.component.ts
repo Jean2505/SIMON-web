@@ -14,6 +14,7 @@ import { ProgressWithGifComponent } from "../loading/loading.component";
 import { SessionStorageService } from '../../core/services/session-storage.service';
 import { RecomendationModalComponent } from "./recomendation-modal/recomendation-modal.component";
 import { Discipline } from '../../models/discipline.model';
+import { Auth, User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-tutors',
@@ -49,6 +50,7 @@ export class SubjectTutorsComponent implements OnInit {
   loadingTutors = true;
 
   userRole: any;
+  user!: User;
 
   isModalOpen = false;
 
@@ -58,9 +60,12 @@ export class SubjectTutorsComponent implements OnInit {
     /** Serviço de rota ativa para acessar parâmetros da rota @type {ActivatedRoute} */
     private route: ActivatedRoute, 
     /** Serviço para gerenciar dados na sessão @type {SessionStorageService} */
-    private sessionStorage: SessionStorageService
+    private sessionStorage: SessionStorageService,
+    /** Referência ao serviço de autenticação do Firebase */
+    private auth: Auth,
   ) {
     this.userRole = this.sessionStorage.getData('role', 'role');
+    this.user = this.auth.currentUser!;
   }
 
   ngOnInit(): void {

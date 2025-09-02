@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-recomendation-modal',
-  imports: [NgLabelTemplateDirective, NgLabelTemplateDirective, NgSelectComponent, FormsModule, NgOptionComponent],
+  imports: [NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, FormsModule, NgOptionComponent],
   templateUrl: './recomendation-modal.component.html',
   styleUrl: './recomendation-modal.component.scss'
 })
@@ -15,6 +15,8 @@ export class RecomendationModalComponent implements OnInit{
   @Input({ required: true }) disciplineId!: string;
   @Input({ required: true }) disciplineTerm!: number ;
   @Input({ required: true }) disciplineCourse!: string;
+  @Input({ required: true }) disciplineName?: string;
+  @Input({ required: true }) professorName!: string | null;
   @Output() cancel = new EventEmitter<boolean>();
 
   students: Student [] = [];
@@ -34,12 +36,29 @@ export class RecomendationModalComponent implements OnInit{
     this.cancel.emit(false);
   }
 
-  confirmAndClose() {
+  confirmAndClose(): void {
+    this.http.post('http://localhost:3000/sendMonitorRecommendation',
+      {
+        disciplineId: this.disciplineId,
+        disciplineName: this.disciplineName,
+        studentUid: this.selectedStudent?.uid,
+        studentName: this.selectedStudent?.nome,
+        professorName: this.professorName
+      })
+    .subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: error => {
+        console.error('Erro ao enviar recomendação: ', error);
+        return;
+      }
+    })
 
+    this.cancelModal();
   }
 
   getStudents(): void {
-    let result: any;
     this.http.post('http://localhost:3000/getStudentsFromDiscipline', { term: this.disciplineTerm, course: this.disciplineCourse })
       .subscribe({
         next: (response: any) => {
