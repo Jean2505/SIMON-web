@@ -43,8 +43,7 @@ export class RecomendationModalComponent implements OnInit{
     this.http.post('http://localhost:3000/getStudentsFromDiscipline', { term: this.disciplineTerm, course: this.disciplineCourse })
       .subscribe({
         next: (response: any) => {
-          this.students = response;
-          console.log(this.students);
+          this.students = JSON.parse(response);
         },
         error: error => {
           console.error('Erro ao carregar alunos:', error);

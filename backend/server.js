@@ -826,21 +826,6 @@ app.post("/getStudentsFromDiscipline", async (req, res) => {
   }
 });
 
-// app.get("/getRequisitions", async (req, res) => {
-//   try {
-//     const response = await axios.get(
-//       "https://getrequisitions-bz6uecg2pq-rj.a.run.app"
-//     );
-//     console.log("Resposta: ", JSON.parse(response.data.payload));
-//     res.json(response.data.payload);
-//   } catch (error) {
-//     console.error("Erro ao chamar função getRequisitions:", error.message);
-//     res
-//       .status(500)
-//       .json({ error: "Erro ao obter as requisições externamente" });
-//   }
-// });
-
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

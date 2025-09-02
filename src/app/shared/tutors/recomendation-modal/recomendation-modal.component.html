@@ -12,15 +12,17 @@
         <p>
             Selecione o aluno
         </p>
-        <!-- <ng-select class="select" [(ngModel)]="selectedStudent">
+        <ng-select class="select" 
+          placeholder="Selecione um estudante" 
+          [(ngModel)]="selectedStudent"
+          >
             @for (student of students; track student.uid) {
-                <ng-option [value]="student.uid">{{student.nome}}</ng-option>
+                <ng-option class="option" [value]="student">{{student.nome}}</ng-option>
             }
-        </ng-select> -->
-        <ng-select [(ngModel)]="selectedStudent" [items]="students" bindLabel="nome" bindValue="uid"></ng-select>
+        </ng-select>
         <p>
             RA do aluno selecionado:
-            <span class="value">{{ selectedStudent?.ra }}</span>
+            <span class="student-ra">{{ selectedStudent?.ra }}</span>
         </p>
     </div>
 
