@@ -53,3 +53,35 @@
 .monitors li {
   margin-bottom: 12px;
 }
+
+  button {
+    background-color: #0ea5e9;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 18px;
+    transition: background-color 0.2s;
+    
+
+    &:hover {
+      background-color: #0284c7;
+    }
+
+    &:active {
+      background-color: #016ba0;
+    }
+  }
+
+  .monitor-header {
+  display: flex;
+  align-items: baseline;   /* mantém na mesma altura */
+  justify-content: space-between; /* título à esquerda, botão à direita */
+  margin-bottom: 10px;
+}
+
+.monitor-header h3 {
+  margin: 0; /* para não desalinhar */
+}

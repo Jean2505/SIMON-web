@@ -12,7 +12,7 @@
   border-radius: 20px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
   width: 100%;
-  max-width: 420px;
+  max-width: 620px;
   overflow: hidden;
   text-align: center;
 }
@@ -22,7 +22,7 @@
   padding: 1rem;
   color: #fff;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
 }
@@ -45,7 +45,7 @@
   border-radius: 20px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
   width: 100%;
-  max-width: 420px;
+  max-width: 620px;
   overflow: hidden;
   text-align: center;
 }
@@ -53,4 +53,299 @@
 .ng-select.select {
   border: 1px solid rgb(130, 130, 130);
   width: 50%;
+}
+
+/* Cabeçalho roxo igual ao da print */
+.modal-header {
+  background: linear-gradient(90deg, #6a0dff, #9a4dff);
+  padding: 1rem;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-align: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+/* Corpo do modal */
+.modal-body {
+  padding: 1.5rem;
+  font-size: 1.10rem;
+  color: #333;
+}
+
+.modal-body p {
+  margin: 0.8rem 0;
+}
+
+/* Campo select */
+.ng-select.select {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  width: 80%;
+  padding: 6px;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* RA destacado */
+.student-ra {
+  font-weight: 600;
+  color: #6a0dff;
+}
+
+/* Ações alinhadas como na print */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.5rem 1.5rem;
+  gap: 1rem;
+}
+
+/* Botão cancelar */
+.cancel-button {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 0.7rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: #444;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+  transition: background 0.2s;
+}
+
+.cancel-button:hover {
+  background: #f5f5f5;
+}
+
+/* Botão confirmar */
+.approve-button {
+  flex: 1;
+  background: #0284c7;
+  border: none;
+  border-radius: 25px;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0px 4px 6px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+
+.approve-button:hover {
+  background: #0369a1;
+}
+
+
+.ng-select.select {
+  width: 90%;                 /* deixa centralizado e mais largo */
+  margin: 0 auto 1rem auto;   /* centraliza */
+  display: block;
+}
+
+.ng-select .ng-dropdown-panel {
+  position: relative !important; /* faz o dropdown se alinhar ao input */
+  width: 100% !important;        /* dropdown ocupa largura do select */
+  left: 0 !important;
+}
+
+.ng-select.select {
+  width: 90%;
+  margin: 0 auto 1rem auto;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 6px 10px;
+  background: #fff;
+  font-size: 0.95rem;
+}
+
+.ng-select .ng-dropdown-panel {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 2000; /* garante que fica acima */
+}
+
+.modal-container {
+  overflow: visible; /* deixa o dropdown sair do container */
+}
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centraliza tudo */
+  gap: 0.8rem; /* espaço entre elementos */
+}
+
+.ng-select.select {
+  width: 80%;            /* deixa alinhado e proporcional */
+  margin: 0 auto;        /* centraliza */
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.95rem;
+}
+
+/* Texto do RA centralizado */
+.modal-body p {
+  text-align: center;
+  margin: 0.3rem 0;
+  width: 100%;
+}
+
+.student-ra {
+  font-weight: 600;
+  color: #6a0dff;
+}
+.ng-dropdown-panel .ng-option {
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin: 4px 0;
+  background: #e0f0ff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ng-dropdown-panel .ng-option:hover {
+  background: #c8e6ff;
+}
+
+/* Container principal do select */
+.ng-select.select {
+  width: 80%;
+  margin: 0 auto 1rem auto;
+  display: block;
+  font-size: 0.95rem;
+}
+
+/* Caixa visível do select */
+.ng-select.select .ng-select-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #f9f9f9;   /* fundo visível */
+  min-height: 40px;
+  align-items: center;
+  padding: 0 10px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Placeholder */
+.ng-select.select .ng-placeholder {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Texto selecionado */
+.ng-select.select .ng-value {
+  color: #333;
+  font-weight: 500;
+}
+
+/* Dropdown das opções */
+.ng-dropdown-panel {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-top: 4px;
+  background: #fff;
+  z-index: 2000;
+}
+
+/* Cada opção */
+.ng-dropdown-panel .ng-option {
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: 2px 6px;
+  cursor: pointer;
+  background: #f1f5f9;
+  transition: background 0.2s;
+}
+
+/* Hover nas opções */
+.ng-dropdown-panel .ng-option:hover {
+  background: #e0f2fe;
+}
+
+/* Força o select a ser um bloco centralizado */
+.ng-select {
+  display: block !important;
+  width: 80% !important;
+  margin: 0 auto 1rem auto !important;
+  font-size: 0.95rem;
+}
+
+/* Caixa do select (fundo + borda arredondada) */
+.ng-select .ng-select-container {
+  background: #f9f9f9 !important;
+  border: 1px solid #ccc !important;
+  border-radius: 10px !important;
+  min-height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 10px !important;
+}
+
+/* Placeholder */
+.ng-select .ng-placeholder {
+  color: #888 !important;
+  font-size: 0.9rem !important;
+}
+
+/* Texto selecionado */
+.ng-select .ng-value {
+  color: #333 !important;
+  font-weight: 500 !important;
+}
+
+/* Corrige alinhamento do RA */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.modal-body p {
+  text-align: center;
+  margin: 0.3rem 0;
+  width: 100%;
+}
+
+:host ::ng-deep .ng-select {
+  font-size: 1.1rem !important; 
+
+}
+
+:host ::ng-deep .ng-dropdown-panel .ng-option {
+  background: #cde7ff !important;   /* fundo azul claro */
+  color: #333 !important;
+  padding: 8px 12px !important;
+  border-radius: 25px !important;
+  margin: 4px 0 !important;
+  font-size: 1.1rem;
+  transition: background 0.2s ease-in-out;
+}
+
+:host ::ng-deep .ng-dropdown-panel .ng-option:hover {
+  background: #00aaff !important;   /* azul forte no hover */
+  color: #fff !important;
+}
+
+:host ::ng-deep .ng-dropdown-panel .ng-option-selected {
+  background: #007ad9 !important;   /* azul escuro quando selecionado */
+  color: #fff !important;
+  font-weight: 600;
+}
+
+:host ::ng-deep .ng-dropdown-panel {
+  width: 100% !important;   /* largura igual ao select */
+  left: 0 !important;       /* alinha à esquerda */
+}
+
+:host ::ng-deep .ng-dropdown-panel .ng-option {
+  padding: 8px 12px !important;
+  margin: 4px 0 !important; /* só vertical */
+  border-radius: 25px !important;
+  border: 1px solid black
 }

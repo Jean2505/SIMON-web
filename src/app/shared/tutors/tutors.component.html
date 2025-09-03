@@ -1,20 +1,24 @@
 <div class="container">
   <!-- Exibição das disciplinas, se houver um curso selecionado -->
-  <div class="list-monitor">
+<div class="list-monitor">
+  <div class="monitor-header">
     <h3>Monitores</h3>
     @if (userRole === 'PROFESSOR') {
-      <button class="rec-btn" (click)="openRecomendationModal()">Recomendar Monitoria</button>
-      @if (isModalOpen) {
-        <app-recomendation-modal
-        (cancel)="clickCancel($event)"
-        [disciplineId]="disciplineId"
-        [disciplineTerm]="disciplineTerm"
-        [disciplineCourse]="disciplineCourse"
-        [disciplineName]="disciplineName"
-        [professorName]="user.displayName"></app-recomendation-modal>
-      }
+      <button class="rec-btn" (click)="openRecomendationModal()">Recomendar Monitoria +</button>
     }
-    <hr />
+  </div>
+
+  @if (isModalOpen) {
+    <app-recomendation-modal
+      (cancel)="clickCancel($event)"
+      [disciplineId]="disciplineId"
+      [disciplineTerm]="disciplineTerm"
+      [disciplineCourse]="disciplineCourse"
+      [disciplineName]="disciplineName"
+      [professorName]="user.displayName"></app-recomendation-modal>
+  }
+
+  <hr />
 
     <!-- Cabeçalho da tabela -->
     <div class="monitors-header">
