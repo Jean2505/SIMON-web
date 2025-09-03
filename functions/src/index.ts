@@ -319,6 +319,29 @@ export const getCourseMonitors = onRequest({region: "southamerica-east1"}, async
     res.status(200).send(result);
 });
 
+export const getCourseMonitorsMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+
+    const snapshot = await db.collection("Monitores").where("disciplinaId", "==", req.data.courseId).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        return result;
+    }
+
+    result = {
+        status: "OK",
+        message: "Monitors found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    return result;
+});
+
 export const helloWorld = onRequest({region: "southamerica-east1"}, (req, res) => {
     logger.info("Hello logs!", {structuredData: true});
     res.send("Hello from Firebase!");
