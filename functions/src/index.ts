@@ -7,7 +7,7 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {onRequest} from "firebase-functions/v2/https";
+import {onCall, onRequest} from "firebase-functions/v2/https";
 import {onDocumentCreated} from "firebase-functions/v2/firestore";
 import * as logger from "firebase-functions/logger";
 import * as admin from "firebase-admin";
@@ -44,6 +44,29 @@ export const getCourses = onRequest({region: "southamerica-east1"}, async (req, 
     let result: CallableResponse;
     logger.debug(req.body)
 
+    if (req.body.term != undefined) {
+        const snapshot = await db.collection("Courses").where("course", "==", req.body.course)
+        .where("term", "==", req.body.term).get();
+
+        if (snapshot.empty) {
+            logger.debug("No matching documents.");
+            result = {
+                status: "ERROR",
+                message: "No matching documents.",
+                payload: "No matching documents."
+            };
+            res.status(404).send(result);
+            return;
+        }
+        result = {
+            status: "OK",
+            message: "Courses retrieved successfully",
+            payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+        };
+        res.status(200).send(result);
+        return;
+    }
+
     let courses: Course[] = [];
     try {
         (await db.collection("Courses").get()).forEach((doc) => {
@@ -65,6 +88,55 @@ export const getCourses = onRequest({region: "southamerica-east1"}, async (req, 
             payload: (error as Error).message
         };
         res.status(500).send(result);
+    }
+});
+
+export const getCoursesMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    if (req.data.term != undefined) {
+        const snapshot = await db.collection("Courses").where("course", "==", req.data.course)
+        .where("term", "==", req.data.term).get();
+
+        if (snapshot.empty) {
+            logger.debug("No matching documents.");
+            result = {
+                status: "ERROR",
+                message: "No matching documents.",
+                payload: "No matching documents."
+            };
+            return result;
+        }
+        result = {
+            status: "OK",
+            message: "Courses retrieved successfully",
+            payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+        };
+        return result;
+    }
+
+    let courses: Course[] = [];
+    try {
+        (await db.collection("Courses").get()).forEach((doc) => {
+            if(doc.data().course == req.data.course){
+                courses.push(doc.data() as Course);
+            }
+        });
+        result = {
+            status: "OK",
+            message: "Courses retrieved successfully",
+            payload: JSON.stringify(courses)
+        };
+        return result;
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error retrieving courses",
+            payload: (error as Error).message
+        };
+        return result;
     }
 });
 
@@ -250,6 +322,11 @@ export const getCourseMonitors = onRequest({region: "southamerica-east1"}, async
 export const helloWorld = onRequest({region: "southamerica-east1"}, (req, res) => {
     logger.info("Hello logs!", {structuredData: true});
     res.send("Hello from Firebase!");
+});
+
+export const teste = onCall({region: "southamerica-east1"}, (req,res) => {
+    logger.info("Hello logs!", {structuredData: true});
+    return "Hello from Firebase!";
 });
 
 export const createMuralPost = onRequest({region: "southamerica-east1"}, async (req, res) => {
