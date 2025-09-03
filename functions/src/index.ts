@@ -1020,3 +1020,26 @@ export const sendMonitorRecommendation = onRequest({region: "southamerica-east1"
         res.status(500).send(result);
     }
 });
+
+export const getMonitorRecommendations = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+    const snapshot = await db.collection("MonitorRecommendations").where("studentUid", "==", req.body.studentUid).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching recommendations.",
+            payload: "No matching recommendations."
+        };
+        res.status(404).send(result);
+        return
+    }
+    result = {
+        status: "OK",
+        message: "Recommendations found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
