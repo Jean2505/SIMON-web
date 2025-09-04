@@ -1043,3 +1043,70 @@ export const getMonitorRecommendations = onRequest({region: "southamerica-east1"
     };
     res.status(200).send(result);
 });
+
+export const sendCourseTopics = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("Courses").where("id", "==", req.body.id).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send("No matching documents.");
+        return;
+    }
+
+    
+    try {
+        await db.collection("Courses").doc(snapshot.docs[0].id).set({topics: req.body.topics}, {merge: true});
+
+        result = {
+            status: "OK",
+            message: "Topics sent successfully",
+            payload: "Topics sent successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error sending topics",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+});
+
+export const getCourseTopics = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+    const snapshot = await db.collection("Courses").where("id", "==", req.body.id).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+
+    let topics = snapshot.docs[0].data().topics;
+    if (topics == undefined) {
+        topics = [];
+    }
+
+    result = {
+        status: "OK",
+        message: "Topics found",
+        payload: JSON.stringify(topics)
+    };
+    res.status(200).send(result);
+});
