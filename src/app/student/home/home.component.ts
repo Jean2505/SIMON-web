@@ -60,4 +60,8 @@ export class StudentHomeComponent {
       })
       .catch((error) => console.error('Erro na navegação:', error));
   }
+
+  goNotifications(): void {
+    alert('Funcionalidade em desenvolvimento');
+  }
 }
