@@ -870,6 +870,21 @@ app.post("/sendCourseTopics", async (req, res) => {
   }
 });
 
+app.post("/getNotifications", async (req, res) => {
+  try {
+    const data = req.body;
+    const response = await axios.post(
+      "https://getmonitorrecommendations-bz6uecg2pq-rj.a.run.app",
+      data
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função getCourseTopics:", error.message);
+    res.status(500).json({ error: "Erro ao obter as requisições externamente" });
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

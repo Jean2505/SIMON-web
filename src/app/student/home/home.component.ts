@@ -62,6 +62,12 @@ export class StudentHomeComponent {
   }
 
   goNotifications(): void {
-    alert('Funcionalidade em desenvolvimento');
+    this.router
+      .navigate(['/student/notifications'])
+      .then((success) => {
+        console.log('Navegação realizada:', success);
+        console.clear(); // Limpa console após navegação bem-sucedida
+      })
+      .catch((error) => console.error('Erro na navegação:', error));
   }
 }

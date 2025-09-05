@@ -7,6 +7,7 @@ import { SubjectBoardComponent } from '../../shared/board/board.component';
 import { SubjectTutorsComponent } from '../../shared/tutors/tutors.component';
 import { SubjectForumComponent } from '../../shared/forum/forum.component';
 import { ForumPostComponent } from '../../shared/forum/post/post.component';
+import { NotificationsComponent } from '../../shared/notifications/notifications.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'tutors', component: SubjectTutorsComponent },
       { path: 'forum', component: SubjectForumComponent },
       { path: 'forum/:postId', component: ForumPostComponent },
+      { path: 'notifications', component: NotificationsComponent }
     ]
   },
 ]
