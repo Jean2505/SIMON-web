@@ -15,6 +15,7 @@ import { SessionStorageService } from '../../core/services/session-storage.servi
 import { RecomendationModalComponent } from "./recomendation-modal/recomendation-modal.component";
 import { Discipline } from '../../models/discipline.model';
 import { Auth, User } from '@angular/fire/auth';
+import { TagsModalComponent } from "./tags-modal/tags-modal.component";
 
 @Component({
   selector: 'app-tutors',
@@ -27,7 +28,8 @@ import { Auth, User } from '@angular/fire/auth';
     MatCardModule,
     TutorComponent,
     ProgressWithGifComponent,
-    RecomendationModalComponent
+    RecomendationModalComponent,
+    TagsModalComponent
 ],
   templateUrl: './tutors.component.html',
   styleUrl: './tutors.component.scss'
@@ -53,6 +55,7 @@ export class SubjectTutorsComponent implements OnInit {
   user!: User;
 
   isModalOpen = false;
+  isTopicsOpen = false;
 
   constructor(
     /** Serviço de requisições HTTP @type {HttpClient} */
@@ -128,7 +131,15 @@ export class SubjectTutorsComponent implements OnInit {
     this.isModalOpen = !this.isModalOpen;
   }
 
+  openTopicsModal() {
+    this.isTopicsOpen = !this.isTopicsOpen;
+  }
+
   clickCancel(event: boolean) {
     this.isModalOpen = event;
+  }
+
+  cancelTopics(event: boolean) {
+    this.isTopicsOpen = event;
   }
 }

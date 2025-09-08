@@ -1,0 +1,12 @@
+<div class="container">
+    <div class="notifs-container">
+        <app-back-button></app-back-button>
+        <h3>Notificações</h3>
+        <hr>
+
+        @for(notification of notifications; track $index) {
+            <app-notification
+            [notification]="notification"></app-notification>
+        }
+    </div>
+</div>

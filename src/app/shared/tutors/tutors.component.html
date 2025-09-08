@@ -4,6 +4,7 @@
   <div class="monitor-header">
     <h3>Monitores</h3>
     @if (userRole === 'PROFESSOR') {
+      <button class="topics-btn" (click)="openTopicsModal()">Definir Tópicos</button>
       <button class="rec-btn" (click)="openRecomendationModal()">Recomendar Monitoria +</button>
     }
   </div>
@@ -16,6 +17,12 @@
       [disciplineCourse]="disciplineCourse"
       [disciplineName]="disciplineName"
       [professorName]="user.displayName"></app-recomendation-modal>
+  }
+
+  @if (isTopicsOpen) {
+    <app-tags-modal
+    (cancel)="cancelTopics($event)"
+    [disciplineId]="disciplineId"></app-tags-modal>
   }
 
   <hr />

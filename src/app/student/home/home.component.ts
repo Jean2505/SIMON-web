@@ -60,4 +60,14 @@ export class StudentHomeComponent {
       })
       .catch((error) => console.error('Erro na navegação:', error));
   }
+
+  goNotifications(): void {
+    this.router
+      .navigate(['/student/notifications'])
+      .then((success) => {
+        console.log('Navegação realizada:', success);
+        console.clear(); // Limpa console após navegação bem-sucedida
+      })
+      .catch((error) => console.error('Erro na navegação:', error));
+  }
 }
