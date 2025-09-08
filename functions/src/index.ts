@@ -271,6 +271,29 @@ export const findUser = onRequest({region: "southamerica-east1"}, async (req, re
     res.status(200).send(result);
 });
 
+export const findUserMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+
+    const snapshot = await db.collection("Alunos").where("uid", "==", req.data.uid).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        return result;
+    }
+
+    result = {
+        status: "OK",
+        message: "User found",
+        payload: JSON.stringify(snapshot.docs[0].data())
+    };
+    return result;
+});
+
 export const findMonitor = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
 
