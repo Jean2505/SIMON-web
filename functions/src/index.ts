@@ -592,7 +592,8 @@ export const getMonitorCoursesMobile = onCall({region: "southamerica-east1"}, as
     let result: CallableResponse;
     logger.debug(req.data)
 
-    const snapshot = await db.collection("Monitores").where("uid", "==", req.data.uid).get();
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.data.uid)
+    .where("aprovacao", "==", 1).get();
 
     if (snapshot.empty) {
         logger.debug("No matching documents.");
