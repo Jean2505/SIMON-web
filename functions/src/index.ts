@@ -588,6 +588,30 @@ export const getMonitorCourses = onRequest({region: "southamerica-east1"}, async
     res.status(200).send(result);
 });
 
+export const getMonitorCoursesMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.data.uid).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        return result;
+    }
+
+    result = {
+        status: "OK",
+        message: "Courses found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    return result;
+});
+
 export const getCourseList = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
     logger.debug(req.body);
