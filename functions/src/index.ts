@@ -1158,3 +1158,32 @@ export const getCourseTopics = onRequest({region: "southamerica-east1"}, async (
     };
     res.status(200).send(result);
 });
+
+export const updateStatus = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.body.uid)
+    .where("disciplinaId", "==", req.body.disciplinaId).get();
+
+    if (!snapshot.empty) {
+        if (snapshot.docs[0].data().status == true) {
+            await db.collection("Monitores").doc(snapshot.docs[0].id).set({status: false}, {merge: true});
+        } else {
+            await db.collection("Monitores").doc(snapshot.docs[0].id).set({status: true}, {merge: true});
+        }
+        result = {
+            status: "OK",
+            message: "Status updated successfully",
+            payload: "Status updated successfully"
+        };
+        res.status(200).send(result);
+        return;
+    }
+    result = {
+        status: "ERROR",
+        message: "No matching documents.",
+        payload: "No matching documents."
+    };
+    res.status(404).send(result);
+});
