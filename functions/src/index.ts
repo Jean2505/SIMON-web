@@ -693,6 +693,35 @@ export const getForumPosts = onRequest({region: "southamerica-east1"}, async (re
     res.status(200).send(result);
 });
 
+export const getForumPostsMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    const snapshot = await db.collection("ForumPosts").where("courseId", "==", req.data.courseId).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        return result;
+    }
+
+    result = {
+        status: "OK",
+        message: "Posts found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => {
+            return {
+                docId: doc.id,
+                data: doc.data()
+            }
+        }))
+    };
+    return result;
+});
+
 export const createForumPost = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
     logger.debug(req.body)
