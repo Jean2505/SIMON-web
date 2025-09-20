@@ -747,6 +747,33 @@ export const createForumPost = onRequest({region: "southamerica-east1"}, async (
 
 });
 
+export const createForumPostMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    req.data.comments = [];
+
+    try {
+        await db.collection("ForumPosts").add(req.data);
+
+        result = {
+            status: "OK",
+            message: "Post created successfully",
+            payload: "Post created successfully"
+        };
+        return result
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating post",
+            payload: (error as Error).message
+        };
+        return result
+    }
+
+});
+
 export const createComment = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
     logger.debug(req.body)
@@ -768,6 +795,31 @@ export const createComment = onRequest({region: "southamerica-east1"}, async (re
             payload: (error as Error).message
         };
         res.status(500).send(result);
+    }
+
+});
+
+export const createCommentMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    try {
+        await db.collection("Comments").add(req.data);
+
+        result = {
+            status: "OK",
+            message: "Comment created successfully",
+            payload: "Comment created successfully"
+        };
+        return result
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating comment",
+            payload: (error as Error).message
+        };
+        return result
     }
 
 });
@@ -853,6 +905,73 @@ export const getComments = onRequest({region: "southamerica-east1"}, async (req,
         };
     res.status(200).send(result);
 });
+
+export const getCommentsMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    logger.debug(req.data);
+    const postId = req.data.postId;
+
+    if (!postId) {
+        logger.error("Missing postId in request data.");
+        return {
+            status: "ERROR",
+            message: "Missing postId.",
+            payload: null
+        };
+    }
+
+    const snapshot = await db.collection("ForumPosts").doc(postId).get();
+
+    if (!snapshot.exists) {
+        logger.debug(`No matching document.`);
+        return {
+            status: "ERROR",
+            message: "Post not found.",
+            payload: null
+        };
+    }
+
+    const data = snapshot.data();
+    const commentIds: string[] = data?.comments || []; // Garante que comments é um array, mesmo que undefined
+
+    if (commentIds.length === 0) {
+        logger.debug(`Post ${postId} has no comments.`);
+        return {
+            status: "OK",
+            message: "Post has no comments.",
+            payload: JSON.stringify([])
+        };
+    }
+
+    const commentRefs = commentIds.map((docId: string) => db.collection("Comments").doc(docId));
+
+    try {
+        const commentSnapshots = await db.getAll(...commentRefs); // Agora captura o resultado diretamente
+
+        const documents: any[] = [];
+        commentSnapshots.forEach((doc) => {
+            if (doc.exists) {
+                documents.push(doc.data());
+            }
+        });
+
+        logger.debug(`Found ${documents.length} comments for post ${postId}.`);
+        logger.debug(documents);
+
+        return {
+            status: "OK",
+            message: "Comments found",
+            payload: JSON.stringify(documents)
+        };
+    } catch (error) {
+        logger.error(`Error fetching comments for post ${postId}:`, error);
+        return {
+            status: "ERROR",
+            message: "Failed to retrieve comments.",
+            payload: null
+        };
+    }
+});
+
 
 export const likePost = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
