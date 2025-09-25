@@ -44,4 +44,8 @@ export class DisciplineComponent {
       })
       .catch(error => console.error('Erro na navegação:', error));
   }
+
+  goReportPage(discipline: Discipline): void {
+    
+  }
 }
