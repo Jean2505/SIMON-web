@@ -1335,3 +1335,27 @@ export const updateStatus = onRequest({region: "southamerica-east1"}, async (req
     };
     res.status(404).send(result);
 });
+
+export const sendReport = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    try {
+        await db.collection("Reports").add(req.body);
+
+        result = {
+            status: "OK",
+            message: "Report created successfully",
+            payload: "Report created successfully"
+        };
+        res.status(200).send(result);
+    } catch (error) {
+        logger.error(error)
+        result = {
+            status: "ERROR",
+            message: "Error creating report",
+            payload: (error as Error).message
+        };
+        res.status(500).send(result);
+    }
+});
