@@ -1,20 +1,37 @@
 <div class="container">
     <div class="manage-container">
         <app-back-button></app-back-button>
-        <h3>Enviar relatório</h3>
+        <h3>Relatório de atendimento - {{ discipline.name }}</h3>
         <hr />
 
         <form>
-            <label for="name">Nome do aluno: </label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="ra">RA do aluno: </label>
-            <input type="text" id="ra" name="ra" required>
-
             <label for="description">Descrição do atendimento: </label>
             <textarea name="description" id="description" required></textarea>
 
-            <button type="submit">Enviar</button>
+            <label for="topic-selection">Selecione um ou mais tópicos</label>
+            <div class="topic-select">
+                <ng-select class="select"
+                    placeholder="Selecione um tópico"
+                    [(ngModel)]="selectedTopic"
+                    name="topic-selection"
+                    id="topic-selection"
+                    >
+                        @for (topic of disciplineTopics; track $index) {
+                            <ng-option class="option" [value]="topic">{{ topic }}</ng-option>
+                        }
+                </ng-select>
+                <button type="button" (click)="addTopic(selectedTopic)">Adicionar</button>
+            </div>
+
+            @if (reportTopics.length !== 0) {
+                <h4>Tópicos</h4>
+                @for (topic of reportTopics; track $index) {
+                    <span class="topic">{{ topic }}</span>
+                    <button class="remove-button" (click)="removeTopic(topic)">X</button>
+                }
+            }
+
+            <button type="submit" (click)="sendReport()">Enviar</button>
         </form>
     </div>
 </div>

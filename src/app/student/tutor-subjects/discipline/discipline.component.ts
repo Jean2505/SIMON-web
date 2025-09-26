@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';  
 
 import { type Discipline } from '../../../models/discipline.model';  
+import { SessionStorageService } from '../../../core/services/session-storage.service';
 
 /**
  * Componente de exibição e manipulação de informações de disciplina.
@@ -30,7 +31,10 @@ export class DisciplineComponent {
    * Construtor do componente.
    * @param router - Serviço Router para navegação programática.
    */
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private sessionStorage: SessionStorageService 
+  ) {}
 
   /**
    * Navega para a página de detalhes de um monitor.
@@ -46,6 +50,11 @@ export class DisciplineComponent {
   }
 
   goReportPage(discipline: Discipline): void {
-    
+    this.router.navigate([`/student/tutor-subjects/report`])
+      .then(success =>{
+        this.sessionStorage.setData('selectedDiscipline', discipline);
+        console.log('Navegação realizada:', success);
+      })
+      .catch(error => console.error('Erro na navegação:', error));
   }
 }

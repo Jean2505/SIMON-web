@@ -9,6 +9,7 @@ import { TutorSubjectsComponent } from '../../student/tutor-subjects/subjects.co
 import { HeaderComponent } from '../../shared/header/header.component';
 import { TutorProfileComponent } from '../../shared/tutor-profile/tutor-profile.component';
 import { NotificationsComponent } from '../../shared/notifications/notifications.component';
+import { SendReportComponent } from '../../student/send-report/send-report.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,8 @@ const routes: Routes = [
         path: 'subject/:id',
         loadChildren: () => import('./shared.module').then(m => m.SharedModule),
       },
-      { path: 'notifications', component: NotificationsComponent }
+      { path: 'notifications', component: NotificationsComponent },
+      { path: 'tutor-subjects/report', component: SendReportComponent }
     ]
   }
 ];
