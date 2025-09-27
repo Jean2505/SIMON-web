@@ -74,10 +74,7 @@ export class SubjectBoardComponent implements OnInit {
                 files: post.files,
                 images: post.images,
                 videos: post.videos,
-                createdAt: new Date(
-                  post.createdAt._seconds * 1000 +
-                    post.createdAt._nanoseconds / 1_000_000
-                ),
+                createdAt: post.createdAt,
                 disciplinaId: post.disciplinaId,
               };
             });

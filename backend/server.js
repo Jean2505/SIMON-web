@@ -554,14 +554,8 @@ app.post("/getMuralPosts", async (req, res) => {
 
 // Endpoint para criar um novo post no mural
 app.post("/createMuralPost", async (req, res) => {
-  const data = req.body;
-  const createdAt = admin.firestore.Timestamp.now();
+  const payload = req.body;
 
-  // 2) Monte um novo objeto com tudo que veio no body + createdAt
-  const payload = {
-    ...data,
-    createdAt,
-  };
   try {
     // Chama a Cloud Function usando axios
     console.log("createMuralPost: ", req.body);
