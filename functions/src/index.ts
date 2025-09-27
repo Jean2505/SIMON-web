@@ -426,6 +426,31 @@ export const getMuralPosts = onRequest({region: "southamerica-east1"}, async (re
     res.status(200).send(result);
 });
 
+export const getMuralPostsMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    const snapshot = await db.collection("MuralPosts").where("disciplinaId", "==", req.data.disciplinaId).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        return result;
+    }
+
+    result = {
+        status: "OK",
+        message: "Posts found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    return result;
+});
+
 export const deleteMuralPost = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
 
