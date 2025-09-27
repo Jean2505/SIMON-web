@@ -67,12 +67,13 @@ export class SendReportComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Relatório enviado com sucesso:', response);
-          this.goTutorSubjects();
         },
         error: (error) => {
           console.error('Erro ao criar post:', error);
         }
       });
+
+    this.goTutorSubjects();
   }
 
   goTutorSubjects(): void {
