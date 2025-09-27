@@ -554,14 +554,8 @@ app.post("/getMuralPosts", async (req, res) => {
 
 // Endpoint para criar um novo post no mural
 app.post("/createMuralPost", async (req, res) => {
-  const data = req.body;
-  const createdAt = admin.firestore.Timestamp.now();
+  const payload = req.body;
 
-  // 2) Monte um novo objeto com tudo que veio no body + createdAt
-  const payload = {
-    ...data,
-    createdAt,
-  };
   try {
     // Chama a Cloud Function usando axios
     console.log("createMuralPost: ", req.body);
@@ -883,7 +877,21 @@ app.post("/getNotifications", async (req, res) => {
     console.error("Erro ao chamar função getCourseTopics:", error.message);
     res.status(500).json({ error: "Erro ao obter as requisições externamente" });
   }
-})
+});
+
+app.post("/sendReport", async (req, res) => {
+  try {
+    const data = req.body;
+    const response = await axios.post(
+      "https://sendreport-bz6uecg2pq-rj.a.run.app",
+      data
+    );
+    console.log("Resposta: ", response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função sendReports:", error.message);
+    res.status(500).json({ error: "Erro ao obter as requisições externamente" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

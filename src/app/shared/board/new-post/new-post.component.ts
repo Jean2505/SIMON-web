@@ -138,6 +138,7 @@ export class NewPostComponent implements OnInit {
    * ou envia diretamente se não houver anexos.
    */
   onPost(): void {
+    const createdAt = new Date();
     if (this.isSending) return;
     this.isSending = true;
 
@@ -151,6 +152,7 @@ export class NewPostComponent implements OnInit {
         images: [] as string[],
         disciplinaId: this.subjectId,
         userName: this.userName,
+        createdAt: createdAt,
       };
       console.log('Payload sem anexos:', payload);
       this.http.post(this.apiUrl, payload).subscribe({
@@ -208,6 +210,7 @@ export class NewPostComponent implements OnInit {
                 images,
                 disciplinaId: this.subjectId,
                 userName: this.userName,
+                createdAt: createdAt,
               };
               console.log('Payload com anexos:', payload);
               this.http.post(this.apiUrl, payload).subscribe({

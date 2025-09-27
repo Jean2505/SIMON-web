@@ -8,7 +8,6 @@ import {
   type ForumPost,
 } from '../../../models/forum-post.model';
 import { CommentsComponent } from '../comments/comments.component';
-import { AuthService } from '../../../core/services/auth.service';
 import { Auth } from '@angular/fire/auth';
 import { ProgressWithGifComponent } from '../../loading/loading.component';
 
@@ -43,7 +42,7 @@ export class ForumPostComponent implements OnInit {
     private http: HttpClient,
     /** Referência ao serviço de localização @type {Location} */
     private location: Location
-  ) {}
+  ) { }
 
   post!: ForumPost;
 

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 import { type MuralPost } from '../../../models/mural-post.model';
 
@@ -7,7 +7,7 @@ import { PostComponent } from "../post/post.component";
 
 @Component({
   selector: 'app-card',
-  imports: [DatePipe, PostComponent, CommonModule],
+  imports: [PostComponent, CommonModule],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss'
 })
