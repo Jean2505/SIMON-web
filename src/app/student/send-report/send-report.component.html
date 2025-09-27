@@ -6,7 +6,7 @@
 
         <form>
             <label for="description">Descrição do atendimento: </label>
-            <textarea name="description" id="description" required></textarea>
+            <textarea [(ngModel)]="description" name="description" id="description" required></textarea>
 
             <label for="topic-selection">Selecione um ou mais tópicos</label>
             <div class="topic-select">
@@ -31,7 +31,7 @@
                 }
             }
 
-            <button type="submit" (click)="sendReport()">Enviar</button>
+            <button type="submit" [disabled]="reportTopics.length === 0" (click)="sendReport()">Enviar</button>
         </form>
     </div>
 </div>

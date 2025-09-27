@@ -4,6 +4,8 @@ import { NgSelectComponent, NgOptionComponent, NgLabelTemplateDirective, NgOptgr
 import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 import { SessionStorageService } from '../../core/services/session-storage.service';
 import { Discipline } from '../../models/discipline.model';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-send-report',
@@ -22,19 +24,25 @@ export class SendReportComponent implements OnInit {
 
   discipline!: any;
 
+  description = '';
   selectedTopic = '';
 
   disciplineTopics: string [] = [];
   reportTopics: string [] = [];
 
   constructor(
-    private sessionStorage: SessionStorageService
+    private sessionStorage: SessionStorageService,
+    /** Serviço HttpClient para requisições HTTP @type {HttpClient} */
+    private http: HttpClient,
+    private router: Router,
+    /** Referência ao serviço de rota ativa @type {ActivatedRoute} */
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.discipline = this.sessionStorage.getAllDataFromKey('selectedDiscipline');
     this.disciplineTopics = this.discipline.topics;
-    console.log(this.disciplineTopics);
+    this.disciplineTopics.push('Outro');
   }
 
   addTopic(topic: string) {
@@ -46,6 +54,34 @@ export class SendReportComponent implements OnInit {
   }
 
   sendReport() {
+    this.http.post('http://localhost:3000/sendReport',
+      {
+        courseId: this.discipline.id,
+        course: this.discipline.name,
+        userName: this.sessionStorage.getData('user', 'nome'), 
+        userUid: this.sessionStorage.getData('user', 'uid'),
+        description: this.description,
+        topics: this.reportTopics,
+        createdAt: new Date()
+      })
+      .subscribe({
+        next: (response) => {
+          console.log('Relatório enviado com sucesso:', response);
+          this.goTutorSubjects();
+        },
+        error: (error) => {
+          console.error('Erro ao criar post:', error);
+        }
+      });
+  }
 
+  goTutorSubjects(): void {
+    this.router
+      .navigate(['../'], { relativeTo: this.route })
+      .then((success) => {
+        console.log('Navegação realizada:', success);
+        console.clear(); // Limpa console após navegação bem-sucedida
+      })
+      .catch((error) => console.error('Erro na navegação:', error));
   }
 }
