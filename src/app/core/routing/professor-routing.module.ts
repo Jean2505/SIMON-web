@@ -7,6 +7,8 @@ import { ListSubjectsComponent } from '../../shared/list-subjects/list-subjects.
 import { ProfessorTutorsComponent } from '../../professor/tutors/tutors.component';
 import { TutorProfileComponent } from '../../shared/tutor-profile/tutor-profile.component';
 import { RequestTutoringComponent } from '../../professor/request-tutoring/request-tutoring.component';
+import { ViewReportsComponent } from '../../professor/view-reports/view-reports.component';
+import { ReportsListComponent } from '../../professor/view-reports/reports-list/reports-list.component';
 
 /* Importação de telas do professor */
 
@@ -25,6 +27,8 @@ const routes: Routes = [
         loadChildren: () => import('./shared.module').then(m => m.SharedModule),
       },
       { path: 'request', component: RequestTutoringComponent },
+      { path: 'reports', component: ViewReportsComponent },
+      { path: 'reports/:id', component: ReportsListComponent }
     ]
   }
 ];
