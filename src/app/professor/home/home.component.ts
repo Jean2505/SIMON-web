@@ -56,7 +56,12 @@ export class ProfessorHomeComponent {
       .catch(error => console.error('Erro na navegação:', error));
   }
 
-  goRecomendation(): void {
-    alert('Funcionalidade em desenvolvimento');
+  goReports(): void {
+    this.router.navigate(['/professor/reports'])
+      .then(success => {
+        console.log('Navegação realizada:', success);
+        console.clear();        
+      })
+      .catch(error => console.error('Erro na navegação:', error));
   }
 }
