@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BackButtonComponent } from "../../shared/buttons/back-button/back-button.component";
 import { Discipline } from '../../models/discipline.model';
 import { DisciplineComponent } from "./discipline/discipline.component";
@@ -18,6 +18,7 @@ export class ViewReportsComponent implements OnInit {
   disciplinas: Discipline [] = [];
 
   loadingDisciplinas = true;
+  loadingSync = true;
 
   constructor (
     private auth: Auth,
@@ -30,7 +31,7 @@ export class ViewReportsComponent implements OnInit {
   }
 
   getDisciplines(): void { 
-    this.http.post('http://localhost:3000/getProfessorDisciplines', { user: this.user.uid })
+    this.http.post('http://localhost:3000/getProfessorDisciplines', { uid: this.user.uid })
       .subscribe({
         next: (response: any) => {
           const result = JSON.parse(response);
@@ -45,6 +46,7 @@ export class ViewReportsComponent implements OnInit {
             };
         });
         this.loadingDisciplinas = false;
+        this.loadingSync = false;
       }
     });
   }

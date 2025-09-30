@@ -1,1 +1,21 @@
-<p>reports-list works!</p>
+<div class="container">
+    <div class="manage-container">
+        <app-back-button></app-back-button>
+        <h3>Relatórios - {{ disciplineName }}</h3>
+        <hr>
+
+        @if (isLoading) {
+            <app-loading class="loading"></app-loading>
+        } @else if (reports.length == 0) {
+        <div class="no-requests">
+            <p>Nenhum relatório disponível</p>
+        </div>
+        } @else { 
+            @for (report of reports; track report.createdAt) {
+                <div class="report-item">
+                    <app-report-item [report]="report"></app-report-item>
+                </div>
+            } 
+        }
+    </div>
+</div>

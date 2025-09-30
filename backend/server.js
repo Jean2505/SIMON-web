@@ -893,6 +893,21 @@ app.post("/sendReport", async (req, res) => {
   }
 });
 
+app.post("/getReports", async (req, res) => {
+  try {
+    const courseId = req.body;
+    const response = await axios.post(
+      "https://getreports-bz6uecg2pq-rj.a.run.app",
+      courseId
+    );
+    console.log("Resposta: ", response.data.payload);
+    res.json(response.data.payload);
+  } catch (error) {
+    console.error("Erro ao chamar função getReports:", error.message);
+    res.status(500).json({ error: "Erro ao obter as requisições externamente" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

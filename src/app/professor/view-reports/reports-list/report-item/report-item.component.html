@@ -1,0 +1,23 @@
+<div class="container">
+    <mat-accordion class="report-accordion">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ report.userName }}
+                </mat-panel-title>
+                <mat-panel-description> 
+                    <span>{{ report.createdAt | date:'dd/MM/yyyy - HH:mm' }}</span>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="panel-content">
+                <h3 class="field-label">Tópicos</h3>
+                @for (topic of report.topics; track $index) {
+                    <span class="field-value topics">{{ topic }}</span>
+                }
+
+                <h3 class="field-label">Descrição do atendimento</h3>
+                <span class="field-value">{{ report.description }}</span>
+            </div>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

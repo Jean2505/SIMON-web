@@ -1,0 +1,29 @@
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  padding: 10vh 102px 0;
+}
+
+.manage-container {
+  margin-top: 30px;
+  min-height: 45vh;
+}
+
+h3 {
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #cbd5e1;
+    margin-bottom: 16px;
+    background-color: rgb(83, 1, 234, 1);
+}
+
+.report-item {
+  margin-bottom: 10px;
+}
