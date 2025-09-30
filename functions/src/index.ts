@@ -1384,3 +1384,27 @@ export const sendReport = onRequest({region: "southamerica-east1"}, async (req, 
         res.status(500).send(result);
     }
 });
+
+export const getReports = onRequest({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.body)
+
+    const snapshot = await db.collection("Reports").where("courseId", "==", req.body.courseId).get();
+
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        res.status(404).send(result);
+        return;
+    }
+    result = {
+        status: "OK",
+        message: "Reports found",
+        payload: JSON.stringify(snapshot.docs.map((doc) => doc.data()))
+    };
+    res.status(200).send(result);
+});
