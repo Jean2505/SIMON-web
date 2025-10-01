@@ -43,3 +43,41 @@
     }
   }
 }
+.discipline-row {
+  display: grid;
+  grid-template-columns: 80px 1.5fr 1.5fr 1fr 1fr; // 5 colunas
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
+  text-align: center;
+
+  .actions {
+    display: flex;
+    flex-direction: column; // empilha verticalmente
+    gap: 8px;
+
+    button {
+      width: 100%; // ocupa a largura da célula
+      background-color: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 8px 0;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #0284c7;
+      }
+
+      &:active {
+        background-color: #016ba0;
+      }
+    }
+  }
+}

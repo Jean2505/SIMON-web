@@ -26,8 +26,11 @@
             @if (reportTopics.length !== 0) {
                 <h4>Tópicos</h4>
                 @for (topic of reportTopics; track $index) {
-                    <span class="topic">{{ topic }}</span>
-                    <button class="remove-button" (click)="removeTopic(topic)">X</button>
+                    <div class="topic-item">
+                    <span>{{ topic }}</span>
+                    <button class="remove-btn" (click)="removeTopic(topic)">x</button>
+                    </div>
+
                 }
             }
 

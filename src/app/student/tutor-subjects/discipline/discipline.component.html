@@ -1,10 +1,11 @@
 <div class="discipline-row">
-    <span>{{ discipline.id }}</span>
-    <span>{{ discipline.name }}</span>
-    <span>{{ discipline.professor }}</span>
-    <span>{{ discipline.term }}</span>
-  
+  <span>{{ discipline.id }}</span>
+  <span>{{ discipline.name }}</span>
+  <span>{{ discipline.professor }}</span>
+  <span>{{ discipline.term }}</span>
+
+  <div class="actions">
     <button (click)="viewSubject(discipline)">Acessar</button>
     <button (click)="goReportPage(discipline)">Enviar relatório</button>
   </div>
-  
+</div>
