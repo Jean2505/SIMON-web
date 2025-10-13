@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { RoleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './shared/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
+import { TutorLocationComponent } from './shared/tutor-profile/tutor-location/tutor-location.component';
 
 export const routes: Routes = [
 
@@ -30,7 +31,7 @@ export const routes: Routes = [
     data: { expectedRoles: ['INSTITUICAO'] }
   },
 
-  // { path: 'perfil-monitor', component: TutorProfileComponent },
+  { path: 'location', component: TutorLocationComponent },
 
   // Rota de Login: qualquer pessoa pode acessar
   { path: '', redirectTo: 'login', pathMatch: 'full' },

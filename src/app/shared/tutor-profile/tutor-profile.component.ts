@@ -22,7 +22,6 @@ import { type Tutor } from '../../models/tutor.model';
 import { SessionStorageService } from '../../core/services/session-storage.service';
 import { BackButtonComponent } from '../buttons/back-button/back-button.component';
 import { TutorSubjectComponent } from './subject/subject.component';
-import { waitForPendingWrites } from 'firebase/firestore';
 
 // --------------------------- COMPONENTE ---------------------------
 

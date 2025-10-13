@@ -1,0 +1,93 @@
+.tutor-location-container {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 12px;
+  padding: 12px;
+  height: calc(100vh - 24px);
+  box-sizing: border-box;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+.tutor-map {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 960px) {
+    height: 60vh;
+  }
+}
+
+.tutor-panel {
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow-y: auto;
+}
+
+.tutor-controls {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.tutor-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+button {
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  background: #1f6feb;
+  color: #fff;
+  transition: background 0.2s;
+
+  &:hover {
+    background: #1a5cd1;
+  }
+
+  &.ghost {
+    background: #eee;
+    color: #222;
+
+    &:hover {
+      background: #ddd;
+    }
+  }
+}
+
+.small {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 8px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+hr {
+  margin: 12px 0;
+}

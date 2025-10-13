@@ -1,0 +1,41 @@
+<div class="tutor-location-container">
+  <div class="tutor-map" #mapRef aria-label="Mapa (Google Maps)"></div>
+
+  <aside class="tutor-panel" aria-labelledby="panel-title">
+    <h2 id="panel-title">Localização do Monitor</h2>
+
+    <div class="tutor-controls">
+      <button type="button" (click)="onUseMyLocation()">Usar minha localização</button>
+      <button type="button" class="ghost" (click)="onReset()">Centralizar</button>
+    </div>
+
+    <label for="address">Buscar endereço</label>
+    <div class="tutor-row">
+      <input #addressInput
+             id="address"
+             type="text"
+             [(ngModel)]="addressQuery"
+             placeholder="Ex.: Av. Paulista, São Paulo"
+             (keydown.enter)="$event.preventDefault()" />
+      <button type="button" (click)="onSearchAddress()">Buscar</button>
+    </div>
+    <div class="small">Dica: arraste o marcador para ajustar sua posição.</div>
+
+    <hr />
+
+    <label for="lat">Latitude</label>
+    <input id="lat" type="number" step="any" [(ngModel)]="latString" (input)="onInputsChanged()" />
+
+    <label for="lng">Longitude</label>
+    <input id="lng" type="number" step="any" [(ngModel)]="lngString" (input)="onInputsChanged()" />
+
+    <div class="tutor-controls">
+      <button type="button" (click)="onSave()">Salvar coordenadas</button>
+      <button type="button" class="ghost" (click)="onCopy()">Copiar</button>
+    </div>
+
+    <p class="small" [style.color]="statusIsError() ? '#a00' : '#333'" aria-live="polite">
+      {{ status() }}
+    </p>
+  </aside>
+</div>

@@ -10,6 +10,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { TutorProfileComponent } from '../../shared/tutor-profile/tutor-profile.component';
 import { NotificationsComponent } from '../../shared/notifications/notifications.component';
 import { SendReportComponent } from '../../student/send-report/send-report.component';
+import { TutorLocationComponent } from '../../shared/tutor-profile/tutor-location/tutor-location.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
       { path: 'tutor-subjects', component: TutorSubjectsComponent },
       { path: 'tutor-profile', component: TutorProfileComponent },
       { path: 'tutor/:id', component: TutorProfileComponent },
+      { path: 'location', component: TutorLocationComponent },
       {
         path: 'subject/:id',
         loadChildren: () => import('./shared.module').then(m => m.SharedModule),
