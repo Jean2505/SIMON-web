@@ -23,8 +23,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MapLoaderService } from '../../../core/services/map-loader.service';
 import { LocationService } from '../../../core/services/location.service';
 
-const DEFAULT_CENTER = { lat: -23.55052, lng: -46.633308 };
-const DEFAULT_ZOOM = 13;
+const DEFAULT_CENTER = { lat: -22.833956, lng: -47.048343 };
+const DEFAULT_ZOOM = 17;
 
 @Component({
   selector: 'app-tutor-location',

@@ -43,7 +43,7 @@ testem.log
 Thumbs.db
 
 # Environment variables
-*/environments
+src/environments/*.ts
 
 # Firebase
 /backend/firebase/*.json
