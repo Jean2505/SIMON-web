@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MapLoaderService } from '../../../core/services/map-loader.service';
 import { LocationService } from '../../../core/services/location.service';
+import { HttpClient } from '@angular/common/http';
 
 const DEFAULT_CENTER = { lat: -22.833956, lng: -47.048343 };
 const DEFAULT_ZOOM = 17;
@@ -39,82 +40,102 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
   /** Referência do input de endereço (para o Autocomplete) */
   @ViewChild('addressInput', { static: true }) private readonly addressInputRef!: ElementRef<HTMLInputElement>;
 
-  /** Variáveis do formulário */
+  constructor(
+    /** Referência ao serviço de requisições HTTP @type {HttpClient} */
+    private http: HttpClient
+  ) { }
+
+  // Variáveis do formulário
   addressQuery = '';
   latString = DEFAULT_CENTER.lat.toFixed(6);
   lngString = DEFAULT_CENTER.lng.toFixed(6);
 
-  /** Objetos window.google Maps */
+  // Objetos window.google Maps
   private map!: google.maps.Map;
-  private marker!: google.maps.Marker;
+  private marker!: google.maps.marker.AdvancedMarkerElement;
   private autocomplete!: google.maps.places.Autocomplete;
+  private pin!: google.maps.marker.PinElement;
 
-  /** Estado reativo */
+  // Estado reativo
   private readonly _status = signal<string>('');
   private readonly _statusError = signal<boolean>(false);
   status = computed(() => this._status());
   statusIsError = computed(() => this._statusError());
 
-  /** Injeções */
+  // Injeções
   private readonly loader = inject(MapLoaderService);
   private readonly locationService = inject(LocationService);
   private readonly destroyRef = inject(DestroyRef);
 
   /** Inicializa o mapa e o Autocomplete quando o componente é montado */
   async ngAfterViewInit(): Promise<void> {
-    console.log('[TutorLocationComponent] ngAfterViewInit');
     await this.loader.load();
-    this.initMap();
-    this.initAutocomplete();
-    this.setStatus('Mapa carregado com sucesso.');
-  }
 
-  ngOnDestroy(): void {
-    // O window.google Maps gerencia automaticamente seus listeners na remoção do elemento.
-  }
+    const { Map } = (await window.google.maps.importLibrary('maps')) as google.maps.MapsLibrary;
+    await window.google.maps.importLibrary('places'); // Autocomplete
+    const { AdvancedMarkerElement, PinElement } = (await window.google.maps.importLibrary('marker')) as google.maps.MarkerLibrary;
 
-  /** Cria o mapa e o marcador arrastável */
-  private initMap(): void {
-    this.map = new window.google.maps.Map(this.mapRef.nativeElement, {
+    // 3) Inicializa mapa e recursos
+    this.map = new Map(this.mapRef.nativeElement, {
       center: DEFAULT_CENTER,
       zoom: DEFAULT_ZOOM,
       mapTypeControl: false,
       streetViewControl: false,
-      fullscreenControl: false
+      fullscreenControl: false,
+      mapId: 'DEMO_MAP_ID' // Substitua pelo seu Map ID
     });
 
-    this.marker = new window.google.maps.Marker({
-      position: DEFAULT_CENTER,
+    // Cria um Pin (cores podem ser alteradas)
+    this.pin = new PinElement({
+      background: '#1f6feb',
+      borderColor: '#0f3c97',
+      glyphColor: '#ffffff'
+    });
+
+    // Cria AdvancedMarker arrastável
+    this.marker = new AdvancedMarkerElement({
       map: this.map,
-      draggable: true
+      position: DEFAULT_CENTER,
+      gmpDraggable: true,
+      content: this.pin.element
     });
 
+    // Eventos de arraste
     this.marker.addListener('dragend', () => {
-      const pos = this.marker.getPosition()!;
-      this.latString = pos.lat().toFixed(6);
-      this.lngString = pos.lng().toFixed(6);
-      this.setStatus('Marcador movido manualmente.');
+      const pos = this.marker.position as google.maps.LatLng | null;
+      if (!pos) return;
+      const lat = pos.lat();
+      const lng = pos.lng();
+      this.latString = lat.toFixed(6);
+      this.lngString = lng.toFixed(6);
+      this.setStatus('Marcador (Advanced) movido manualmente.');
     });
+
+    // Autocomplete
+    // this.autocomplete = new window.google.maps.places.Autocomplete(
+    //   this.addressInputRef.nativeElement,
+    //   {
+    //     fields: ['geometry', 'formatted_address'],
+    //     types: ['geocode']
+    //   }
+    // );
+    // this.autocomplete.addListener('place_changed', () => {
+    //   const place = this.autocomplete.getPlace();
+    //   if (!place.geometry?.location) {
+    //     this.setStatus('Endereço sem geometry. Tente outro termo.', true);
+    //     return;
+    //   }
+    //   const loc = place.geometry.location;
+    //   this.centerAndMark(loc.lat(), loc.lng());
+    //   this.addressQuery = place.formatted_address ?? this.addressQuery;
+    //   this.setStatus('Endereço localizado. Ajuste se necessário.');
+    // });
+
+    this.setStatus('Mapa pronto com AdvancedMarkerElement.');
   }
 
-  /** Ativa o Autocomplete de endereços (Places API) */
-  private initAutocomplete(): void {
-    this.autocomplete = new window.google.maps.places.Autocomplete(this.addressInputRef.nativeElement, {
-      fields: ['geometry', 'formatted_address'],
-      types: ['geocode']
-    });
-
-    this.autocomplete.addListener('place_changed', () => {
-      const place = this.autocomplete.getPlace();
-      if (!place.geometry?.location) {
-        this.setStatus('Endereço inválido. Tente outro termo.', true);
-        return;
-      }
-      const loc = place.geometry.location;
-      this.centerAndMark(loc.lat(), loc.lng());
-      this.addressQuery = place.formatted_address ?? this.addressQuery;
-      this.setStatus('Endereço encontrado com sucesso.');
-    });
+  ngOnDestroy(): void {
+    // O window.google Maps gerencia automaticamente seus listeners na remoção do elemento.
   }
 
   /** Força foco e aviso quando usuário tenta buscar manualmente */
@@ -177,10 +198,13 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.setStatus('Salvando coordenadas...');
-    const sub = this.locationService.saveLocation({ lat, lng, source: 'tutor-location' }).subscribe({
-      next: () => this.setStatus('Coordenadas salvas com sucesso (simulado).'),
-      error: () => this.setStatus('Erro ao salvar coordenadas.', true)
-    });
+    const sub = this.locationService
+      .saveLocation({ lat, lng, source: 'tutor-location' })
+      .subscribe({
+        next: () => this.setStatus('Coordenadas salvas com sucesso (simulado).'),
+        error: () => this.setStatus('Erro ao salvar coordenadas.', true)
+      });
+
     this.destroyRef.onDestroy(() => sub.unsubscribe());
   }
 
@@ -195,7 +219,7 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
   /** Centraliza mapa e marcador */
   private centerAndMark(lat: number, lng: number, zoom?: number): void {
     const position = new window.google.maps.LatLng(lat, lng);
-    this.marker.setPosition(position);
+    this.marker.position = position;
     this.map.setCenter(position);
     if (zoom) this.map.setZoom(zoom);
     this.latString = lat.toFixed(6);
