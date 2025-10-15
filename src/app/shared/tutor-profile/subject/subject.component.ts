@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -11,6 +11,7 @@ import { type Tutor } from '../../../models/tutor.model';
 
 import { SessionStorageService } from '../../../core/services/session-storage.service';
 import { TutorProfileComponent } from '../tutor-profile.component';
+import { TutorLocationComponent } from '../tutor-location/tutor-location.component';
 
 @Component({
   selector: 'app-tutor-subject',
@@ -21,18 +22,19 @@ import { TutorProfileComponent } from '../tutor-profile.component';
     MatSlideToggleModule,
     MatTableModule,
     MatCheckboxModule,
+    TutorLocationComponent
   ],
   templateUrl: './subject.component.html',
   styleUrls: ['./subject.component.scss', '.././tutor-profile.component.scss'],
 })
 export class TutorSubjectComponent implements OnInit {
   /**
-   * Matéria do tutor
+   * Matéria do monitor
    * @type {Tutor}
    */
   @Input() subject!: Tutor;
   /**
-   * Indica se o tutor é um professor
+   * Indica se o aluno é um monitor
    * @type {boolean}
    */
   @Input() isTutor!: boolean;
@@ -66,6 +68,14 @@ export class TutorSubjectComponent implements OnInit {
    * @default false
    */
   isEditingSubject: boolean = false;
+
+  /**
+   * Controle de edição de localização
+   * @type {boolean}
+   * @default false
+   */
+  isMapOpen: boolean = false;
+
   /**
    * Controle de status de monitoria
    * @type {boolean}
@@ -86,7 +96,14 @@ export class TutorSubjectComponent implements OnInit {
     private sessionStorage: SessionStorageService,
     /** Componente pai de perfil de tutor @type {TutorProfileComponent} */
     private tutorProfileComponent: TutorProfileComponent
-  ) {}
+  ) { }
+
+  @HostListener('document:keydown.escape')
+  onEsc() {
+    if (this.isMapOpen) {
+      this.isMapOpen = false;
+    }
+  }
 
   /** Alterna modo de edição de matéria */
   onEditSubject(): void {
@@ -170,6 +187,18 @@ export class TutorSubjectComponent implements OnInit {
     }));
 
     return result;
+  }
+
+  closeMap(): void {
+    this.isMapOpen = false;
+  }
+
+  onEditLocation(): void {
+    this.isMapOpen = true;
+  }
+
+  onViewLocation(): void {
+    this.isMapOpen = true;
   }
 
   /**
@@ -269,7 +298,7 @@ export class TutorSubjectComponent implements OnInit {
           'Atualizando usuário na sessão:',
           this.sessionStorage.getAllData()
         );
-        
+
         // Atualiza o estado de monitoria no componente pai
         window.location.reload();
       },

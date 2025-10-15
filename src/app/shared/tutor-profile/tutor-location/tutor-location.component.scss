@@ -1,14 +1,30 @@
 .tutor-location-container {
-  display: grid;
-  grid-template-columns: 1fr 340px;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  padding: 12px;
-  height: calc(100vh - 24px);
+  padding: 6px;
+  height: calc(100vh - 12px);
   box-sizing: border-box;
 
   @media (max-width: 960px) {
     grid-template-columns: 1fr;
     height: auto;
+  }
+}
+
+.location-header {
+  margin: 5px 0;
+  position: fixed;
+  text-align: center;
+  z-index: 1;
+  width: calc(100% - 20px);
+  justify-self: anchor-center;
+
+  .panel-title {
+    justify-self: anchor-center;
+    background: hwb(0deg 66% 34% / 75%);
+    padding: 10px;
+    border-radius: 10rem;
   }
 }
 
@@ -24,11 +40,13 @@
 }
 
 .tutor-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   padding: 12px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  overflow-y: auto;
 }
 
 .tutor-controls {

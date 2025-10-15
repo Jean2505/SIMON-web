@@ -1,3 +1,5 @@
+import { GeoPoint } from "firebase/firestore";
+
 /**
  * Modelo de dados para o monitor.
  * @interface Tutor
@@ -16,6 +18,7 @@
  * @property {boolean} status - Status do monitor.
  * @property {string} uid - UID (ID único) do monitor.
  * @property {string} email - E-mail para contato do monitor.
+ * @property {GeoPoint} [geoLoc] - Geolocalização do monitor (opcional).
  */
 export class Tutor {
   /**
@@ -94,6 +97,11 @@ export class Tutor {
    * @type {string}
    */
   email!: string;
+  /**
+   * Geolocalização do monitor (opcional).
+   * @type {GeoPoint}
+   */
+  geoLoc?: GeoPoint;
 }
 
 /**

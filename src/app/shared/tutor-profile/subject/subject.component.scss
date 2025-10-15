@@ -1,0 +1,70 @@
+button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background: #1f6feb;
+  color: #fff;
+}
+
+button.ghost {
+  background: #eee;
+  color: #222;
+}
+
+.icon-btn {
+  background: transparent;
+  color: #222;
+  font-size: 18px;
+  padding: 4px 8px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .45);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.dialog {
+  width: min(96vw, 1100px);
+  height: min(90vh, 760px);
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.dialog-header,
+.dialog-footer {
+  padding: 10px 12px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dialog-header {
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+}
+
+.dialog-footer {
+  justify-content: flex-end;
+  border-top: 1px solid #eee;
+}
+
+.dialog-body {
+  padding: 0;
+  /* o mapa já ocupa sua própria altura via SCSS do componente */
+  display: block;
+}
+
+/* garante altura visual do mapa dentro do modal */
+:host ::ng-deep app-tutor-location .tutor-map {
+  height: 60vh;
+  /* ajuste se quiser maior/menor */
+}

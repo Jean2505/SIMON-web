@@ -16,13 +16,16 @@ import {
   ViewChild,
   inject,
   signal,
-  computed
+  computed,
+  Input
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MapLoaderService } from '../../../core/services/map-loader.service';
 import { LocationService } from '../../../core/services/location.service';
 import { HttpClient } from '@angular/common/http';
+import { Tutor } from '../../../models/tutor.model';
+import { GeoPoint } from 'firebase/firestore';
 
 const DEFAULT_CENTER = { lat: -22.833956, lng: -47.048343 };
 const DEFAULT_ZOOM = 17;
@@ -40,6 +43,18 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
   /** Referência do input de endereço (para o Autocomplete) */
   @ViewChild('addressInput', { static: true }) private readonly addressInputRef!: ElementRef<HTMLInputElement>;
 
+  /** ID do usuário */
+  @Input() uid!: string;
+
+  /** Indica se o usuário é um monitor */
+  @Input() isTutor!: boolean;
+
+  /** Matéria do monitor */
+  @Input() subject!: Tutor;
+
+  /** Indica se o usuário está vendo ou editando */
+  @Input() isEditingSubject!: boolean;
+
   constructor(
     /** Referência ao serviço de requisições HTTP @type {HttpClient} */
     private http: HttpClient
@@ -47,13 +62,12 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
 
   // Variáveis do formulário
   addressQuery = '';
-  latString = DEFAULT_CENTER.lat.toFixed(6);
-  lngString = DEFAULT_CENTER.lng.toFixed(6);
+  latString!: string;
+  lngString!: string;
 
   // Objetos window.google Maps
   private map!: google.maps.Map;
   private marker!: google.maps.marker.AdvancedMarkerElement;
-  private autocomplete!: google.maps.places.Autocomplete;
   private pin!: google.maps.marker.PinElement;
 
   // Estado reativo
@@ -64,11 +78,20 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
 
   // Injeções
   private readonly loader = inject(MapLoaderService);
-  private readonly locationService = inject(LocationService);
-  private readonly destroyRef = inject(DestroyRef);
 
   /** Inicializa o mapa e o Autocomplete quando o componente é montado */
   async ngAfterViewInit(): Promise<void> {
+
+    if (!this.subject.geoLoc) {
+      this.setStatus('Nenhuma localização salva para esta matéria.', true);
+      this.latString = DEFAULT_CENTER.lat.toFixed(6);
+      this.lngString = DEFAULT_CENTER.lng.toFixed(6);
+    } else {
+      console.log(this.subject.geoLoc);
+      this.latString = this.subject.geoLoc.latitude.toFixed(6);
+      this.lngString = this.subject.geoLoc.longitude.toFixed(6);
+    }
+
     await this.loader.load();
 
     const { Map } = (await window.google.maps.importLibrary('maps')) as google.maps.MapsLibrary;
@@ -87,7 +110,7 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
 
     // Cria um Pin (cores podem ser alteradas)
     this.pin = new PinElement({
-      background: '#1f6feb',
+      background: '#1fa0ebd7',
       borderColor: '#0f3c97',
       glyphColor: '#ffffff'
     });
@@ -101,37 +124,34 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
     });
 
     // Eventos de arraste
-    this.marker.addListener('dragend', () => {
-      const pos = this.marker.position as google.maps.LatLng | null;
-      if (!pos) return;
-      const lat = pos.lat();
-      const lng = pos.lng();
+    this.marker.addListener('dragend', (ev: any) => {
+      const ll = ev?.latLng ?? null;
+      const lat = ll ? ll.lat() : this.readAdvancedPos().lat;
+      const lng = ll ? ll.lng() : this.readAdvancedPos().lng;
       this.latString = lat.toFixed(6);
       this.lngString = lng.toFixed(6);
-      this.setStatus('Marcador (Advanced) movido manualmente.');
     });
 
-    // Autocomplete
-    // this.autocomplete = new window.google.maps.places.Autocomplete(
-    //   this.addressInputRef.nativeElement,
-    //   {
-    //     fields: ['geometry', 'formatted_address'],
-    //     types: ['geocode']
-    //   }
-    // );
-    // this.autocomplete.addListener('place_changed', () => {
-    //   const place = this.autocomplete.getPlace();
-    //   if (!place.geometry?.location) {
-    //     this.setStatus('Endereço sem geometry. Tente outro termo.', true);
-    //     return;
-    //   }
-    //   const loc = place.geometry.location;
-    //   this.centerAndMark(loc.lat(), loc.lng());
-    //   this.addressQuery = place.formatted_address ?? this.addressQuery;
-    //   this.setStatus('Endereço localizado. Ajuste se necessário.');
-    // });
 
     this.setStatus('Mapa pronto com AdvancedMarkerElement.');
+    // depois que cria Map, PinElement e AdvancedMarkerElement…
+    if (this.subject?.geoLoc) {
+      this.centerAndMark(this.subject.geoLoc.latitude, this.subject.geoLoc.longitude, DEFAULT_ZOOM);
+    } else {
+      this.centerAndMark(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng, DEFAULT_ZOOM);
+    }
+  }
+
+  /** Retorna {lat, lng} do AdvancedMarker, lidando com LatLng ou Literal. */
+  private readAdvancedPos(): { lat: number; lng: number } {
+    const p = this.marker.position;
+    if (!p) return { lat: DEFAULT_CENTER.lat, lng: DEFAULT_CENTER.lng };
+
+    if (p instanceof window.google.maps.LatLng) {
+      return { lat: p.lat(), lng: p.lng() };
+    }
+    // p é LatLngLiteral/LatLngAltitudeLiteral
+    return { lat: (p as google.maps.LatLngLiteral).lat, lng: (p as google.maps.LatLngLiteral).lng };
   }
 
   ngOnDestroy(): void {
@@ -198,22 +218,32 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.setStatus('Salvando coordenadas...');
-    const sub = this.locationService
-      .saveLocation({ lat, lng, source: 'tutor-location' })
-      .subscribe({
-        next: () => this.setStatus('Coordenadas salvas com sucesso (simulado).'),
-        error: () => this.setStatus('Erro ao salvar coordenadas.', true)
-      });
 
-    this.destroyRef.onDestroy(() => sub.unsubscribe());
+    const geoLoc = new GeoPoint(lat, lng);
+
+    const request = {
+      uid: this.uid,
+      disciplinaId: this.subject.disciplinaId,
+      updates: {
+        geoLoc
+      }
+    };
+
+    this.http.post('http://localhost:3000/updateTutor', request).subscribe({
+      next: () => {
+        console.log('Coordenadas salvas!', geoLoc);
+        this.setStatus('Coordenadas salvas com sucesso.');
+      },
+      error: () => {
+        this.setStatus('Erro ao salvar coordenadas.', true);
+      }
+    });
   }
 
   /** Copia coordenadas para área de transferência */
-  onCopy(): void {
-    const text = `lat:${this.latString}, lng:${this.lngString}`;
-    navigator.clipboard?.writeText(text)
-      .then(() => this.setStatus('Coordenadas copiadas para a área de transferência.'))
-      .catch(() => this.setStatus('Falha ao copiar coordenadas.', true));
+  onCancel(): void {
+    const lat = Number(this.latString);
+    const lng = Number(this.lngString);
   }
 
   /** Centraliza mapa e marcador */

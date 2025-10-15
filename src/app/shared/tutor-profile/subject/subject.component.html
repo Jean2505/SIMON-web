@@ -15,6 +15,21 @@
       }
     </mat-expansion-panel-header>
 
+    @if (isMapOpen) {
+      <div class="overlay" (click)="closeMap()">
+        <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+          <section class="dialog-body">
+            <app-tutor-location
+              [uid]="uid"
+              [isTutor]="isTutor"
+              [subject]="subject"
+              [isEditingSubject]="isEditingSubject"
+            ></app-tutor-location>
+          </section>
+        </div>
+      </div>
+    }
+
     <div class="panel-content">
       <div class="subject-info">
         <div class="subject-place">
@@ -27,9 +42,15 @@
             <strong>Sala: </strong>
             <input class="room" [(ngModel)]="subject.sala" />
           </p>
+          <button class="pinpoint-button" mat-button (click)="onEditLocation()">
+            Definir Localização
+          </button>
           } @else {
           <p><strong>Prédio:</strong> {{ subject.local }}</p>
           <p><strong>Sala:</strong> {{ subject.sala }}</p>
+          <button class="pinpoint-button" mat-button (click)="onViewLocation()">
+            Ver Localização
+          </button>
           }
         </div>
         @if (isTutor) {
