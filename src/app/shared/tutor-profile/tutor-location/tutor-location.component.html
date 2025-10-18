@@ -24,7 +24,9 @@
     <div class="save-location">
       <div class="tutor-controls">
         <button type="button" class="ghost" (click)="onCancel()">Cancelar</button>
+        @if (isEditingSubject) {
         <button type="button" (click)="onSave()">Salvar Localização</button>
+        }
       </div>
     </div>
   </div>

@@ -189,7 +189,7 @@ export class TutorSubjectComponent implements OnInit {
     return result;
   }
 
-  closeMap(): void {
+  closeMap(evt?: boolean): void {
     this.isMapOpen = false;
   }
 

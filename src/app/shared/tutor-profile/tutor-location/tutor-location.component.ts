@@ -17,12 +17,13 @@ import {
   inject,
   signal,
   computed,
-  Input
+  Input,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MapLoaderService } from '../../../core/services/map-loader.service';
-import { LocationService } from '../../../core/services/location.service';
 import { HttpClient } from '@angular/common/http';
 import { Tutor } from '../../../models/tutor.model';
 import { GeoPoint } from 'firebase/firestore';
@@ -54,6 +55,8 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
 
   /** Indica se o usuário está vendo ou editando */
   @Input() isEditingSubject!: boolean;
+
+  @Output() closeLocation = new EventEmitter<boolean>();
 
   constructor(
     /** Referência ao serviço de requisições HTTP @type {HttpClient} */
@@ -119,21 +122,24 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
     this.marker = new AdvancedMarkerElement({
       map: this.map,
       position: DEFAULT_CENTER,
-      gmpDraggable: true,
+      gmpDraggable: this.isEditingSubject,
       content: this.pin.element
     });
 
     // Eventos de arraste
-    this.marker.addListener('dragend', (ev: any) => {
-      const ll = ev?.latLng ?? null;
-      const lat = ll ? ll.lat() : this.readAdvancedPos().lat;
-      const lng = ll ? ll.lng() : this.readAdvancedPos().lng;
-      this.latString = lat.toFixed(6);
-      this.lngString = lng.toFixed(6);
-    });
+    console.log('isEditingSubject:', this.isEditingSubject);
+    if (this.isEditingSubject) {
+      this.marker.addListener('dragend', (ev: any) => {
+        const ll = ev?.latLng ?? null;
+        const lat = ll ? ll.lat() : this.readAdvancedPos().lat;
+        const lng = ll ? ll.lng() : this.readAdvancedPos().lng;
+        this.latString = lat.toFixed(6);
+        this.lngString = lng.toFixed(6);
+      });
+    }
 
 
-    this.setStatus('Mapa pronto com AdvancedMarkerElement.');
+    this.setStatus('');
     // depois que cria Map, PinElement e AdvancedMarkerElement…
     if (this.subject?.geoLoc) {
       this.centerAndMark(this.subject.geoLoc.latitude, this.subject.geoLoc.longitude, DEFAULT_ZOOM);
@@ -240,10 +246,8 @@ export class TutorLocationComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  /** Copia coordenadas para área de transferência */
   onCancel(): void {
-    const lat = Number(this.latString);
-    const lng = Number(this.lngString);
+    this.closeLocation.emit(true);
   }
 
   /** Centraliza mapa e marcador */
