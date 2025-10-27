@@ -1,111 +1,135 @@
+/* === Container Principal === */
 .tutor-location-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 6px;
-  height: calc(100vh - 12px);
+  gap: 16px;
+  padding: 16px;
+  background: #f7f9fc;
+  min-height: 100vh;
   box-sizing: border-box;
-
-  @media (max-width: 960px) {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
 }
 
+/* === Cabeçalho === */
 .location-header {
-  margin: 5px 0;
-  position: fixed;
   text-align: center;
-  z-index: 1;
-  width: calc(100% - 20px);
-  justify-self: anchor-center;
+  margin: 10px 0 20px 0;
 
   .panel-title {
-    justify-self: anchor-center;
-    background: hwb(0deg 66% 34% / 75%);
-    padding: 10px;
-    border-radius: 10rem;
+    display: inline-block;
+    background: linear-gradient(90deg, #4a00e0, #007bff);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.8rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   }
 }
 
+/* === Mapa === */
 .tutor-map {
   width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  height: 60vh;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  border: 2px solid #e4e9f2;
+  background-color: #fff;
 
   @media (max-width: 960px) {
-    height: 60vh;
+    height: 50vh;
   }
 }
 
+/* === Painel de Controles === */
 .tutor-panel {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 12px;
+  flex-direction: column;
+  gap: 12px;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
+/* === Botões === */
 .tutor-controls {
   display: flex;
-  gap: 8px;
-  margin: 12px 0;
-}
+  gap: 12px;
+  justify-content: center;
+  margin-top: 10px;
 
-.tutor-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-input[type="text"],
-input[type="number"] {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-}
-
-button {
-  cursor: pointer;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: none;
-  background: #1f6feb;
-  color: #fff;
-  transition: background 0.2s;
-
-  &:hover {
-    background: #1a5cd1;
+  button {
+    cursor: pointer;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    transition: all 0.25s ease;
   }
 
-  &.ghost {
-    background: #eee;
-    color: #222;
+  button:not(.ghost) {
+    background: linear-gradient(90deg, #4a00e0, #007bff);
+    color: #fff;
 
     &:hover {
-      background: #ddd;
+      background: linear-gradient(90deg, #3700b3, #0056d1);
+    }
+  }
+
+  button.ghost {
+    background: #f2f4f8;
+    color: #333;
+    border: 1px solid #ddd;
+
+    &:hover {
+      background: #e6e9ee;
     }
   }
 }
 
+/* === Texto e Dicas === */
 .small {
   font-size: 0.9rem;
-  color: #555;
+  color: #666;
+  text-align: center;
   margin-top: 8px;
 }
 
-label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  display: block;
+/* === Seção de Salvamento === */
+.save-location {
+  display: flex;
+  justify-content: center;
   margin-top: 8px;
-  margin-bottom: 6px;
 }
 
-hr {
-  margin: 12px 0;
+/* === Input padrão (caso exista) === */
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  outline: none;
+
+  &:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 4px rgba(74, 144, 226, 0.5);
+  }
 }
+
+/* === Responsividade === */
+@media (max-width: 600px) {
+  .tutor-panel {
+    padding: 16px;
+    width: 100%;
+  }
+
+  .tutor-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+

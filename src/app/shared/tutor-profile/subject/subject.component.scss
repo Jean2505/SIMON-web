@@ -68,3 +68,41 @@ button.ghost {
   height: 60vh;
   /* ajuste se quiser maior/menor */
 }
+
+.subject-place {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* espaço entre prédio, sala e botão */
+  flex-wrap: wrap; /* garante boa exibição em telas pequenas */
+}
+
+.subject-place p {
+  margin: 0; /* remove espaçamento padrão do <p> */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.95rem;
+}
+
+.subject-place strong {
+  font-weight: 600;
+  color: #333;
+}
+
+.subject-place .pinpoint-button {
+  margin: 0;
+  align-self: center;
+  background: #f4f6fb;
+  color: #1f6feb;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: #e9eef9;
+    border-color: #1f6feb;
+  }
+}
