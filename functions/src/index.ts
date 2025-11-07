@@ -1408,3 +1408,85 @@ export const getReports = onRequest({region: "southamerica-east1"}, async (req, 
     };
     res.status(200).send(result);
 });
+
+export const updateMonitorMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.data.uid).get();
+
+    logger.debug(snapshot.docs);
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        return result;
+    }
+
+    snapshot.docs.forEach(async (doc) => {
+        if (doc.data().disciplinaId == req.data.disciplinaId) {
+            // await db.collection("Monitores").doc(doc.id).set(req.body.update, {merge: true});
+            await db.collection("Monitores").doc(doc.id).update(req.data.updates).then(() => {
+                logger.debug("Monitor updated successfully");
+                result = {
+                    status: "OK",
+                    message: "Monitor updated successfully",
+                    payload: "Monitor updated successfully"
+                };
+                return result;
+            });
+        }
+    });
+
+    return {
+        status: "ERROR",
+        message: "Error updating",
+        payload: ""
+    }
+});
+
+export const updateMonitorScheduleMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.data.uid).get();
+
+    logger.debug(snapshot.docs);
+    if (snapshot.empty) {
+        logger.debug("No matching documents.");
+        result = {
+            status: "ERROR",
+            message: "No matching documents.",
+            payload: "No matching documents."
+        };
+        return result;
+    }
+    
+   
+    const schedule = JSON.parse(req.data.schedule.horarioDisponivel)
+    const update = {
+        horarioDisponivel: schedule
+    }
+    snapshot.docs.forEach(async (doc) => {
+        if (doc.data().disciplinaId == req.data.disciplinaId) {
+            await db.collection("Monitores").doc(doc.id).update(update).then(() => {
+                logger.debug("Monitor updated successfully");
+                result = {
+                    status: "OK",
+                    message: "Monitor updated successfully",
+                    payload: "Monitor updated successfully"
+                };
+                return result;
+            });
+        }
+    });
+
+    return {
+        status: "ERROR",
+        message: "Error updating",
+        payload: ""
+    }
+});
