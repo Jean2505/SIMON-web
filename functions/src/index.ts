@@ -8,7 +8,7 @@
  */
 
 import {onCall, onRequest} from "firebase-functions/v2/https";
-import {onDocumentCreated} from "firebase-functions/v2/firestore";
+import {onDocumentCreated, onDocumentUpdated} from "firebase-functions/v2/firestore";
 import * as logger from "firebase-functions/logger";
 import * as admin from "firebase-admin";
 
@@ -1361,6 +1361,34 @@ export const updateStatus = onRequest({region: "southamerica-east1"}, async (req
     res.status(404).send(result);
 });
 
+export const updateStatusMobile = onCall({region: "southamerica-east1"}, async (req, res) => {
+    let result: CallableResponse;
+    logger.debug(req.data)
+
+    const snapshot = await db.collection("Monitores").where("uid", "==", req.data.uid)
+    .where("disciplinaId", "==", req.data.disciplinaId).get();
+
+    if (!snapshot.empty) {
+        if (snapshot.docs[0].data().status == true) {
+            await db.collection("Monitores").doc(snapshot.docs[0].id).set({status: false}, {merge: true});
+        } else {
+            await db.collection("Monitores").doc(snapshot.docs[0].id).set({status: true}, {merge: true});
+        }
+        result = {
+            status: "OK",
+            message: "Status updated successfully",
+            payload: "Status updated successfully"
+        };
+        return result;
+    }
+    result = {
+        status: "ERROR",
+        message: "No matching documents.",
+        payload: "No matching documents."
+    };
+    return result;
+});
+
 export const sendReport = onRequest({region: "southamerica-east1"}, async (req, res) => {
     let result: CallableResponse;
     logger.debug(req.body)
@@ -1426,19 +1454,23 @@ export const updateMonitorMobile = onCall({region: "southamerica-east1"}, async 
         return result;
     }
 
+    if (req.data.updates.foto) {
+        logger.debug("Updating Monitor's profile picture")
+        const snap = await db.collection("Alunos").where("uid", "==", req.data.uid).get();
+        await db.collection("Alunos").doc(snap.docs[0].id).update(req.data.updates)
+    }
+
     snapshot.docs.forEach(async (doc) => {
-        if (doc.data().disciplinaId == req.data.disciplinaId) {
             // await db.collection("Monitores").doc(doc.id).set(req.body.update, {merge: true});
-            await db.collection("Monitores").doc(doc.id).update(req.data.updates).then(() => {
-                logger.debug("Monitor updated successfully");
-                result = {
-                    status: "OK",
-                    message: "Monitor updated successfully",
-                    payload: "Monitor updated successfully"
-                };
-                return result;
+        await db.collection("Monitores").doc(doc.id).update(req.data.updates).then(() => {
+            logger.debug("Monitor updated successfully");
+            result = {
+                status: "OK",
+                message: "Monitor updated successfully",
+                payload: "Monitor updated successfully"
+            };
+            return result;
             });
-        }
     });
 
     return {
@@ -1490,3 +1522,61 @@ export const updateMonitorScheduleMobile = onCall({region: "southamerica-east1"}
         payload: ""
     }
 });
+
+export const trackMonitorStatus = onDocumentUpdated({document: 'Monitores/{monitorId}',region: "southamerica-east1"},
+  async (event) => {
+    const newData = event.data!.after.data();
+    const oldData = event.data!.before.data();
+    const monitorId = event.params.monitorId;
+
+    // We only care if the 'status' field has actually changed.
+    if (newData.status === oldData.status) {
+      console.log(`Status for monitor ${monitorId} did not change. Exiting.`);
+      return null;
+    }
+
+    const firestore = admin.firestore();
+    const docRef = firestore.collection('Monitores').doc(monitorId);
+
+    // If status changes to true, record the start time
+    if (newData.status === true) {
+      console.log(`Monitor ${monitorId} status changed to TRUE. Setting startAtendimento.`);
+      return docRef.update({
+        startAtendimento: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    }
+    // If status changes to false, calculate the duration
+    else if (newData.status === false) {
+      console.log(`Monitor ${monitorId} status changed to FALSE. Calculating session duration and accumulating hours.`);
+
+      // We need the startAtendimento from *before* this status change (when it was true)
+      const startAtendimento = oldData.startAtendimento as admin.firestore.Timestamp | undefined;
+
+      if (!startAtendimento) {
+        console.warn(`Monitor ${monitorId} status changed to FALSE, but 'startAtendimento' was not found in previous state. Cannot calculate duration.`);
+        return null; // Cannot calculate duration without a start time
+      }
+
+      const currentTime = admin.firestore.Timestamp.now();
+      const startTimeMillis = startAtendimento.toMillis();
+      const endTimeMillis = currentTime.toMillis();
+
+      // Calculate duration in milliseconds
+      const durationMillis = endTimeMillis - startTimeMillis;
+      // Convert duration to hours (1 hour = 3,600,000 milliseconds)
+      const sessionDurationHours = durationMillis / (1000 * 60 * 60);
+
+      // Get the current accumulated quantHoras (if it exists)
+      const currentAccumulatedHours = (oldData.quantHoras as number) || 0;
+
+      // Add the new session's duration to the accumulated total
+      const newAccumulatedHours = currentAccumulatedHours + sessionDurationHours;
+
+      // Update quantHoras with the new accumulated total
+      return docRef.update({
+        quantHoras: newAccumulatedHours,
+      });
+    }
+
+    return null; // Should not reach here unless status changes to something else
+  });
