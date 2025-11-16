@@ -47,14 +47,14 @@ export class TutorComponent implements OnInit {
         next: (response: any) => {
           const user = JSON.parse(response.payload);
           console.log('Dados do usuário obtidos:', user);
-          this.tutor.nome = user.nome;
-          this.tutor.status = this.disciplineId == user.status;
-          try {
-            this.tutor.foto = user.foto;
-          } catch (error) {
-            console.error('Erro ao definir foto do tutor:', error);
-            this.tutor.foto = '/simons.png'; // Foto padrão em caso de erro
-          }
+          // this.tutor.nome = user.nome;
+          // this.tutor.status = this.disciplineId == user.status;
+          // try {
+          //   this.tutor.foto = user.foto;
+          // } catch (error) {
+          //   console.error('Erro ao definir foto do tutor:', error);
+          //   this.tutor.foto = '/simons.png'; // Foto padrão em caso de erro
+          // }
         },
         error: (error) => {
           console.error('Erro ao obter dados do usuário:', error);

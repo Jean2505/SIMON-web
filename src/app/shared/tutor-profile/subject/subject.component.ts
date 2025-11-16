@@ -262,50 +262,51 @@ export class TutorSubjectComponent implements OnInit {
   onToggleTutoring() {
     const newState = !this.isTutoring;
 
-    // const tutorRequest = {
-    //   uid: this.uid,
-    //   disciplinaId: this.subject.disciplinaId,
-    //   updates: {
-    //     status: newState,
-    //   },
-    // };
-
-    const userRequest = {
+    const tutorRequest = {
       uid: this.uid,
+      disciplinaId: this.subject.disciplinaId,
       updates: {
-        status: newState ? this.subject.disciplinaId : '',
+        status: newState,
       },
     };
 
-    // this.http.post('http://localhost:3000/updateTutor', tutorRequest).subscribe({
-    //   next: (response) => {
-    //     console.log('Estado de tutoria atualizado!', response);
+    // const userRequest = {
+    //   uid: this.uid,
+    //   updates: {
+    //     status: newState,
     //   },
-    //   error: (error) => {
-    //     console.error('Erro ao atualizar estado de tutoria:', error);
-    //   }
-    // });
+    //   disciplinaId: this.subject
+    // };
 
-    this.http.post('http://localhost:3000/updateUser', userRequest).subscribe({
+    this.http.post('http://localhost:3000/updateTutor', tutorRequest).subscribe({
       next: (response) => {
-        console.log('Estado de monitoria atualizado!', response);
-        // Atualiza o usuário da sessão
-        this.sessionStorage.setData('user', {
-          ...this.sessionStorage.getAllDataFromKey('user'),
-          status: newState ? this.subject.disciplinaId : '',
-        });
-        console.log(
-          'Atualizando usuário na sessão:',
-          this.sessionStorage.getAllData()
-        );
-
-        // Atualiza o estado de monitoria no componente pai
-        window.location.reload();
+        console.log('Estado de tutoria atualizado!', response);
       },
       error: (error) => {
-        console.error('Erro ao atualizar estado de monitoria:', error);
-      },
+        console.error('Erro ao atualizar estado de tutoria:', error);
+      }
     });
+
+    // this.http.post('http://localhost:3000/updateUser', userRequest).subscribe({
+    //   next: (response) => {
+    //     console.log('Estado de monitoria atualizado!', response);
+    //     // Atualiza o usuário da sessão
+    //     this.sessionStorage.setData('user', {
+    //       ...this.sessionStorage.getAllDataFromKey('user'),
+    //       status: newState ? this.subject.disciplinaId : '',
+    //     });
+    //     console.log(
+    //       'Atualizando usuário na sessão:',
+    //       this.sessionStorage.getAllData()
+    //     );
+
+    //     // Atualiza o estado de monitoria no componente pai
+    //     window.location.reload();
+    //   },
+    //   error: (error) => {
+    //     console.error('Erro ao atualizar estado de monitoria:', error);
+    //   },
+    // });
 
     // Ativa a selecionada (ou desativa se já estava ativa)
     this.isTutoring = newState;
