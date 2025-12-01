@@ -1,12 +1,12 @@
 <div class="container">
   <div class="tutors-container">
     <app-back-button></app-back-button>
-    <h1 class="title">Disciplinas</h1>
+    <h1 class="title">Matérias</h1>
 
     <table class="subject-table" *ngIf="groupedData.length; else noData">
       <thead>
         <tr>
-          <th>Disciplina</th>
+          <th>Matéria</th>
           <th>Curso</th>
           <th>Escola</th>
           <th>Monitores</th>
@@ -39,7 +39,7 @@
     </table>
 
     <ng-template #noData>
-      <p>Não há disciplinas cadastradas para este professor.</p>
+      <p>Não há matérias cadastradas para este professor.</p>
     </ng-template>
   </div>
 </div>

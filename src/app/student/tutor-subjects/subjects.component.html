@@ -2,7 +2,7 @@
   <!-- Exibição das disciplinas, se houver um curso selecionado -->
   <div class="manage-container">
     <app-back-button></app-back-button>
-    <h3>Disciplinas</h3>
+    <h3>Matérias</h3>
     <hr />
 
     <!-- Cabeçalho da tabela -->
@@ -19,7 +19,7 @@
       @if (loadingDisciplinas) {
       <app-loading class="loading"></app-loading>
       } @else if (list.length == 0) {
-      <li class="loading">Nenhuma disciplina encontrada.</li>
+      <li class="loading">Nenhuma matéria encontrada.</li>
       } @else { @for (subject of subjects; track subject) {
       <li>
         <app-discipline

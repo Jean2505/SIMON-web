@@ -1,7 +1,7 @@
 <div class="container">
     <div class="manage-container">
         <app-back-button></app-back-button>
-        <h3>Disciplinas</h3>
+        <h3>Matérias</h3>
         <hr>
 
         <div class="discipline-header">
@@ -14,7 +14,7 @@
 
         <ul class="disciplines">
             @if (loadingDisciplinas) {
-            <li class="loading">Carregando disciplinas...</li>
+            <li class="loading">Carregando matérias...</li>
             } @else {
                 @for (disciplina of disciplinas; track $index) {
                     <li>
